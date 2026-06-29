@@ -14,6 +14,9 @@ This is the codebase for **HiddenSpot** (`hiddenspot.in`), a premium travel disc
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_key
+   # Optional. MapLibre basemap style for the discovery map.
+   # Defaults to CARTO dark-matter. Swap for OpenFreeMap or a self-hosted style.
+   NEXT_PUBLIC_MAP_STYLE_URL=
    ```
 
 3. Run the development server:
