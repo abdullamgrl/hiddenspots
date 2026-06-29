@@ -163,6 +163,14 @@ export function Navbar() {
           >
             Explore
           </Link>
+          <Link
+            href="/map"
+            className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
+              pathname === '/map' ? 'text-emerald-600 dark:text-teal-400' : 'text-muted-foreground'
+            }`}
+          >
+            Map
+          </Link>
           <button
             onClick={handleAddSpotClick}
             className="flex items-center space-x-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-emerald-600"
