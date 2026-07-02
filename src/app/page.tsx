@@ -218,6 +218,13 @@ export default async function HomePage() {
   // Combine them, placing database reels first
   const combinedReels = [...databaseReels, ...fallbackReels].slice(0, 11)
 
+  // Real stats derived from data already fetched above — no vanity numbers.
+  const spotCount = mappedMapSpots.length
+  const districtCount = new Set(
+    mappedMapSpots.map((s) => s.district?.slug).filter(Boolean)
+  ).size
+  const reelCount = databaseReels.length
+
   return (
     <div className="space-y-24 pb-24 overflow-hidden bg-zinc-950 text-zinc-50">
       {/* Floating Animations CSS */}
@@ -260,14 +267,14 @@ export default async function HomePage() {
               </p>
             </div>
 
-            {/* Premium community badge */}
-            <div className="flex items-center space-x-3 bg-zinc-900/40 backdrop-blur-md border border-white/5 px-4 py-2 rounded-full w-fit mx-auto lg:mx-0 shadow-lg">
-              <div className="flex -space-x-2">
-                <div className="relative h-6 w-6 rounded-full border border-zinc-950 bg-emerald-500 text-[9px] font-bold flex items-center justify-center text-black">U1</div>
-                <div className="relative h-6 w-6 rounded-full border border-zinc-950 bg-teal-500 text-[9px] font-bold flex items-center justify-center text-black">U2</div>
-                <div className="relative h-6 w-6 rounded-full border border-zinc-950 bg-indigo-500 text-[9px] font-bold flex items-center justify-center text-white">U3</div>
-              </div>
-              <span className="text-[11px] font-semibold text-zinc-300">Join 3,400+ offbeat explorers</span>
+            {/* Trust badge — real numbers only */}
+            <div className="flex items-center space-x-2 bg-zinc-900/40 backdrop-blur-md border border-white/5 px-4 py-2 rounded-full w-fit mx-auto lg:mx-0 shadow-lg">
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+              <span className="text-[11px] font-semibold text-zinc-300">
+                {spotCount > 0
+                  ? `${spotCount} GPS-verified ${spotCount === 1 ? 'spot' : 'spots'} across ${districtCount} ${districtCount === 1 ? 'district' : 'districts'} — growing weekly`
+                  : 'Every spot GPS-verified before it goes live'}
+              </span>
             </div>
 
             <div className="max-w-md mx-auto lg:mx-0 w-full">
@@ -324,10 +331,10 @@ export default async function HomePage() {
               <h2 className="font-heading text-3xl font-extrabold tracking-tight mt-1">Featured Hidden Gems</h2>
             </div>
             <Link
-              href="/category/waterfalls"
+              href="/map"
               className={`${buttonVariants({ variant: "ghost" })} text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/5 font-semibold gap-1 inline-flex items-center`}
             >
-              <span>View All Gems</span>
+              <span>Explore the Map</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -471,7 +478,7 @@ export default async function HomePage() {
             </div>
             <h3 className="font-heading text-lg font-bold text-zinc-100">1. Submit a Spot</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Verify your mobile number via OTP, search location coordinates via Google geocoding, compress photos on the client side, and submit.
+              Sign in with your mobile number, drop a pin on the exact location, add photos and the reel that inspired you — done in under two minutes.
             </p>
           </div>
 
@@ -481,7 +488,7 @@ export default async function HomePage() {
             </div>
             <h3 className="font-heading text-lg font-bold text-zinc-100">2. Moderation & Vetting</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Moderators verify submitted coordinates, flag duplicates via spatial checks, approve details, and update the verification score.
+              Moderators check the coordinates on a map, catch duplicates automatically, and approve only spots that are genuinely worth the trip.
             </p>
           </div>
 
@@ -491,30 +498,30 @@ export default async function HomePage() {
             </div>
             <h3 className="font-heading text-lg font-bold text-zinc-100">3. Earn Reputation</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              As your shared locations get approved and featured, your contributor reputation score escalates, unlocking trusted moderator privileges.
+              Every approved spot builds your explorer reputation. Top contributors get featured placements and trusted-moderator privileges.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Community stats */}
+      {/* Community stats — live counts, not vanity numbers */}
       <section className="bg-zinc-900/10 backdrop-blur-md py-16 border-y border-white/5">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">300+</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Vetted Locations</div>
+            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{spotCount}</div>
+            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Hidden Spots</div>
           </div>
           <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">10k+</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Active Travelers</div>
+            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{districtCount}</div>
+            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Districts Covered</div>
+          </div>
+          <div>
+            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{reelCount}</div>
+            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Reels Curated</div>
           </div>
           <div>
             <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">100%</div>
             <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Community Vetted</div>
-          </div>
-          <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">100m</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">GPS Accuracy</div>
           </div>
         </div>
       </section>
