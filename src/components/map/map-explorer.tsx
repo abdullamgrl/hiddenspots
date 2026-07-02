@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import Image from 'next/image'
 import type { Point } from 'geojson'
 import { Loader2, MapPin, Sparkles } from 'lucide-react'
@@ -78,9 +79,15 @@ export function MapExplorer({ categories }: MapExplorerProps) {
 
       <div className="flex-1 overflow-y-auto">
         {items.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-sm text-muted-foreground">
+          <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center text-sm text-muted-foreground">
             <MapPin className="h-8 w-8 opacity-40" />
             <p>No reels in this area yet. Try zooming out or panning the map.</p>
+            <Link
+              href="/add-spot"
+              className="font-semibold text-emerald-600 transition-colors hover:text-emerald-500 dark:text-teal-400"
+            >
+              Know a hidden gem here? Add it →
+            </Link>
           </div>
         ) : (
           <ul className="divide-y divide-border/50">
