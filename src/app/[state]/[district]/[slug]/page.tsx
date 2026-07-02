@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  Compass,
   MapPin,
   Clock,
   Sparkles,
@@ -15,12 +14,13 @@ import {
   Compass as HikeIcon,
   ShieldAlert,
   ArrowLeft,
-  Share2,
 } from 'lucide-react'
 import DynamicMap from '@/components/map/map-wrapper'
-import { InstagramEmbed } from '@/components/spot/instagram-embed'
+import { ReelsSection } from '@/components/spot/reels-section'
 import { SaveButton } from '@/components/spot/save-button'
 import { ReportDialog } from '@/components/spot/report-dialog'
+import { ShareButton } from '@/components/spot/share-button'
+import { CoordsCard } from '@/components/spot/coords-card'
 
 interface PageProps {
   params: Promise<{
@@ -159,10 +159,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
     ],
   }
 
-  // Active Social links (e.g. Instagram oEmbed)
-  const instagramLink = spot.spot_social_links?.find(
-    (link: any) => link.platform === 'instagram'
-  )
+  const socialLinks = spot.spot_social_links ?? []
 
   return (
     <>
@@ -231,6 +228,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
             {/* Actions for User */}
             <div className="flex items-center space-x-3">
               <SaveButton spotId={spot.id} userId={user?.id} />
+              <ShareButton title={spot.title} text={spot.short_description} />
               <ReportDialog spotId={spot.id} userId={user?.id} />
             </div>
           </div>
@@ -342,13 +340,8 @@ export default async function SpotDetailPage({ params }: PageProps) {
               )}
             </section>
 
-            {/* Instagram reel embed */}
-            {instagramLink && (
-              <section className="space-y-4">
-                <h2 className="font-heading text-xl font-bold">Social Preview</h2>
-                <InstagramEmbed url={instagramLink.url} />
-              </section>
-            )}
+            {/* All reels + social links for this spot */}
+            <ReelsSection links={socialLinks} />
           </div>
 
           {/* Right Sidebar */}
@@ -377,6 +370,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
                   interactive={true}
                 />
               </div>
+              <CoordsCard latitude={spot.latitude} longitude={spot.longitude} />
             </section>
 
             {/* Contributor Panel */}
