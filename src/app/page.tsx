@@ -12,6 +12,7 @@ import {
   CheckCircle,
   ArrowRight,
   TrendingUp,
+  Calendar,
 } from 'lucide-react'
 import { SearchBox } from '@/components/navigation/search-box'
 import DynamicMap from '@/components/map/map-wrapper'
@@ -31,7 +32,7 @@ export default async function HomePage() {
   const { data: featuredSpots } = await supabase
     .from('spots')
     .select(`
-      id, title, slug, cover_image, verification_score,
+      id, title, slug, cover_image, verification_score, best_time_to_visit,
       state:states(name, slug),
       district:districts(name, slug),
       category:categories(name)
@@ -45,7 +46,7 @@ export default async function HomePage() {
   const { data: newestSpots } = await supabase
     .from('spots')
     .select(`
-      id, title, slug, cover_image, verification_score, created_at,
+      id, title, slug, cover_image, verification_score, best_time_to_visit, created_at,
       state:states(name, slug),
       district:districts(name, slug),
       category:categories(name)
@@ -215,8 +216,12 @@ export default async function HomePage() {
     }
   }) || []
 
-  // Combine them, placing database reels first
-  const combinedReels = [...databaseReels, ...fallbackReels].slice(0, 11)
+  // Combine them, placing database reels first. Curated fallbacks link to the
+  // discovery map — their detail pages don't exist until someone submits them.
+  const combinedReels = [
+    ...databaseReels,
+    ...fallbackReels.map((r) => ({ ...r, detail_link: '/map' })),
+  ].slice(0, 11)
 
   // Real stats derived from data already fetched above — no vanity numbers.
   const spotCount = mappedMapSpots.length
@@ -374,11 +379,19 @@ export default async function HomePage() {
                           {spot.title}
                         </h3>
                       </div>
-                      <div className="flex items-center text-xs text-zinc-400 pt-3 border-t border-white/5">
-                        <MapPin className="h-3.5 w-3.5 mr-1 text-zinc-500" />
-                        <span>
-                          {districtObj.name}, {stateObj.name}
+                      <div className="flex items-center justify-between gap-2 text-xs text-zinc-400 pt-3 border-t border-white/5">
+                        <span className="flex items-center min-w-0">
+                          <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0 text-zinc-500" />
+                          <span className="truncate">
+                            {districtObj.name}, {stateObj.name}
+                          </span>
                         </span>
+                        {spot.best_time_to_visit && (
+                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-400">
+                            <Calendar className="h-3 w-3" />
+                            {spot.best_time_to_visit}
+                          </span>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -449,11 +462,19 @@ export default async function HomePage() {
                           {spot.title}
                         </h3>
                       </div>
-                      <div className="flex items-center text-xs text-zinc-400 pt-3 border-t border-white/5">
-                        <MapPin className="h-3.5 w-3.5 mr-1 text-zinc-500" />
-                        <span>
-                          {districtObj.name}, {stateObj.name}
+                      <div className="flex items-center justify-between gap-2 text-xs text-zinc-400 pt-3 border-t border-white/5">
+                        <span className="flex items-center min-w-0">
+                          <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0 text-zinc-500" />
+                          <span className="truncate">
+                            {districtObj.name}, {stateObj.name}
+                          </span>
                         </span>
+                        {spot.best_time_to_visit && (
+                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-400">
+                            <Calendar className="h-3 w-3" />
+                            {spot.best_time_to_visit}
+                          </span>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
