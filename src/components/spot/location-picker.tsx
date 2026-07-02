@@ -136,12 +136,29 @@ export function LocationPicker({
       })
   }, [])
 
+  // Cost controls for the one approved Google surface: a session token spans
+  // all keystrokes of one search and is closed by the Place Details call on
+  // selection (session-based billing), and requests are debounced so we never
+  // fire per-keystroke.
+  const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null)
+  const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null)
+  const geoDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   useEffect(() => {
     if (mapsApiLoaded) {
       setAutocompleteService(new google.maps.places.AutocompleteService())
       setGeocoder(new google.maps.Geocoder())
+      placesServiceRef.current = new google.maps.places.PlacesService(
+        document.createElement('div')
+      )
     }
   }, [mapsApiLoaded])
+
+  useEffect(() => {
+    return () => {
+      if (geoDebounceRef.current) clearTimeout(geoDebounceRef.current)
+    }
+  }, [])
 
   // Coordinates are set programmatically (search / GPS / map pin) rather than via
   // visible inputs, so register them explicitly to keep validation + trigger() working.
@@ -154,9 +171,11 @@ export function LocationPicker({
   const selectedStateId = watch('state_id')
   const filteredDistricts = districts.filter((d) => d.state_id === selectedStateId)
 
-  // Geocoding search function using Google Maps Autocomplete
-  const handleGeoSearch = async (val: string) => {
+  // Debounced Places Autocomplete search (session-token billed)
+  const handleGeoSearch = (val: string) => {
     setGeoQuery(val)
+    if (geoDebounceRef.current) clearTimeout(geoDebounceRef.current)
+
     if (val.length < 3) {
       setGeoSuggestions([])
       return
@@ -164,75 +183,97 @@ export function LocationPicker({
 
     if (!autocompleteService) return
 
-    setSearchingGeo(true)
-    autocompleteService.getPlacePredictions(
-      {
-        input: val,
-        componentRestrictions: { country: 'in' },
-      },
-      (predictions, status) => {
-        setSearchingGeo(false)
-        if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
-          setGeoSuggestions(predictions)
-        } else {
-          setGeoSuggestions([])
+    geoDebounceRef.current = setTimeout(() => {
+      if (!sessionTokenRef.current) {
+        sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
+      }
+      setSearchingGeo(true)
+      autocompleteService.getPlacePredictions(
+        {
+          input: val,
+          componentRestrictions: { country: 'in' },
+          sessionToken: sessionTokenRef.current,
+        },
+        (predictions, status) => {
+          setSearchingGeo(false)
+          if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
+            setGeoSuggestions(predictions)
+          } else {
+            setGeoSuggestions([])
+          }
+        }
+      )
+    }, 350)
+  }
+
+  // Autofill state/district selects from resolved address components.
+  const applyAddressComponents = (components: google.maps.GeocoderAddressComponent[]) => {
+    const administrativeArea1 = components.find((c) =>
+      c.types.includes('administrative_area_level_1')
+    )
+    const administrativeArea2 = components.find((c) =>
+      c.types.includes('administrative_area_level_2')
+    )
+
+    if (administrativeArea1) {
+      const stateName = administrativeArea1.long_name.toLowerCase()
+      const matchedState = states.find(
+        (s) =>
+          s.name.toLowerCase().includes(stateName) ||
+          stateName.includes(s.name.toLowerCase())
+      )
+      if (matchedState) {
+        setValue('state_id', matchedState.id, { shouldValidate: true })
+
+        if (administrativeArea2) {
+          const districtName = administrativeArea2.long_name.toLowerCase()
+          const matchedDistrict = districts.find(
+            (d) =>
+              d.state_id === matchedState.id &&
+              (d.name.toLowerCase().includes(districtName) ||
+                districtName.includes(d.name.toLowerCase()))
+          )
+          if (matchedDistrict) {
+            setValue('district_id', matchedDistrict.id, { shouldValidate: true })
+          }
         }
       }
-    )
+    }
   }
 
   const handleSelectSuggestion = (suggestion: any) => {
-    if (!geocoder) return
+    const placesService = placesServiceRef.current
+    if (!placesService) return
 
-    const placeId = suggestion.place_id
     setGeoQuery(suggestion.description)
     setGeoSuggestions([])
 
-    geocoder.geocode({ placeId: placeId }, (results, status) => {
-      if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
-        const location = results[0].geometry.location
-        const lat = location.lat()
-        const lng = location.lng()
-        setValue('latitude', lat, { shouldValidate: true })
-        setValue('longitude', lng, { shouldValidate: true })
-        setValue('address', results[0].formatted_address, { shouldValidate: true })
-
-        const components = results[0].address_components || []
-        const administrativeArea1 = components.find((c) =>
-          c.types.includes('administrative_area_level_1')
-        )
-        const administrativeArea2 = components.find((c) =>
-          c.types.includes('administrative_area_level_2')
-        )
-
-        if (administrativeArea1) {
-          const stateName = administrativeArea1.long_name.toLowerCase()
-          const matchedState = states.find(
-            (s) =>
-              s.name.toLowerCase().includes(stateName) ||
-              stateName.includes(s.name.toLowerCase())
-          )
-          if (matchedState) {
-            setValue('state_id', matchedState.id, { shouldValidate: true })
-
-            if (administrativeArea2) {
-              const districtName = administrativeArea2.long_name.toLowerCase()
-              const matchedDistrict = districts.find(
-                (d) =>
-                  d.state_id === matchedState.id &&
-                  (d.name.toLowerCase().includes(districtName) ||
-                    districtName.includes(d.name.toLowerCase()))
-              )
-              if (matchedDistrict) {
-                setValue('district_id', matchedDistrict.id, { shouldValidate: true })
-              }
-            }
-          }
+    // Place Details (limited fields) closes the autocomplete session, so the
+    // whole search bills as one session instead of per-request.
+    placesService.getDetails(
+      {
+        placeId: suggestion.place_id,
+        fields: ['geometry.location', 'formatted_address', 'address_components'],
+        sessionToken: sessionTokenRef.current ?? undefined,
+      },
+      (place, status) => {
+        sessionTokenRef.current = null
+        if (
+          status === google.maps.places.PlacesServiceStatus.OK &&
+          place?.geometry?.location
+        ) {
+          const location = place.geometry.location
+          setValue('latitude', location.lat(), { shouldValidate: true })
+          setValue('longitude', location.lng(), { shouldValidate: true })
+          setValue('address', place.formatted_address ?? suggestion.description, {
+            shouldValidate: true,
+          })
+          applyAddressComponents(place.address_components ?? [])
+        } else {
+          toast.error('Could not resolve the selected location')
         }
-      } else {
-        toast.error('Geocoding failed for the selected location')
       }
-    })
+    )
   }
 
   // Detect GPS location with browser geolocation
@@ -257,38 +298,7 @@ export function LocationPicker({
             if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
               setValue('address', results[0].formatted_address, { shouldValidate: true })
 
-              const components = results[0].address_components || []
-              const administrativeArea1 = components.find((c) =>
-                c.types.includes('administrative_area_level_1')
-              )
-              const administrativeArea2 = components.find((c) =>
-                c.types.includes('administrative_area_level_2')
-              )
-
-              if (administrativeArea1) {
-                const stateName = administrativeArea1.long_name.toLowerCase()
-                const matchedState = states.find(
-                  (s) =>
-                    s.name.toLowerCase().includes(stateName) ||
-                    stateName.includes(s.name.toLowerCase())
-                )
-                if (matchedState) {
-                  setValue('state_id', matchedState.id, { shouldValidate: true })
-
-                  if (administrativeArea2) {
-                    const districtName = administrativeArea2.long_name.toLowerCase()
-                    const matchedDistrict = districts.find(
-                      (d) =>
-                        d.state_id === matchedState.id &&
-                        (d.name.toLowerCase().includes(districtName) ||
-                          districtName.includes(d.name.toLowerCase()))
-                    )
-                    if (matchedDistrict) {
-                      setValue('district_id', matchedDistrict.id, { shouldValidate: true })
-                    }
-                  }
-                }
-              }
+              applyAddressComponents(results[0].address_components || [])
             }
           })
         }
