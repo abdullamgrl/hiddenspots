@@ -25,7 +25,8 @@ export async function GET() {
 
   const staticUrls = [
     { url: baseUrl, lastmod: new Date().toISOString() },
-    { url: `${baseUrl}/offline`, lastmod: new Date().toISOString() },
+    { url: `${baseUrl}/map`, lastmod: new Date().toISOString() },
+    { url: `${baseUrl}/nearby`, lastmod: new Date().toISOString() },
   ]
 
   const categoryUrls =

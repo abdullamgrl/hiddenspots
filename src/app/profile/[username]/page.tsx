@@ -4,7 +4,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Sparkles, MapPin, Compass, Award, ExternalLink } from 'lucide-react'
+import { Calendar, Sparkles, MapPin, Compass, Award, ExternalLink, Bookmark } from 'lucide-react'
+import { ShareButton } from '@/components/spot/share-button'
+import { buttonVariants } from '@/components/ui/button'
 
 interface ProfilePageProps {
   params: Promise<{
@@ -68,6 +70,12 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const { data: spots } = await query.order('created_at', { ascending: false })
 
   const approvedSpotsCount = spots?.filter((s) => s.status === 'approved').length || 0
+  const districtsExplored = new Set(
+    (spots ?? [])
+      .filter((s) => s.status === 'approved')
+      .map((s: any) => (Array.isArray(s.district) ? s.district[0]?.slug : s.district?.slug))
+      .filter(Boolean)
+  ).size
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -99,11 +107,27 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 <Award className="h-4 w-4 text-emerald-600" />
                 <span>{approvedSpotsCount} Approved Gems</span>
               </div>
+              <div className="flex items-center space-x-1.5">
+                <MapPin className="h-4 w-4 text-emerald-600" />
+                <span>{districtsExplored} {districtsExplored === 1 ? 'District' : 'Districts'} Explored</span>
+              </div>
             </div>
 
-            <div className="inline-flex items-center space-x-2 rounded-xl bg-amber-500/10 text-amber-800 dark:text-amber-400 px-4 py-2 text-sm font-semibold border border-amber-500/20">
-              <Sparkles className="h-4 w-4" />
-              <span>{profile.reputation_score} Reputation Score</span>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+              <div className="inline-flex items-center space-x-2 rounded-xl bg-amber-500/10 text-amber-800 dark:text-amber-400 px-4 py-2 text-sm font-semibold border border-amber-500/20">
+                <Sparkles className="h-4 w-4" />
+                <span>{profile.reputation_score} Reputation Score</span>
+              </div>
+              <ShareButton
+                title={`${profile.full_name || profile.username} on HiddenSpot`}
+                text={`Hidden gems shared by @${profile.username}`}
+              />
+              {isOwner && (
+                <Link href="/saved" className={`${buttonVariants({ variant: 'outline', size: 'sm' })} gap-1.5 border-border/50 font-medium text-muted-foreground hover:text-foreground`}>
+                  <Bookmark className="h-4 w-4" />
+                  Saved Spots
+                </Link>
+              )}
             </div>
           </div>
         </CardContent>
@@ -185,8 +209,19 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             <Compass className="h-10 w-10 text-muted-foreground mx-auto mb-3 animate-pulse" />
             <h3 className="font-heading text-lg font-bold">No Gems Shared Yet</h3>
             <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-1">
-              Explore hidden spots or sign in to add your first beautiful location.
+              {isOwner
+                ? 'Share your first hidden gem and start building your explorer reputation.'
+                : `${profile.full_name || username} hasn’t shared any spots yet.`}
             </p>
+            {isOwner && (
+              <Link
+                href="/add-spot"
+                className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-emerald-600 hover:to-teal-500"
+              >
+                <Compass className="h-4 w-4" />
+                Add Your First Spot
+              </Link>
+            )}
           </div>
         )}
       </div>
