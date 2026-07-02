@@ -13,7 +13,7 @@ import {
   ArrowRight,
   TrendingUp,
 } from 'lucide-react'
-import { HeroSearch } from '@/components/navigation/hero-search'
+import { SearchBox } from '@/components/navigation/search-box'
 import DynamicMap from '@/components/map/map-wrapper'
 import { HeroReelsCarousel, ReelItem } from '@/components/spot/hero-reels-carousel'
 
@@ -278,7 +278,7 @@ export default async function HomePage() {
             </div>
 
             <div className="max-w-md mx-auto lg:mx-0 w-full">
-              <HeroSearch />
+              <SearchBox variant="hero" />
             </div>
 
             <div className="text-[11px] text-zinc-500 flex items-center justify-center lg:justify-start gap-1">
