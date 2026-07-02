@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
-import { Compass, Menu, PlusCircle, ShieldAlert, Sparkles, User, LogOut, CheckCircle } from 'lucide-react'
+import { Bookmark, Compass, PlusCircle, ShieldAlert, Sparkles, User, LogOut } from 'lucide-react'
 
 export function Navbar() {
   const pathname = usePathname()
@@ -211,6 +211,12 @@ export function Navbar() {
                   <User className="mr-2 h-4 w-4" />
                   <span>My Profile</span>
                 </DropdownMenuItem>
+                <DropdownMenuItem render={
+                  <Link href="/saved" className="cursor-pointer" />
+                }>
+                  <Bookmark className="mr-2 h-4 w-4" />
+                  <span>Saved Spots</span>
+                </DropdownMenuItem>
                 {profile?.role && (profile.role === 'admin' || profile.role === 'moderator') && (
                   <DropdownMenuItem render={
                     <Link href="/admin" className="cursor-pointer text-emerald-600 dark:text-teal-400 font-medium" />
@@ -253,6 +259,12 @@ export function Navbar() {
                 }>
                   <User className="mr-2 h-4 w-4" />
                   <span>My Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem render={
+                  <Link href="/saved" className="cursor-pointer" />
+                }>
+                  <Bookmark className="mr-2 h-4 w-4" />
+                  <span>Saved Spots</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleAddSpotClick} className="cursor-pointer">
                   <PlusCircle className="mr-2 h-4 w-4" />
