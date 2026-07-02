@@ -123,7 +123,7 @@ export function MapExplorer({ categories }: MapExplorerProps) {
   )
 
   return (
-    <div className="relative flex h-[calc(100dvh_-_4rem)] w-full flex-col lg:flex-row">
+    <div className="relative flex h-[calc(100dvh_-_8rem)] w-full flex-col md:h-[calc(100dvh_-_4rem)] lg:flex-row">
       {/* Map — the inner wrapper is absolutely positioned so it has a definite
           height for MapLibre (a percentage height inside a flex item can
           collapse to 0 and render a blank canvas). */}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navigation/navbar";
+import { MobileNav } from "@/components/navigation/mobile-nav";
 import { Footer } from "@/components/navigation/footer";
 import { QueryProvider } from "@/components/provider/query-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -67,8 +68,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
         <QueryProvider>
           <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
+          <main className="flex-1 flex flex-col pb-16 md:pb-0">{children}</main>
           <Footer />
+          <MobileNav />
           <Toaster position="bottom-right" richColors closeButton />
           <PWARegister />
         </QueryProvider>

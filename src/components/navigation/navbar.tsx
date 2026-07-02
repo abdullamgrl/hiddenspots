@@ -171,6 +171,14 @@ export function Navbar() {
           >
             Map
           </Link>
+          <Link
+            href="/nearby"
+            className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
+              pathname === '/nearby' ? 'text-emerald-600 dark:text-teal-400' : 'text-muted-foreground'
+            }`}
+          >
+            Nearby
+          </Link>
           <button
             onClick={handleAddSpotClick}
             className="flex items-center space-x-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-emerald-600"
