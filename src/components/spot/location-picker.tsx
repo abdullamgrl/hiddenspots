@@ -118,17 +118,24 @@ export function LocationPicker({
 }: LocationPickerProps) {
   // Google Maps autocompletion state
   const [geoQuery, setGeoQuery] = useState('')
-  const [geoSuggestions, setGeoSuggestions] = useState<any[]>([])
+  const [geoSuggestions, setGeoSuggestions] = useState<google.maps.places.AutocompletePrediction[]>([])
   const [searchingGeo, setSearchingGeo] = useState(false)
 
   const [mapsApiLoaded, setMapsApiLoaded] = useState(false)
-  const [autocompleteService, setAutocompleteService] = useState<google.maps.places.AutocompleteService | null>(null)
-  const [geocoder, setGeocoder] = useState<google.maps.Geocoder | null>(null)
   const [detectingGps, setDetectingGps] = useState(false)
+
+  // Service handles are external-system objects, not render state — refs.
+  const autocompleteServiceRef = useRef<google.maps.places.AutocompleteService | null>(null)
+  const geocoderRef = useRef<google.maps.Geocoder | null>(null)
 
   useEffect(() => {
     loadGoogleMaps()
       .then(() => {
+        autocompleteServiceRef.current = new google.maps.places.AutocompleteService()
+        geocoderRef.current = new google.maps.Geocoder()
+        placesServiceRef.current = new google.maps.places.PlacesService(
+          document.createElement('div')
+        )
         setMapsApiLoaded(true)
       })
       .catch((err) => {
@@ -143,16 +150,6 @@ export function LocationPicker({
   const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null)
   const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null)
   const geoDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    if (mapsApiLoaded) {
-      setAutocompleteService(new google.maps.places.AutocompleteService())
-      setGeocoder(new google.maps.Geocoder())
-      placesServiceRef.current = new google.maps.places.PlacesService(
-        document.createElement('div')
-      )
-    }
-  }, [mapsApiLoaded])
 
   useEffect(() => {
     return () => {
@@ -181,14 +178,14 @@ export function LocationPicker({
       return
     }
 
-    if (!autocompleteService) return
+    if (!autocompleteServiceRef.current) return
 
     geoDebounceRef.current = setTimeout(() => {
       if (!sessionTokenRef.current) {
         sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
       }
       setSearchingGeo(true)
-      autocompleteService.getPlacePredictions(
+      autocompleteServiceRef.current!.getPlacePredictions(
         {
           input: val,
           componentRestrictions: { country: 'in' },
@@ -241,7 +238,7 @@ export function LocationPicker({
     }
   }
 
-  const handleSelectSuggestion = (suggestion: any) => {
+  const handleSelectSuggestion = (suggestion: google.maps.places.AutocompletePrediction) => {
     const placesService = placesServiceRef.current
     if (!placesService) return
 
@@ -293,8 +290,8 @@ export function LocationPicker({
         toast.success(`GPS Location detected: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`)
         setDetectingGps(false)
 
-        if (geocoder) {
-          geocoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
+        if (geocoderRef.current) {
+          geocoderRef.current.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
               setValue('address', results[0].formatted_address, { shouldValidate: true })
 
@@ -372,8 +369,8 @@ export function LocationPicker({
           setValue('latitude', lat, { shouldValidate: true })
           setValue('longitude', lng, { shouldValidate: true })
 
-          if (geocoder) {
-            geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+          if (geocoderRef.current) {
+            geocoderRef.current.geocode({ location: { lat, lng } }, (results, status) => {
               if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
                 setValue('address', results[0].formatted_address, { shouldValidate: true })
               }
@@ -391,8 +388,8 @@ export function LocationPicker({
           setValue('longitude', lng, { shouldValidate: true })
           marker.setPosition(latLng)
 
-          if (geocoder) {
-            geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+          if (geocoderRef.current) {
+            geocoderRef.current.geocode({ location: { lat, lng } }, (results, status) => {
               if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
                 setValue('address', results[0].formatted_address, { shouldValidate: true })
               }
@@ -401,6 +398,9 @@ export function LocationPicker({
         }
       })
     }
+    // Init-once per activation: lat/lng/setValue are read via closures on
+    // purpose; re-running would tear down the user's map interaction.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, mapsApiLoaded])
 
   useEffect(() => {
@@ -465,7 +465,7 @@ export function LocationPicker({
 
         {geoSuggestions.length > 0 && (
           <div className="absolute z-30 w-full mt-1 rounded-md border border-border bg-card shadow-lg max-h-60 overflow-y-auto glass">
-            {geoSuggestions.map((s: any) => (
+            {geoSuggestions.map((s) => (
               <button
                 key={s.place_id}
                 type="button"

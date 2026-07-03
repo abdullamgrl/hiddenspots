@@ -1,15 +1,19 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
+
+declare global {
+  interface Window {
+    instgrm?: { Embeds: { process: () => void } }
+  }
+}
 
 interface InstagramEmbedProps {
   url: string
 }
 
 export function InstagramEmbed({ url }: InstagramEmbedProps) {
-  const [embedHtml, setEmbedHtml] = useState<string | null>(null)
-
-  useEffect(() => {
+  const embedHtml = useMemo(() => {
     // 1. Clean the URL and ensure canonical formatting
     let cleanUrl = url.trim().split('?')[0]
     if (!cleanUrl.endsWith('/')) {
@@ -17,7 +21,7 @@ export function InstagramEmbed({ url }: InstagramEmbedProps) {
     }
 
     // 2. Build the exact blockquote HTML structure required by Instagram's embed.js SDK
-    const blockquoteHtml = `
+    return `
       <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="${cleanUrl}?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:12px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
         <div style="padding:16px;">
           <a href="${cleanUrl}?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">
@@ -47,38 +51,27 @@ export function InstagramEmbed({ url }: InstagramEmbedProps) {
         </div>
       </blockquote>
     `
-    setEmbedHtml(blockquoteHtml)
   }, [url])
 
   // 3. Load script and trigger parsing once HTML is ready in DOM
   useEffect(() => {
-    if (embedHtml && typeof window !== 'undefined') {
-      try {
-        // @ts-ignore
-        if (window.instgrm) {
-          // @ts-ignore
-          window.instgrm.Embeds.process()
-        } else {
-          const script = document.createElement('script')
-          script.src = 'https://www.instagram.com/embed.js'
-          script.async = true
-          script.defer = true
-          script.onload = () => {
-            // @ts-ignore
-            if (window.instgrm) {
-              // @ts-ignore
-              window.instgrm.Embeds.process()
-            }
-          }
-          document.body.appendChild(script)
+    try {
+      if (window.instgrm) {
+        window.instgrm.Embeds.process()
+      } else {
+        const script = document.createElement('script')
+        script.src = 'https://www.instagram.com/embed.js'
+        script.async = true
+        script.defer = true
+        script.onload = () => {
+          window.instgrm?.Embeds.process()
         }
-      } catch (err) {
-        console.error('Error loading or processing Instagram embed SDK:', err)
+        document.body.appendChild(script)
       }
+    } catch (err) {
+      console.error('Error loading or processing Instagram embed SDK:', err)
     }
   }, [embedHtml])
-
-  if (!embedHtml) return null
 
   return (
     <div className="flex justify-center w-full max-w-md mx-auto overflow-hidden rounded-2xl border border-border/50 shadow-lg bg-card">

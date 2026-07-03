@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Compass, Mail, Globe, MapPin, Sparkles } from 'lucide-react'
+import { Compass, Mail, Globe, MapPin } from 'lucide-react'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()

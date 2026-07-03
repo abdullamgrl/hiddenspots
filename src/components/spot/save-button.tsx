@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Bookmark, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { errMessage } from '@/lib/utils'
 
 interface SaveButtonProps {
   spotId: string
@@ -83,8 +84,8 @@ export function SaveButton({ spotId, userId }: SaveButtonProps) {
         setSaved(true)
         toast.success('Saved spot to your collection!')
       }
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to toggle bookmark status')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to toggle bookmark status'))
     } finally {
       setToggling(false)
     }

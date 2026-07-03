@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { MapPin, Sparkles, Compass } from 'lucide-react'
 import DynamicMap from '@/components/map/map-wrapper'
+import { first, type SpotCardRow } from '@/lib/spot-types'
 
 interface StatePageProps {
   params: Promise<{
@@ -69,18 +70,18 @@ export default async function StatePage({ params }: StatePageProps) {
     .order('verification_score', { ascending: false })
 
   // Map raw supabase joins to safe objects for dynamic map typing
-  const mappedSpots = spots?.map((s: any) => ({
+  const mappedSpots = ((spots ?? []) as SpotCardRow[]).map((s) => ({
     id: s.id,
     title: s.title,
     slug: s.slug,
     cover_image: s.cover_image,
     verification_score: s.verification_score,
-    latitude: s.latitude,
-    longitude: s.longitude,
-    state: Array.isArray(s.state) ? s.state[0] : s.state,
-    district: Array.isArray(s.district) ? s.district[0] : s.district,
-    category: Array.isArray(s.category) ? s.category[0] : s.category,
-  })) || []
+    latitude: s.latitude!,
+    longitude: s.longitude!,
+    state: first(s.state)!,
+    district: first(s.district)!,
+    category: first(s.category)!,
+  }))
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 space-y-12">
@@ -130,7 +131,7 @@ export default async function StatePage({ params }: StatePageProps) {
         <h2 className="font-heading text-2xl font-bold">Top Vetted Gems in {stateData.name}</h2>
         {mappedSpots.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {mappedSpots.map((spot: any) => (
+            {mappedSpots.map((spot) => (
               <Link
                 key={spot.id}
                 href={`/${stateData.slug}/${spot.district.slug}/${spot.slug}`}

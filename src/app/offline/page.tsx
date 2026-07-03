@@ -1,6 +1,6 @@
-import { Compass, WifiOff } from 'lucide-react'
+import { WifiOff } from 'lucide-react'
 import Link from 'next/link'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { RetryButton } from '@/components/navigation/retry-button'
 
 export const metadata = {

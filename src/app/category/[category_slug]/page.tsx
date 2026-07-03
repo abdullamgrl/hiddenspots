@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { MapPin, Sparkles, Compass } from 'lucide-react'
+import type { SpotCardResolved } from '@/lib/spot-types'
 
 interface CategoryPageProps {
   params: Promise<{
@@ -78,7 +79,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {/* Grid List */}
       {spots && spots.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {spots.map((spot: any) => (
+          {(spots as unknown as SpotCardResolved[]).map((spot) => (
             <Link
               key={spot.id}
               href={`/${spot.state.slug}/${spot.district.slug}/${spot.slug}`}

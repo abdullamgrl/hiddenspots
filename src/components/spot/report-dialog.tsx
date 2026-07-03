@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { AlertOctagon, Loader2 } from 'lucide-react'
+import { errMessage } from '@/lib/utils'
 
 interface ReportDialogProps {
   spotId: string
@@ -62,8 +63,8 @@ export function ReportDialog({ spotId, userId }: ReportDialogProps) {
       // Reset form
       setReportType('')
       setDescription('')
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to submit report. Please try again.')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to submit report. Please try again.'))
     } finally {
       setSubmitting(false)
     }

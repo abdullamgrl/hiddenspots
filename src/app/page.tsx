@@ -17,6 +17,7 @@ import {
 import { SearchBox } from '@/components/navigation/search-box'
 import DynamicMap from '@/components/map/map-wrapper'
 import { HeroReelsCarousel, ReelItem } from '@/components/spot/hero-reels-carousel'
+import { first, type SpotCardRow } from '@/lib/spot-types'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -84,18 +85,18 @@ export default async function HomePage() {
     .eq('spot.is_deleted', false)
 
   // Map raw supabase joins to safe objects for dynamic map typing
-  const mappedMapSpots = mapSpots?.map((s: any) => ({
+  const mappedMapSpots = ((mapSpots ?? []) as SpotCardRow[]).map((s) => ({
     id: s.id,
     title: s.title,
     slug: s.slug,
     cover_image: s.cover_image,
     verification_score: s.verification_score,
-    latitude: s.latitude,
-    longitude: s.longitude,
-    state: Array.isArray(s.state) ? s.state[0] : s.state,
-    district: Array.isArray(s.district) ? s.district[0] : s.district,
-    category: Array.isArray(s.category) ? s.category[0] : s.category,
-  })) || []
+    latitude: s.latitude!,
+    longitude: s.longitude!,
+    state: first(s.state)!,
+    district: first(s.district)!,
+    category: first(s.category)!,
+  }))
 
   // Define premium fallback reels to ensure we always have 11 items
   const fallbackReels: ReelItem[] = [
@@ -201,10 +202,11 @@ export default async function HomePage() {
   ]
 
   // Map database reels
-  const databaseReels = reelLinks?.map((rl: any) => {
+  type ReelLinkRow = { url: string; spot: SpotCardRow }
+  const databaseReels = ((reelLinks ?? []) as unknown as ReelLinkRow[]).map((rl) => {
     const spot = rl.spot
-    const stateObj = Array.isArray(spot.state) ? spot.state[0] : spot.state
-    const districtObj = Array.isArray(spot.district) ? spot.district[0] : spot.district
+    const stateObj = first(spot.state)!
+    const districtObj = first(spot.district)!
     return {
       id: spot.id,
       title: spot.title,
@@ -214,7 +216,7 @@ export default async function HomePage() {
       district: districtObj.name,
       state: stateObj.name,
     }
-  }) || []
+  })
 
   // Once the community has a healthy set of real reels, the carousel is purely
   // DB-driven; curated fallbacks (linking to the discovery map, since their
@@ -350,10 +352,10 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredSpots.map((spot: any) => {
-              const stateObj = Array.isArray(spot.state) ? spot.state[0] : spot.state
-              const districtObj = Array.isArray(spot.district) ? spot.district[0] : spot.district
-              const categoryObj = Array.isArray(spot.category) ? spot.category[0] : spot.category
+            {featuredSpots.map((spot: SpotCardRow) => {
+              const stateObj = first(spot.state)!
+              const districtObj = first(spot.district)!
+              const categoryObj = first(spot.category)!
               return (
                 <Link
                   key={spot.id}
@@ -433,10 +435,10 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newestSpots.map((spot: any) => {
-              const stateObj = Array.isArray(spot.state) ? spot.state[0] : spot.state
-              const districtObj = Array.isArray(spot.district) ? spot.district[0] : spot.district
-              const categoryObj = Array.isArray(spot.category) ? spot.category[0] : spot.category
+            {newestSpots.map((spot: SpotCardRow) => {
+              const stateObj = first(spot.state)!
+              const districtObj = first(spot.district)!
+              const categoryObj = first(spot.category)!
               return (
                 <Link
                   key={spot.id}

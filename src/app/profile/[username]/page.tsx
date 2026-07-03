@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Calendar, Sparkles, MapPin, Compass, Award, ExternalLink, Bookmark } from 'lucide-react'
 import { ShareButton } from '@/components/spot/share-button'
 import { buttonVariants } from '@/components/ui/button'
+import { first, type SpotCardRow, type SpotCardResolved } from '@/lib/spot-types'
 
 interface ProfilePageProps {
   params: Promise<{
@@ -73,7 +74,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const districtsExplored = new Set(
     (spots ?? [])
       .filter((s) => s.status === 'approved')
-      .map((s: any) => (Array.isArray(s.district) ? s.district[0]?.slug : s.district?.slug))
+      .map((s) => first((s as unknown as SpotCardRow).district)?.slug)
       .filter(Boolean)
   ).size
 
@@ -141,7 +142,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         {spots && spots.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {spots.map((spot: any) => (
+            {(spots as unknown as SpotCardResolved[]).map((spot) => (
               <Card key={spot.id} className="glass overflow-hidden shadow-md border-border/50 group hover:shadow-lg transition-all duration-300">
                 <div className="relative h-48 w-full">
                   <Image
@@ -189,7 +190,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   </div>
 
                   <div className="pt-3 border-t border-border/50 flex justify-between items-center text-xs text-muted-foreground">
-                    <span>Added {new Date(spot.created_at).toLocaleDateString('en-IN')}</span>
+                    <span>Added {new Date(spot.created_at!).toLocaleDateString('en-IN')}</span>
                     {spot.status === 'approved' && (
                       <Link
                         href={`/${spot.state.slug}/${spot.district.slug}/${spot.slug}`}

@@ -20,18 +20,15 @@ import {
 } from '@/components/ui/select'
 import { Card, CardContent } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
-import { Checkbox } from '@/components/ui/checkbox'
 import { toast } from 'sonner'
 import {
-  Image as ImageIcon,
-  Sparkles,
-  CheckCircle,
   AlertTriangle,
   UploadCloud,
   Loader2,
   X,
 } from 'lucide-react'
 import { LocationPicker } from './location-picker'
+import { errMessage } from '@/lib/utils'
 
 // Zod Schema for validation
 const spotSchema = z.object({
@@ -169,7 +166,7 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
         )
         setSelectedImages((prev) => [...prev, ...compressedArray])
         toast.success('Images compressed to optimized WebP format!')
-      } catch (err) {
+      } catch {
         toast.error('Image compression failed')
       } finally {
         setCompressing(false)
@@ -183,7 +180,7 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
 
   // Navigation handlers
   const nextStep = async () => {
-    let fieldsToValidate: any[] = []
+    let fieldsToValidate: (keyof SpotFormValues)[] = []
     if (step === 1) {
       fieldsToValidate = ['title', 'short_description', 'description', 'category_id']
     } else if (step === 2) {
@@ -282,7 +279,6 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
 
       // 4. Insert Social URL if available
       if (values.social_url) {
-        const isReel = values.social_url.includes('/reel/')
         const { error: socialError } = await supabase.from('spot_social_links').insert({
           spot_id: spotId,
           platform: 'instagram',
@@ -301,8 +297,8 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
       toast.success('Spot submitted successfully! Queueing for moderator approval.')
       router.push(`/profile/${creatorProfile?.username || userId}`)
       router.refresh()
-    } catch (err: any) {
-      toast.error(err.message || 'Submission failed. Please check connection.')
+    } catch (err) {
+      toast.error(errMessage(err, 'Submission failed. Please check connection.'))
     } finally {
       setLoading(false)
     }
@@ -480,7 +476,7 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
                     <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Difficulty Level</label>
                     <Select
                       value={watch('difficulty_level')}
-                      onValueChange={(val) => setValue('difficulty_level', val as any)}
+                      onValueChange={(val) => setValue('difficulty_level', val as SpotFormValues['difficulty_level'])}
                     >
                       <SelectTrigger className="glass">
                         <SelectValue placeholder="Difficulty">
@@ -616,6 +612,8 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-4">
                     {selectedImages.map((file, idx) => (
                       <div key={idx} className="relative h-20 rounded-lg overflow-hidden border border-border group">
+                        {/* Local blob preview — next/image can't optimize object URLs */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={URL.createObjectURL(file)}
                           alt="preview"

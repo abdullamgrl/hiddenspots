@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
 import { Bookmark, Compass, PlusCircle, ShieldAlert, Sparkles, User, LogOut } from 'lucide-react'
+import { errMessage } from '@/lib/utils'
 
 export function Navbar() {
   const pathname = usePathname()
@@ -39,17 +40,14 @@ export function Navbar() {
   const [fullName, setFullName] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
-  // Open auth dialog if requested via URL
+  // Open auth dialog if requested via URL (deferred a tick so the dialog
+  // opens after paint instead of inside the effect's synchronous pass).
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const searchParams = new URLSearchParams(window.location.search)
-      if (searchParams.get('auth') === 'required') {
-        setAuthOpen(true)
-        // Clean URL parameter
-        const newUrl = window.location.pathname
-        window.history.replaceState({}, '', newUrl)
-      }
-    }
+    const searchParams = new URLSearchParams(window.location.search)
+    if (searchParams.get('auth') !== 'required') return
+    window.history.replaceState({}, '', window.location.pathname)
+    const t = setTimeout(() => setAuthOpen(true), 0)
+    return () => clearTimeout(t)
   }, [pathname])
 
   const handleSendOtp = async (e: React.FormEvent) => {
@@ -63,8 +61,8 @@ export function Navbar() {
       await sendOtp(phone)
       toast.success('OTP sent successfully to your mobile!')
       setAuthStep('otp')
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to send OTP')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to send OTP'))
     } finally {
       setSubmitting(false)
     }
@@ -96,8 +94,8 @@ export function Navbar() {
         setAuthOpen(false)
         resetForm()
       }
-    } catch (err: any) {
-      toast.error(err.message || 'Invalid verification code')
+    } catch (err) {
+      toast.error(errMessage(err, 'Invalid verification code'))
     } finally {
       setSubmitting(false)
     }
@@ -116,8 +114,8 @@ export function Navbar() {
       setAuthOpen(false)
       resetForm()
       router.refresh()
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to complete profile setup')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to complete profile setup'))
     } finally {
       setSubmitting(false)
     }

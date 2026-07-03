@@ -21,6 +21,13 @@ import { SaveButton } from '@/components/spot/save-button'
 import { ReportDialog } from '@/components/spot/report-dialog'
 import { ShareButton } from '@/components/spot/share-button'
 import { CoordsCard } from '@/components/spot/coords-card'
+import type { SpotCardResolved } from '@/lib/spot-types'
+
+interface SpotImage {
+  id: string
+  image_url: string
+  is_cover: boolean
+}
 
 interface PageProps {
   params: Promise<{
@@ -252,8 +259,8 @@ export default async function SpotDetailPage({ params }: PageProps) {
                 <h2 className="font-heading text-xl font-bold">Location Photos</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {spot.spot_images
-                    .filter((img: any) => !img.is_cover)
-                    .map((img: any) => (
+                    .filter((img: SpotImage) => !img.is_cover)
+                    .map((img: SpotImage) => (
                       <div key={img.id} className="relative h-32 md:h-40 rounded-xl overflow-hidden border border-border/50 shadow-sm hover:opacity-90 transition-opacity">
                         <Image
                           src={img.image_url}
@@ -400,7 +407,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
               <section className="space-y-4">
                 <h3 className="font-heading text-lg font-bold">Nearby Hidden Gems</h3>
                 <div className="space-y-3">
-                  {nearbySpots.map((nSpot: any) => (
+                  {(nearbySpots as unknown as SpotCardResolved[]).map((nSpot) => (
                     <Link
                       key={nSpot.id}
                       href={`/${nSpot.state.slug}/${nSpot.district.slug}/${nSpot.slug}`}
