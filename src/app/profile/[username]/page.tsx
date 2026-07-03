@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Sparkles, MapPin, Compass, Award, ExternalLink, Bookmark } from 'lucide-react'
+import { Calendar, Sparkles, MapPin, Compass, Award, ExternalLink, Bookmark, Pencil } from 'lucide-react'
 import { ShareButton } from '@/components/spot/share-button'
 import { buttonVariants } from '@/components/ui/button'
 import { first, type SpotCardRow, type SpotCardResolved } from '@/lib/spot-types'
@@ -93,6 +93,11 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 {profile.full_name || 'Traveler Contributor'}
               </h1>
               <p className="text-muted-foreground font-medium mt-0.5">@{profile.username}</p>
+              {profile.bio && (
+                <p className="text-sm text-muted-foreground/90 leading-relaxed mt-3 max-w-md mx-auto md:mx-0">
+                  {profile.bio}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs text-muted-foreground">
@@ -124,10 +129,16 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 text={`Hidden gems shared by @${profile.username}`}
               />
               {isOwner && (
-                <Link href="/saved" className={`${buttonVariants({ variant: 'outline', size: 'sm' })} gap-1.5 border-border/50 font-medium text-muted-foreground hover:text-foreground`}>
-                  <Bookmark className="h-4 w-4" />
-                  Saved Spots
-                </Link>
+                <>
+                  <Link href="/saved" className={`${buttonVariants({ variant: 'outline', size: 'sm' })} gap-1.5 border-border/50 font-medium text-muted-foreground hover:text-foreground`}>
+                    <Bookmark className="h-4 w-4" />
+                    Saved Spots
+                  </Link>
+                  <Link href="/settings" className={`${buttonVariants({ variant: 'outline', size: 'sm' })} gap-1.5 border-border/50 font-medium text-muted-foreground hover:text-foreground`}>
+                    <Pencil className="h-4 w-4" />
+                    Edit Profile
+                  </Link>
+                </>
               )}
             </div>
           </div>

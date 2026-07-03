@@ -52,8 +52,8 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // 2. Add Spot flow protection
-  if (pathname.startsWith('/add-spot')) {
+  // 2. Authenticated-only flows (submission, own settings)
+  if (pathname.startsWith('/add-spot') || pathname.startsWith('/settings')) {
     if (!user) {
       const url = request.nextUrl.clone()
       url.pathname = '/'
