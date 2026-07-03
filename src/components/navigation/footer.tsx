@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Compass, Mail, Globe, MapPin } from 'lucide-react'
+import { Mail, Globe, MapPin } from 'lucide-react'
+import { LogoMark } from '@/components/brand/logo-mark'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -11,9 +12,7 @@ export function Footer() {
           {/* Brand/Mission */}
           <div className="space-y-4 md:col-span-1">
             <div className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-600 to-teal-500 text-white">
-                <Compass className="h-5 w-5" />
-              </div>
+              <LogoMark className="h-8 w-auto" />
               <span className="font-heading text-lg font-bold tracking-tight">
                 Hidden<span className="text-emerald-600 dark:text-teal-400">Spot</span>
               </span>

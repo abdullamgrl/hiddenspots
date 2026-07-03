@@ -13,7 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Bookmark, Compass, PlusCircle, Settings, ShieldAlert, Sparkles, User, LogOut } from 'lucide-react'
+import { Bookmark, PlusCircle, Settings, ShieldAlert, Sparkles, User, LogOut } from 'lucide-react'
+import { LogoMark } from '@/components/brand/logo-mark'
 
 export function Navbar() {
   const pathname = usePathname()
@@ -34,9 +35,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20">
-            <Compass className="h-6 w-6 animate-pulse" />
-          </div>
+          <LogoMark className="h-10 w-auto drop-shadow-sm" />
           <span className="font-heading text-xl font-extrabold tracking-tight">
             Hidden<span className="text-emerald-600 dark:text-teal-400">Spot</span>
             <span className="text-xs font-semibold text-muted-foreground ml-1">.in</span>
