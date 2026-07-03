@@ -165,8 +165,9 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
 
                   {reelCode ? (
                     <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                      {/* /p/{code}/embed is canonical and works for both posts and reels */}
                       <iframe
-                        src={`https://www.instagram.com/reel/${reelCode}/embed/`}
+                        src={`https://www.instagram.com/p/${reelCode}/embed/`}
                         className="absolute w-full border-0"
                         style={{
                           top: '-54px',

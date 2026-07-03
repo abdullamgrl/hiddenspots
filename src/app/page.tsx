@@ -216,12 +216,17 @@ export default async function HomePage() {
     }
   }) || []
 
-  // Combine them, placing database reels first. Curated fallbacks link to the
-  // discovery map — their detail pages don't exist until someone submits them.
-  const combinedReels = [
-    ...databaseReels,
-    ...fallbackReels.map((r) => ({ ...r, detail_link: '/map' })),
-  ].slice(0, 11)
+  // Once the community has a healthy set of real reels, the carousel is purely
+  // DB-driven; curated fallbacks (linking to the discovery map, since their
+  // detail pages don't exist) only pad out a cold start.
+  const MIN_REAL_REELS = 5
+  const combinedReels =
+    databaseReels.length >= MIN_REAL_REELS
+      ? databaseReels.slice(0, 11)
+      : [
+          ...databaseReels,
+          ...fallbackReels.map((r) => ({ ...r, detail_link: '/map' })),
+        ].slice(0, 11)
 
   // Real stats derived from data already fetched above — no vanity numbers.
   const spotCount = mappedMapSpots.length
