@@ -1,29 +1,65 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+
+export interface Profile {
+  id: string
+  username: string | null
+  full_name: string | null
+  avatar_url: string | null
+  phone: string | null
+  role: 'visitor' | 'contributor' | 'moderator' | 'admin'
+  reputation_score: number
+  bio: string | null
+  created_at: string
+  updated_at: string
+}
+
+// The signup trigger seeds username as "user_<id-prefix>" and an empty
+// full_name; either signals the user hasn't completed the profile step yet.
+export function isProfileIncomplete(profile: Pick<Profile, 'username' | 'full_name'> | null): boolean {
+  if (!profile) return true
+  return !profile.username || profile.username.startsWith('user_') || !profile.full_name
+}
+
+// Map raw Supabase auth errors to messages worth showing a person.
+export function friendlyAuthError(err: unknown, fallback: string): string {
+  const msg = err instanceof Error ? err.message : String(err)
+  if (/rate limit|too many/i.test(msg)) return 'Too many attempts — please wait a minute and try again.'
+  if (/expired/i.test(msg)) return 'That code has expired — request a new one.'
+  if (/invalid.*(otp|token|code)|(otp|token|code).*invalid/i.test(msg)) return "That code doesn't match — double-check and try again."
+  if (/invalid.*phone|phone.*invalid/i.test(msg)) return 'That phone number doesn\'t look right — use your 10-digit mobile number.'
+  if (/network|fetch failed|failed to fetch/i.test(msg)) return 'Network hiccup — check your connection and try again.'
+  return msg || fallback
+}
 
 export function useSupabaseAuth() {
   const supabase = createClient()
   const router = useRouter()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [user, setUser] = useState<any>(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [profile, setProfile] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // maybeSingle: the profile row is created by a DB trigger and can lag the
+    // auth session by a beat — a missing row must not throw.
+    const fetchProfile = async (userId: string): Promise<Profile | null> => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle()
+      return data
+    }
+
     const fetchSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       setUser(session?.user ?? null)
       if (session?.user) {
-        const { data: prof } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single()
-        setProfile(prof)
+        setProfile(await fetchProfile(session.user.id))
       }
       setLoading(false)
     }
@@ -33,18 +69,13 @@ export function useSupabaseAuth() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUser(session?.user ?? null)
-        if (session?.user) {
-          const { data: prof } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
-          setProfile(prof)
-        } else {
-          setProfile(null)
-        }
+        setProfile(session?.user ? await fetchProfile(session.user.id) : null)
         setLoading(false)
-        router.refresh()
+        // Only sign-in/out changes what the server renders; skip refresh on
+        // token refreshes so the app doesn't reload every hour.
+        if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
+          router.refresh()
+        }
       }
     )
 
@@ -85,12 +116,11 @@ export function useSupabaseAuth() {
 
     if (error) throw error
 
-    // Fetch updated profile
     const { data: prof } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
     setProfile(prof)
   }
 

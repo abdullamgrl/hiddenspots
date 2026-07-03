@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navigation/navbar";
 import { MobileNav } from "@/components/navigation/mobile-nav";
 import { Footer } from "@/components/navigation/footer";
 import { QueryProvider } from "@/components/provider/query-provider";
+import { AuthDialogProvider } from "@/components/auth/auth-dialog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { PWARegister } from "@/components/provider/pwa-register";
 
@@ -67,12 +68,14 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
         <QueryProvider>
-          <Navbar />
-          <main className="flex-1 flex flex-col pb-16 md:pb-0">{children}</main>
-          <Footer />
-          <MobileNav />
-          <Toaster position="bottom-right" richColors closeButton />
-          <PWARegister />
+          <AuthDialogProvider>
+            <Navbar />
+            <main className="flex-1 flex flex-col pb-16 md:pb-0">{children}</main>
+            <Footer />
+            <MobileNav />
+            <Toaster position="bottom-right" richColors closeButton />
+            <PWARegister />
+          </AuthDialogProvider>
         </QueryProvider>
       </body>
     </html>
