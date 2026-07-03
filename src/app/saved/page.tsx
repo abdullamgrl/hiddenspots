@@ -4,6 +4,11 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { buttonVariants } from '@/components/ui/button'
 import { RemoveSavedButton } from '@/components/spot/remove-saved-button'
+import {
+  CollectionControls,
+  type Collection,
+} from '@/components/collections/collection-controls'
+import { AssignCollectionMenu } from '@/components/collections/assign-collection-menu'
 import { Bookmark, MapPin, Sparkles, Map as MapIcon, LogIn } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -13,7 +18,7 @@ export const metadata: Metadata = {
 
 interface SavedRow {
   id: string
-  collection_name: string
+  collection_id: string | null
   spot: {
     id: string
     title: string
@@ -26,7 +31,12 @@ interface SavedRow {
   } | null
 }
 
-export default async function SavedSpotsPage() {
+interface SavedPageProps {
+  searchParams: Promise<{ c?: string }>
+}
+
+export default async function SavedSpotsPage({ searchParams }: SavedPageProps) {
+  const { c: activeSlug = null } = await searchParams
   const supabase = await createClient()
   const {
     data: { user },
@@ -53,58 +63,89 @@ export default async function SavedSpotsPage() {
     )
   }
 
-  const { data } = await supabase
-    .from('saved_spots')
-    .select(
+  const [{ data: profileRow }, { data: collectionRows }, { data: savedRows }] = await Promise.all([
+    supabase.from('profiles').select('username').eq('id', user.id).maybeSingle(),
+    supabase
+      .from('collections')
+      .select('id, name, slug, is_public')
+      .eq('profile_id', user.id)
+      .order('created_at', { ascending: true }),
+    supabase
+      .from('saved_spots')
+      .select(
+        `
+        id, collection_id,
+        spot:spots(
+          id, title, slug, cover_image, verification_score,
+          state:states(name, slug),
+          district:districts(name, slug),
+          category:categories(name)
+        )
       `
-      id, collection_name,
-      spot:spots(
-        id, title, slug, cover_image, verification_score,
-        state:states(name, slug),
-        district:districts(name, slug),
-        category:categories(name)
       )
-    `
-    )
-    .eq('profile_id', user.id)
-    .order('created_at', { ascending: false })
+      .eq('profile_id', user.id)
+      .order('created_at', { ascending: false }),
+  ])
+
+  const collections = (collectionRows ?? []) as Collection[]
+  const activeCollection = collections.find((col) => col.slug === activeSlug) ?? null
 
   // RLS nulls out spots that are no longer publicly visible.
-  const saved = ((data ?? []) as unknown as SavedRow[]).filter((row) => row.spot)
+  const allSaved = ((savedRows ?? []) as unknown as SavedRow[]).filter((row) => row.spot)
+  const saved = activeCollection
+    ? allSaved.filter((row) => row.collection_id === activeCollection.id)
+    : allSaved
 
   return (
     <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mb-8 flex items-end justify-between gap-4 border-b border-border/50 pb-5">
+      <div className="mb-6 flex items-end justify-between gap-4 border-b border-border/50 pb-5">
         <div>
           <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-500">
             <Bookmark className="h-4 w-4" />
             Your Collection
           </div>
-          <h1 className="mt-1 font-heading text-3xl font-extrabold tracking-tight">Saved Spots</h1>
+          <h1 className="mt-1 font-heading text-3xl font-extrabold tracking-tight">
+            {activeCollection ? activeCollection.name : 'Saved Spots'}
+          </h1>
         </div>
         <span className="text-sm font-semibold text-muted-foreground">
           {saved.length} {saved.length === 1 ? 'spot' : 'spots'}
         </span>
       </div>
 
+      <div className="mb-8">
+        <CollectionControls
+          collections={collections}
+          activeSlug={activeCollection?.slug ?? null}
+          username={profileRow?.username ?? ''}
+          userId={user.id}
+        />
+      </div>
+
       {saved.length === 0 ? (
         <div className="mx-auto max-w-md rounded-2xl border border-border/50 bg-card p-8 text-center">
           <Bookmark className="mx-auto h-10 w-10 text-muted-foreground/50" />
-          <h2 className="mt-3 font-heading text-lg font-bold">Nothing saved yet</h2>
+          <h2 className="mt-3 font-heading text-lg font-bold">
+            {activeCollection ? 'This collection is empty' : 'Nothing saved yet'}
+          </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Tap “Save Spot” on any place that catches your eye and it will wait for you here.
+            {activeCollection
+              ? 'Move saved spots here with the folder button on any card.'
+              : 'Tap “Save Spot” on any place that catches your eye and it will wait for you here.'}
           </p>
-          <Link
-            href="/map"
-            className={`${buttonVariants({ variant: 'default' })} gradient-btn mt-5`}
-          >
-            <MapIcon className="mr-1.5 h-4 w-4" />
-            Find spots on the map
-          </Link>
+          {!activeCollection && (
+            <Link
+              href="/map"
+              className={`${buttonVariants({ variant: 'default' })} gradient-btn mt-5`}
+            >
+              <MapIcon className="mr-1.5 h-4 w-4" />
+              Find spots on the map
+            </Link>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {saved.map(({ id, spot }) => {
+          {saved.map(({ id, collection_id, spot }) => {
             if (!spot) return null
             const href = `/${spot.state?.slug}/${spot.district?.slug}/${spot.slug}`
             return (
@@ -122,7 +163,12 @@ export default async function SavedSpotsPage() {
                       <Sparkles className="h-3 w-3" />
                       <span>{spot.verification_score} Score</span>
                     </div>
-                    <div className="absolute right-3 top-3">
+                    <div className="absolute right-3 top-3 flex items-center gap-1.5">
+                      <AssignCollectionMenu
+                        savedId={id}
+                        currentCollectionId={collection_id}
+                        collections={collections}
+                      />
                       <RemoveSavedButton savedId={id} spotTitle={spot.title} />
                     </div>
                   </div>
