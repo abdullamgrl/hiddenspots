@@ -419,11 +419,11 @@ export default async function SpotDetailPage({ params }: PageProps) {
   )
 }
 
-// Consistent section header: tiny tracked eyebrow above the title.
+// Consistent section header: script eyebrow (brand accent) above the title.
 function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
-    <div className="space-y-1">
-      <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-500">{eyebrow}</div>
+    <div>
+      <div className="font-script text-xl text-emerald-500">{eyebrow.toLowerCase()}</div>
       <h2 className="font-heading text-2xl font-bold">{title}</h2>
     </div>
   )

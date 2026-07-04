@@ -313,6 +313,7 @@ export default async function HomePage() {
       {categories && categories.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
+            <div className="font-script text-2xl text-emerald-400">find your kind of place</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Browse Popular Categories</h2>
             <p className="text-zinc-400 text-sm max-w-md mx-auto">Explore destinations categorized by adventure terrain.</p>
           </div>
@@ -339,9 +340,9 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-white/5 pb-5 gap-4">
             <div>
-              <div className="text-emerald-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <div className="font-script text-xl text-emerald-400 flex items-center gap-1.5">
                 <TrendingUp className="h-4 w-4" />
-                <span>Trending Exploration</span>
+                <span>trending right now</span>
               </div>
               <h2 className="font-heading text-3xl font-extrabold tracking-tight mt-1">Featured Hidden Gems</h2>
             </div>
@@ -416,6 +417,7 @@ export default async function HomePage() {
       {mappedMapSpots.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
+            <div className="font-script text-2xl text-emerald-400">wander the map</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Interactive Map Explorer</h2>
             <p className="text-zinc-400 text-sm max-w-md mx-auto">Click markers or zoom in on clusters to inspect nearby spots.</p>
           </div>
@@ -430,8 +432,8 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-white/5 pb-5 gap-4">
             <div>
-              <div className="text-emerald-400 text-xs font-bold uppercase tracking-wider">
-                Fresh Discoveries
+              <div className="font-script text-xl text-emerald-400">
+                fresh discoveries
               </div>
               <h2 className="font-heading text-3xl font-extrabold tracking-tight mt-1">Newest Travel Submissions</h2>
             </div>
@@ -498,6 +500,7 @@ export default async function HomePage() {
       {/* How it Works / Steps */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center space-y-2">
+          <div className="font-script text-2xl text-emerald-400">simple as one, two, three</div>
           <h2 className="font-heading text-3xl font-extrabold tracking-tight">How It Works</h2>
           <p className="text-zinc-400 text-sm max-w-md mx-auto">Three simple steps to build the leading travel community directory.</p>
         </div>
