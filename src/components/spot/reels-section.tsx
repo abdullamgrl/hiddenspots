@@ -1,6 +1,6 @@
 'use client'
 
-import { InstagramEmbed } from './instagram-embed'
+import { ReelEmbed } from './reel-embed'
 import { Film, ExternalLink } from 'lucide-react'
 
 interface SocialLink {
@@ -40,7 +40,7 @@ export function ReelsSection({ links }: ReelsSectionProps) {
         <div className={`grid grid-cols-1 gap-6 ${instagram.length > 1 ? 'md:grid-cols-2' : ''}`}>
           {instagram.map((link) => (
             <div key={link.id} className="space-y-2">
-              <InstagramEmbed url={link.url} />
+              <ReelEmbed url={link.url} />
               <a
                 href={link.url}
                 target="_blank"

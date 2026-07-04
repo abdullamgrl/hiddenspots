@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, Loader2, ArrowRight, Sparkles } from 'lucide-react'
-import { InstagramEmbed } from '@/components/spot/instagram-embed'
+import { ReelEmbed } from '@/components/spot/reel-embed'
 import { useSpotReels } from '@/hooks/use-spot-reels'
 import type { MapSpotProperties } from '@/hooks/use-map-spots'
 
@@ -41,7 +41,7 @@ export function SpotPreviewCard({ spot, onClose }: SpotPreviewCardProps) {
             </div>
           ) : current ? (
             <div className="p-2">
-              <InstagramEmbed key={current.url} url={current.url} />
+              <ReelEmbed key={current.url} url={current.url} />
             </div>
           ) : (
             // No reel (or failed to load) — fall back to the cover image.
