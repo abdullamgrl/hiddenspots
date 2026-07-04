@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSupabaseAuth } from '@/hooks/use-supabase-auth'
 import { useAuthDialog } from '@/components/auth/auth-dialog-provider'
@@ -14,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Bookmark, PlusCircle, Settings, ShieldAlert, Sparkles, User, LogOut } from 'lucide-react'
-import { LogoMark } from '@/components/brand/logo-mark'
 
 export function Navbar() {
   const pathname = usePathname()
@@ -35,11 +35,11 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <LogoMark className="h-10 w-auto drop-shadow-sm" />
-          <span className="font-heading text-xl font-extrabold tracking-tight">
+          <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={80} height={40} className="h-10 w-auto drop-shadow-sm" priority />
+          {/* <span className="font-heading text-xl font-extrabold tracking-tight">
             Hidden<span className="text-emerald-600 dark:text-teal-400">Spot</span>
             <span className="text-xs font-semibold text-muted-foreground ml-1">.in</span>
-          </span>
+          </span> */}
         </Link>
 
         {/* Desktop Navigation */}
