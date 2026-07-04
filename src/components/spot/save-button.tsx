@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useAuthDialog } from '@/components/auth/auth-dialog-provider'
 import { Button } from '@/components/ui/button'
 import { Bookmark, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { errMessage } from '@/lib/utils'
 
 interface SaveButtonProps {
   spotId: string
@@ -13,6 +15,7 @@ interface SaveButtonProps {
 
 export function SaveButton({ spotId, userId }: SaveButtonProps) {
   const supabase = createClient()
+  const { openAuthDialog } = useAuthDialog()
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(true)
   const [toggling, setToggling] = useState(false)
@@ -48,13 +51,7 @@ export function SaveButton({ spotId, userId }: SaveButtonProps) {
   const handleToggleSave = async () => {
     if (!userId) {
       toast.info('Please sign in to save spots to your collection')
-      // Redirect or trigger auth dialog via URL params
-      const searchParams = new URLSearchParams(window.location.search)
-      searchParams.set('auth', 'required')
-      window.history.replaceState({}, '', `${window.location.pathname}?${searchParams.toString()}`)
-      
-      // Dispatch custom event to trigger Navbar dialog
-      window.dispatchEvent(new Event('popstate'))
+      openAuthDialog()
       return
     }
 
@@ -83,8 +80,8 @@ export function SaveButton({ spotId, userId }: SaveButtonProps) {
         setSaved(true)
         toast.success('Saved spot to your collection!')
       }
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to toggle bookmark status')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to toggle bookmark status'))
     } finally {
       setToggling(false)
     }

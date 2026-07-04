@@ -25,7 +25,8 @@ export async function GET() {
 
   const staticUrls = [
     { url: baseUrl, lastmod: new Date().toISOString() },
-    { url: `${baseUrl}/offline`, lastmod: new Date().toISOString() },
+    { url: `${baseUrl}/map`, lastmod: new Date().toISOString() },
+    { url: `${baseUrl}/nearby`, lastmod: new Date().toISOString() },
   ]
 
   const categoryUrls =
@@ -41,13 +42,13 @@ export async function GET() {
     })) || []
 
   const districtUrls =
-    districts?.map((dst: any) => ({
+    (districts as { slug: string; state: { slug: string } }[] | null)?.map((dst) => ({
       url: `${baseUrl}/${dst.state.slug}/${dst.slug}`,
       lastmod: new Date().toISOString(),
     })) || []
 
   const spotUrls =
-    spots?.map((spot: any) => ({
+    (spots as { slug: string; updated_at: string; state: { slug: string }; district: { slug: string } }[] | null)?.map((spot) => ({
       url: `${baseUrl}/${spot.state.slug}/${spot.district.slug}/${spot.slug}`,
       lastmod: new Date(spot.updated_at).toISOString(),
     })) || []

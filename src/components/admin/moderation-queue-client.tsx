@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -26,9 +25,9 @@ import {
   Eye,
   Loader2,
   Clock,
-  Sparkles,
 } from 'lucide-react'
 import Image from 'next/image'
+import { errMessage } from '@/lib/utils'
 
 interface PendingSpot {
   id: string
@@ -150,8 +149,8 @@ export function ModerationQueueClient({
 
       toast.success('Spot approved successfully and is now live!')
       setSpots((prev) => prev.filter((s) => s.id !== spotId))
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to approve spot')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to approve spot'))
     }
   }
 
@@ -189,8 +188,8 @@ export function ModerationQueueClient({
       setSpots((prev) => prev.filter((s) => s.id !== actionSpot.id))
       setActionSpot(null)
       setReason('')
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to complete moderation action')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to complete moderation action'))
     } finally {
       setActionLoading(false)
     }
@@ -231,8 +230,8 @@ export function ModerationQueueClient({
 
       toast.success('Report resolved and spot soft-deleted!')
       setReports((prev) => prev.filter((r) => r.id !== reportId))
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to resolve report')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to resolve report'))
     }
   }
 
@@ -252,8 +251,8 @@ export function ModerationQueueClient({
 
       toast.success('Report ticket dismissed.')
       setReports((prev) => prev.filter((r) => r.id !== reportId))
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to dismiss report')
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to dismiss report'))
     }
   }
 

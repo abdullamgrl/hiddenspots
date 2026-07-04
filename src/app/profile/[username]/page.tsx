@@ -4,7 +4,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Sparkles, MapPin, Compass, Award, ExternalLink } from 'lucide-react'
+import { Calendar, Sparkles, MapPin, Compass, Award, ExternalLink, Bookmark, Pencil } from 'lucide-react'
+import { ShareButton } from '@/components/spot/share-button'
+import { buttonVariants } from '@/components/ui/button'
+import { first, type SpotCardRow, type SpotCardResolved } from '@/lib/spot-types'
 
 interface ProfilePageProps {
   params: Promise<{
@@ -68,6 +71,12 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const { data: spots } = await query.order('created_at', { ascending: false })
 
   const approvedSpotsCount = spots?.filter((s) => s.status === 'approved').length || 0
+  const districtsExplored = new Set(
+    (spots ?? [])
+      .filter((s) => s.status === 'approved')
+      .map((s) => first((s as unknown as SpotCardRow).district)?.slug)
+      .filter(Boolean)
+  ).size
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -84,6 +93,11 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 {profile.full_name || 'Traveler Contributor'}
               </h1>
               <p className="text-muted-foreground font-medium mt-0.5">@{profile.username}</p>
+              {profile.bio && (
+                <p className="text-sm text-muted-foreground/90 leading-relaxed mt-3 max-w-md mx-auto md:mx-0">
+                  {profile.bio}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs text-muted-foreground">
@@ -99,11 +113,33 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 <Award className="h-4 w-4 text-emerald-600" />
                 <span>{approvedSpotsCount} Approved Gems</span>
               </div>
+              <div className="flex items-center space-x-1.5">
+                <MapPin className="h-4 w-4 text-emerald-600" />
+                <span>{districtsExplored} {districtsExplored === 1 ? 'District' : 'Districts'} Explored</span>
+              </div>
             </div>
 
-            <div className="inline-flex items-center space-x-2 rounded-xl bg-amber-500/10 text-amber-800 dark:text-amber-400 px-4 py-2 text-sm font-semibold border border-amber-500/20">
-              <Sparkles className="h-4 w-4" />
-              <span>{profile.reputation_score} Reputation Score</span>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+              <div className="inline-flex items-center space-x-2 rounded-xl bg-amber-500/10 text-amber-800 dark:text-amber-400 px-4 py-2 text-sm font-semibold border border-amber-500/20">
+                <Sparkles className="h-4 w-4" />
+                <span>{profile.reputation_score} Reputation Score</span>
+              </div>
+              <ShareButton
+                title={`${profile.full_name || profile.username} on HiddenSpot`}
+                text={`Hidden gems shared by @${profile.username}`}
+              />
+              {isOwner && (
+                <>
+                  <Link href="/saved" className={`${buttonVariants({ variant: 'outline', size: 'sm' })} gap-1.5 border-border/50 font-medium text-muted-foreground hover:text-foreground`}>
+                    <Bookmark className="h-4 w-4" />
+                    Saved Spots
+                  </Link>
+                  <Link href="/settings" className={`${buttonVariants({ variant: 'outline', size: 'sm' })} gap-1.5 border-border/50 font-medium text-muted-foreground hover:text-foreground`}>
+                    <Pencil className="h-4 w-4" />
+                    Edit Profile
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </CardContent>
@@ -117,7 +153,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         {spots && spots.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {spots.map((spot: any) => (
+            {(spots as unknown as SpotCardResolved[]).map((spot) => (
               <Card key={spot.id} className="glass overflow-hidden shadow-md border-border/50 group hover:shadow-lg transition-all duration-300">
                 <div className="relative h-48 w-full">
                   <Image
@@ -165,7 +201,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   </div>
 
                   <div className="pt-3 border-t border-border/50 flex justify-between items-center text-xs text-muted-foreground">
-                    <span>Added {new Date(spot.created_at).toLocaleDateString('en-IN')}</span>
+                    <span>Added {new Date(spot.created_at!).toLocaleDateString('en-IN')}</span>
                     {spot.status === 'approved' && (
                       <Link
                         href={`/${spot.state.slug}/${spot.district.slug}/${spot.slug}`}
@@ -185,8 +221,19 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             <Compass className="h-10 w-10 text-muted-foreground mx-auto mb-3 animate-pulse" />
             <h3 className="font-heading text-lg font-bold">No Gems Shared Yet</h3>
             <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-1">
-              Explore hidden spots or sign in to add your first beautiful location.
+              {isOwner
+                ? 'Share your first hidden gem and start building your explorer reputation.'
+                : `${profile.full_name || username} hasn’t shared any spots yet.`}
             </p>
+            {isOwner && (
+              <Link
+                href="/add-spot"
+                className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-emerald-600 hover:to-teal-500"
+              >
+                <Compass className="h-4 w-4" />
+                Add Your First Spot
+              </Link>
+            )}
           </div>
         )}
       </div>

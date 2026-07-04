@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { MapPin, Sparkles, Compass } from 'lucide-react'
 import DynamicMap from '@/components/map/map-wrapper'
+import { first, type SpotCardRow } from '@/lib/spot-types'
 
 interface DistrictPageProps {
   params: Promise<{
@@ -75,18 +76,18 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
     .order('verification_score', { ascending: false })
 
   // Map raw supabase joins to safe objects for dynamic map typing
-  const mappedSpots = spots?.map((s: any) => ({
+  const mappedSpots = ((spots ?? []) as SpotCardRow[]).map((s) => ({
     id: s.id,
     title: s.title,
     slug: s.slug,
     cover_image: s.cover_image,
     verification_score: s.verification_score,
-    latitude: s.latitude,
-    longitude: s.longitude,
-    state: Array.isArray(s.state) ? s.state[0] : s.state,
-    district: Array.isArray(s.district) ? s.district[0] : s.district,
-    category: Array.isArray(s.category) ? s.category[0] : s.category,
-  })) || []
+    latitude: s.latitude!,
+    longitude: s.longitude!,
+    state: first(s.state)!,
+    district: first(s.district)!,
+    category: first(s.category)!,
+  }))
 
   // Calculate average coordinates for centering the map
   const hasSpots = mappedSpots.length > 0
@@ -134,7 +135,7 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
         <h2 className="font-heading text-2xl font-bold">Destinations worth visiting</h2>
         {hasSpots ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {mappedSpots.map((spot: any) => (
+            {mappedSpots.map((spot) => (
               <Link
                 key={spot.id}
                 href={`/${data.state.slug}/${data.district.slug}/${spot.slug}`}
@@ -180,6 +181,13 @@ export default async function DistrictPage({ params }: DistrictPageProps) {
             <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-1">
               Be the first to share a beautiful travel spot in {data.district.name}!
             </p>
+            <Link
+              href="/add-spot"
+              className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-emerald-600 hover:to-teal-500"
+            >
+              <Compass className="h-4 w-4" />
+              Add the First Spot
+            </Link>
           </div>
         )}
       </section>

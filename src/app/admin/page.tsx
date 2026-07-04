@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Compass, ShieldAlert, Sparkles, Users, AlertTriangle, CheckCircle } from 'lucide-react'
+import { Compass, ShieldAlert, Users, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient()

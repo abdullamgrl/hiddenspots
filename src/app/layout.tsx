@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navigation/navbar";
+import { MobileNav } from "@/components/navigation/mobile-nav";
 import { Footer } from "@/components/navigation/footer";
 import { QueryProvider } from "@/components/provider/query-provider";
+import { AuthDialogProvider } from "@/components/auth/auth-dialog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { PWARegister } from "@/components/provider/pwa-register";
 
@@ -48,7 +50,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d9488",
+  themeColor: "#1F3D2E",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -62,15 +64,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
+      className={`${inter.variable} ${outfit.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
         <QueryProvider>
-          <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
-          <Toaster position="bottom-right" richColors closeButton />
-          <PWARegister />
+          <AuthDialogProvider>
+            <Navbar />
+            <main className="flex-1 flex flex-col pb-16 md:pb-0">{children}</main>
+            <Footer />
+            <MobileNav />
+            <Toaster position="bottom-right" richColors closeButton />
+            <PWARegister />
+          </AuthDialogProvider>
         </QueryProvider>
       </body>
     </html>

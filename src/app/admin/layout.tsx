@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ShieldCheck, BarChart3, ListCollapse, Settings, LogOut, ArrowLeft } from 'lucide-react'
+import { ShieldCheck, BarChart3, ListCollapse, ArrowLeft } from 'lucide-react'
 
 export default async function AdminLayout({
   children,

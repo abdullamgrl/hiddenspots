@@ -12,10 +12,12 @@ import {
   CheckCircle,
   ArrowRight,
   TrendingUp,
+  Calendar,
 } from 'lucide-react'
-import { HeroSearch } from '@/components/navigation/hero-search'
+import { SearchBox } from '@/components/navigation/search-box'
 import DynamicMap from '@/components/map/map-wrapper'
 import { HeroReelsCarousel, ReelItem } from '@/components/spot/hero-reels-carousel'
+import { first, type SpotCardRow } from '@/lib/spot-types'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -31,7 +33,7 @@ export default async function HomePage() {
   const { data: featuredSpots } = await supabase
     .from('spots')
     .select(`
-      id, title, slug, cover_image, verification_score,
+      id, title, slug, cover_image, verification_score, best_time_to_visit,
       state:states(name, slug),
       district:districts(name, slug),
       category:categories(name)
@@ -45,7 +47,7 @@ export default async function HomePage() {
   const { data: newestSpots } = await supabase
     .from('spots')
     .select(`
-      id, title, slug, cover_image, verification_score, created_at,
+      id, title, slug, cover_image, verification_score, best_time_to_visit, created_at,
       state:states(name, slug),
       district:districts(name, slug),
       category:categories(name)
@@ -83,18 +85,18 @@ export default async function HomePage() {
     .eq('spot.is_deleted', false)
 
   // Map raw supabase joins to safe objects for dynamic map typing
-  const mappedMapSpots = mapSpots?.map((s: any) => ({
+  const mappedMapSpots = ((mapSpots ?? []) as SpotCardRow[]).map((s) => ({
     id: s.id,
     title: s.title,
     slug: s.slug,
     cover_image: s.cover_image,
     verification_score: s.verification_score,
-    latitude: s.latitude,
-    longitude: s.longitude,
-    state: Array.isArray(s.state) ? s.state[0] : s.state,
-    district: Array.isArray(s.district) ? s.district[0] : s.district,
-    category: Array.isArray(s.category) ? s.category[0] : s.category,
-  })) || []
+    latitude: s.latitude!,
+    longitude: s.longitude!,
+    state: first(s.state)!,
+    district: first(s.district)!,
+    category: first(s.category)!,
+  }))
 
   // Define premium fallback reels to ensure we always have 11 items
   const fallbackReels: ReelItem[] = [
@@ -200,10 +202,11 @@ export default async function HomePage() {
   ]
 
   // Map database reels
-  const databaseReels = reelLinks?.map((rl: any) => {
+  type ReelLinkRow = { url: string; spot: SpotCardRow }
+  const databaseReels = ((reelLinks ?? []) as unknown as ReelLinkRow[]).map((rl) => {
     const spot = rl.spot
-    const stateObj = Array.isArray(spot.state) ? spot.state[0] : spot.state
-    const districtObj = Array.isArray(spot.district) ? spot.district[0] : spot.district
+    const stateObj = first(spot.state)!
+    const districtObj = first(spot.district)!
     return {
       id: spot.id,
       title: spot.title,
@@ -213,10 +216,26 @@ export default async function HomePage() {
       district: districtObj.name,
       state: stateObj.name,
     }
-  }) || []
+  })
 
-  // Combine them, placing database reels first
-  const combinedReels = [...databaseReels, ...fallbackReels].slice(0, 11)
+  // Once the community has a healthy set of real reels, the carousel is purely
+  // DB-driven; curated fallbacks (linking to the discovery map, since their
+  // detail pages don't exist) only pad out a cold start.
+  const MIN_REAL_REELS = 5
+  const combinedReels =
+    databaseReels.length >= MIN_REAL_REELS
+      ? databaseReels.slice(0, 11)
+      : [
+          ...databaseReels,
+          ...fallbackReels.map((r) => ({ ...r, detail_link: '/map' })),
+        ].slice(0, 11)
+
+  // Real stats derived from data already fetched above — no vanity numbers.
+  const spotCount = mappedMapSpots.length
+  const districtCount = new Set(
+    mappedMapSpots.map((s) => s.district?.slug).filter(Boolean)
+  ).size
+  const reelCount = databaseReels.length
 
   return (
     <div className="space-y-24 pb-24 overflow-hidden bg-zinc-950 text-zinc-50">
@@ -260,18 +279,18 @@ export default async function HomePage() {
               </p>
             </div>
 
-            {/* Premium community badge */}
-            <div className="flex items-center space-x-3 bg-zinc-900/40 backdrop-blur-md border border-white/5 px-4 py-2 rounded-full w-fit mx-auto lg:mx-0 shadow-lg">
-              <div className="flex -space-x-2">
-                <div className="relative h-6 w-6 rounded-full border border-zinc-950 bg-emerald-500 text-[9px] font-bold flex items-center justify-center text-black">U1</div>
-                <div className="relative h-6 w-6 rounded-full border border-zinc-950 bg-teal-500 text-[9px] font-bold flex items-center justify-center text-black">U2</div>
-                <div className="relative h-6 w-6 rounded-full border border-zinc-950 bg-indigo-500 text-[9px] font-bold flex items-center justify-center text-white">U3</div>
-              </div>
-              <span className="text-[11px] font-semibold text-zinc-300">Join 3,400+ offbeat explorers</span>
+            {/* Trust badge — real numbers only */}
+            <div className="flex items-center space-x-2 bg-zinc-900/40 backdrop-blur-md border border-white/5 px-4 py-2 rounded-full w-fit mx-auto lg:mx-0 shadow-lg">
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+              <span className="text-[11px] font-semibold text-zinc-300">
+                {spotCount > 0
+                  ? `${spotCount} GPS-verified ${spotCount === 1 ? 'spot' : 'spots'} across ${districtCount} ${districtCount === 1 ? 'district' : 'districts'} — growing weekly`
+                  : 'Every spot GPS-verified before it goes live'}
+              </span>
             </div>
 
             <div className="max-w-md mx-auto lg:mx-0 w-full">
-              <HeroSearch />
+              <SearchBox variant="hero" />
             </div>
 
             <div className="text-[11px] text-zinc-500 flex items-center justify-center lg:justify-start gap-1">
@@ -324,19 +343,19 @@ export default async function HomePage() {
               <h2 className="font-heading text-3xl font-extrabold tracking-tight mt-1">Featured Hidden Gems</h2>
             </div>
             <Link
-              href="/category/waterfalls"
+              href="/map"
               className={`${buttonVariants({ variant: "ghost" })} text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/5 font-semibold gap-1 inline-flex items-center`}
             >
-              <span>View All Gems</span>
+              <span>Explore the Map</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredSpots.map((spot: any) => {
-              const stateObj = Array.isArray(spot.state) ? spot.state[0] : spot.state
-              const districtObj = Array.isArray(spot.district) ? spot.district[0] : spot.district
-              const categoryObj = Array.isArray(spot.category) ? spot.category[0] : spot.category
+            {featuredSpots.map((spot: SpotCardRow) => {
+              const stateObj = first(spot.state)!
+              const districtObj = first(spot.district)!
+              const categoryObj = first(spot.category)!
               return (
                 <Link
                   key={spot.id}
@@ -367,11 +386,19 @@ export default async function HomePage() {
                           {spot.title}
                         </h3>
                       </div>
-                      <div className="flex items-center text-xs text-zinc-400 pt-3 border-t border-white/5">
-                        <MapPin className="h-3.5 w-3.5 mr-1 text-zinc-500" />
-                        <span>
-                          {districtObj.name}, {stateObj.name}
+                      <div className="flex items-center justify-between gap-2 text-xs text-zinc-400 pt-3 border-t border-white/5">
+                        <span className="flex items-center min-w-0">
+                          <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0 text-zinc-500" />
+                          <span className="truncate">
+                            {districtObj.name}, {stateObj.name}
+                          </span>
                         </span>
+                        {spot.best_time_to_visit && (
+                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-400">
+                            <Calendar className="h-3 w-3" />
+                            {spot.best_time_to_visit}
+                          </span>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -408,10 +435,10 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newestSpots.map((spot: any) => {
-              const stateObj = Array.isArray(spot.state) ? spot.state[0] : spot.state
-              const districtObj = Array.isArray(spot.district) ? spot.district[0] : spot.district
-              const categoryObj = Array.isArray(spot.category) ? spot.category[0] : spot.category
+            {newestSpots.map((spot: SpotCardRow) => {
+              const stateObj = first(spot.state)!
+              const districtObj = first(spot.district)!
+              const categoryObj = first(spot.category)!
               return (
                 <Link
                   key={spot.id}
@@ -442,11 +469,19 @@ export default async function HomePage() {
                           {spot.title}
                         </h3>
                       </div>
-                      <div className="flex items-center text-xs text-zinc-400 pt-3 border-t border-white/5">
-                        <MapPin className="h-3.5 w-3.5 mr-1 text-zinc-500" />
-                        <span>
-                          {districtObj.name}, {stateObj.name}
+                      <div className="flex items-center justify-between gap-2 text-xs text-zinc-400 pt-3 border-t border-white/5">
+                        <span className="flex items-center min-w-0">
+                          <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0 text-zinc-500" />
+                          <span className="truncate">
+                            {districtObj.name}, {stateObj.name}
+                          </span>
                         </span>
+                        {spot.best_time_to_visit && (
+                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-400">
+                            <Calendar className="h-3 w-3" />
+                            {spot.best_time_to_visit}
+                          </span>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -471,7 +506,7 @@ export default async function HomePage() {
             </div>
             <h3 className="font-heading text-lg font-bold text-zinc-100">1. Submit a Spot</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Verify your mobile number via OTP, search location coordinates via Google geocoding, compress photos on the client side, and submit.
+              Sign in with your mobile number, drop a pin on the exact location, add photos and the reel that inspired you — done in under two minutes.
             </p>
           </div>
 
@@ -481,7 +516,7 @@ export default async function HomePage() {
             </div>
             <h3 className="font-heading text-lg font-bold text-zinc-100">2. Moderation & Vetting</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Moderators verify submitted coordinates, flag duplicates via spatial checks, approve details, and update the verification score.
+              Moderators check the coordinates on a map, catch duplicates automatically, and approve only spots that are genuinely worth the trip.
             </p>
           </div>
 
@@ -491,30 +526,30 @@ export default async function HomePage() {
             </div>
             <h3 className="font-heading text-lg font-bold text-zinc-100">3. Earn Reputation</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              As your shared locations get approved and featured, your contributor reputation score escalates, unlocking trusted moderator privileges.
+              Every approved spot builds your explorer reputation. Top contributors get featured placements and trusted-moderator privileges.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Community stats */}
+      {/* Community stats — live counts, not vanity numbers */}
       <section className="bg-zinc-900/10 backdrop-blur-md py-16 border-y border-white/5">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">300+</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Vetted Locations</div>
+            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{spotCount}</div>
+            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Hidden Spots</div>
           </div>
           <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">10k+</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Active Travelers</div>
+            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{districtCount}</div>
+            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Districts Covered</div>
+          </div>
+          <div>
+            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{reelCount}</div>
+            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Reels Curated</div>
           </div>
           <div>
             <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">100%</div>
             <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Community Vetted</div>
-          </div>
-          <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">100m</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">GPS Accuracy</div>
           </div>
         </div>
       </section>
