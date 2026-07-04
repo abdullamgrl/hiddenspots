@@ -67,20 +67,57 @@ interface PendingReport {
   }
 }
 
+interface PendingSuggestion {
+  id: string
+  spot_id: string
+  changes: Record<string, { from: unknown; to: unknown }>
+  note: string | null
+  created_at: string
+  spot: { id: string; title: string; slug: string; cover_image: string } | null
+  suggester: { id: string; username: string | null; full_name: string | null } | null
+}
+
 interface ModerationQueueProps {
   initialSpots: PendingSpot[]
   initialReports: PendingReport[]
+  initialSuggestions: PendingSuggestion[]
   moderatorId: string
+}
+
+// Human labels + value formatting for the edit-suggestion diff view.
+const EDIT_FIELD_LABELS: Record<string, string> = {
+  description: 'Description',
+  short_description: 'Short Description',
+  address: 'Address',
+  best_time_to_visit: 'Best Time To Visit',
+  estimated_visit_duration: 'Visit Duration',
+  difficulty_level: 'Difficulty',
+  entry_fee: 'Entry Fee (₹)',
+  parking_available: 'Parking',
+  family_friendly: 'Family Friendly',
+  pet_friendly: 'Pet Friendly',
+  requires_trek: 'Requires Trek',
+  trek_distance_km: 'Trek Distance (km)',
+  safety_notes: 'Safety Notes',
+}
+
+function formatEditValue(v: unknown): string {
+  if (v === null || v === undefined || v === '') return '—'
+  if (typeof v === 'boolean') return v ? 'Yes' : 'No'
+  return String(v)
 }
 
 export function ModerationQueueClient({
   initialSpots,
   initialReports,
+  initialSuggestions,
   moderatorId,
 }: ModerationQueueProps) {
   const supabase = createClient()
   const [spots, setSpots] = useState<PendingSpot[]>(initialSpots)
   const [reports, setReports] = useState<PendingReport[]>(initialReports)
+  const [suggestions, setSuggestions] = useState<PendingSuggestion[]>(initialSuggestions)
+  const [reviewingId, setReviewingId] = useState<string | null>(null)
 
   const [activeTab, setActiveTab] = useState('submissions')
 
@@ -195,6 +232,30 @@ export function ModerationQueueClient({
     }
   }
 
+  // Review an edit suggestion — approve auto-applies the diff via RPC.
+  const handleReviewSuggestion = async (suggestionId: string, action: 'approve' | 'reject') => {
+    setReviewingId(suggestionId)
+    try {
+      const { error } = await supabase.rpc('review_edit_suggestion', {
+        p_suggestion_id: suggestionId,
+        p_action: action,
+        p_reason: null,
+      })
+      if (error) throw error
+
+      toast.success(
+        action === 'approve'
+          ? 'Edit applied to the spot — contributor credited!'
+          : 'Suggestion rejected.'
+      )
+      setSuggestions((prev) => prev.filter((s) => s.id !== suggestionId))
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to review the suggestion'))
+    } finally {
+      setReviewingId(null)
+    }
+  }
+
   // Resolve Report (Soft Delete Spot)
   const handleResolveReport = async (reportId: string, spotId: string) => {
     try {
@@ -267,6 +328,7 @@ export function ModerationQueueClient({
         <TabsList className="glass mb-6">
           <TabsTrigger value="submissions">Submissions ({spots.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
+          <TabsTrigger value="edits">Edits ({suggestions.length})</TabsTrigger>
         </TabsList>
 
         {/* 1. Submissions Tab Content */}
@@ -434,6 +496,92 @@ export function ModerationQueueClient({
               <h3 className="font-heading text-lg font-bold">Reports Queue Clear</h3>
               <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-1">
                 No active flags or reports on live gems.
+              </p>
+            </div>
+          )}
+        </TabsContent>
+
+        {/* 3. Community Edit Suggestions Tab Content */}
+        <TabsContent value="edits" className="space-y-6 outline-none">
+          {suggestions.length > 0 ? (
+            suggestions.map((sug) => (
+              <Card key={sug.id} className="glass border-border/50 p-6 shadow-sm">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+                  <div className="space-y-3 flex-1 min-w-0">
+                    <div className="flex items-center flex-wrap gap-2">
+                      <Badge className="bg-emerald-600 text-white uppercase text-[10px] tracking-wider px-2 py-0.5">
+                        Edit Suggestion
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(sug.created_at).toLocaleDateString('en-IN')} · by{' '}
+                        <span className="font-semibold text-foreground">
+                          @{sug.suggester?.username || 'unknown'}
+                        </span>
+                      </span>
+                    </div>
+
+                    <h4 className="font-heading text-lg font-bold text-foreground">
+                      Fixes for: <span className="text-emerald-600">{sug.spot?.title || 'Unknown Spot'}</span>
+                    </h4>
+
+                    {/* Field-level diff */}
+                    <div className="rounded-xl border border-border/50 overflow-hidden divide-y divide-border/50">
+                      {Object.entries(sug.changes).map(([field, change]) => (
+                        <div key={field} className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-1 sm:gap-3 p-3 text-sm bg-muted/20">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground pt-0.5">
+                            {EDIT_FIELD_LABELS[field] ?? field}
+                          </div>
+                          <div className="min-w-0 space-y-1">
+                            <div className="text-muted-foreground line-through decoration-red-400/60 break-words">
+                              {formatEditValue(change.from)}
+                            </div>
+                            <div className="text-emerald-600 dark:text-emerald-400 font-medium break-words">
+                              {formatEditValue(change.to)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {sug.note && (
+                      <p className="text-xs text-muted-foreground bg-muted/30 p-3 rounded-lg border border-border/50">
+                        <span className="font-semibold">Contributor&rsquo;s note:</span> &ldquo;{sug.note}&rdquo;
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-row md:flex-col gap-2.5 w-full md:w-auto">
+                    <Button
+                      onClick={() => handleReviewSuggestion(sug.id, 'approve')}
+                      disabled={reviewingId === sug.id}
+                      className="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-1.5"
+                    >
+                      {reviewingId === sug.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Check className="h-4 w-4" />
+                      )}
+                      <span>Approve &amp; Apply</span>
+                    </Button>
+                    <Button
+                      onClick={() => handleReviewSuggestion(sug.id, 'reject')}
+                      disabled={reviewingId === sug.id}
+                      variant="outline"
+                      className="flex-1 md:flex-none border-border/50 font-semibold text-muted-foreground hover:text-destructive"
+                    >
+                      <X className="h-4 w-4 mr-1.5" />
+                      Reject
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))
+          ) : (
+            <div className="text-center py-20 rounded-2xl bg-muted/20 border border-dashed border-border/50 glass">
+              <Check className="h-10 w-10 text-muted-foreground mx-auto mb-3 animate-pulse" />
+              <h3 className="font-heading text-lg font-bold">No Pending Edits</h3>
+              <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-1">
+                Community edit suggestions will land here for one-click review.
               </p>
             </div>
           )}

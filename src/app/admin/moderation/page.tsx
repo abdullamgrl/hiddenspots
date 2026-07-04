@@ -49,10 +49,22 @@ export default async function ModerationPage() {
     .eq('status', 'pending')
     .order('created_at', { ascending: true })
 
+  // 3. Fetch pending community edit suggestions
+  const { data: pendingSuggestions } = await supabase
+    .from('spot_edit_suggestions')
+    .select(`
+      id, spot_id, changes, note, created_at,
+      spot:spots(id, title, slug, cover_image),
+      suggester:profiles!spot_edit_suggestions_suggested_by_fkey(id, username, full_name)
+    `)
+    .eq('status', 'pending')
+    .order('created_at', { ascending: true })
+
   return (
     <ModerationQueueClient
       initialSpots={pendingSpots || []}
       initialReports={activeReports || []}
+      initialSuggestions={(pendingSuggestions as never[]) || []}
       moderatorId={user.id}
     />
   )
