@@ -19,6 +19,7 @@ import DynamicMap from '@/components/map/map-wrapper'
 import { ReelsSection } from '@/components/spot/reels-section'
 import { SaveButton } from '@/components/spot/save-button'
 import { ReportDialog } from '@/components/spot/report-dialog'
+import { SuggestEditDialog } from '@/components/spot/suggest-edit-dialog'
 import { ShareButton } from '@/components/spot/share-button'
 import { CoordsCard } from '@/components/spot/coords-card'
 import type { SpotCardResolved } from '@/lib/spot-types'
@@ -233,9 +234,28 @@ export default async function SpotDetailPage({ params }: PageProps) {
             </div>
 
             {/* Actions for User */}
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-wrap items-center gap-3">
               <SaveButton spotId={spot.id} userId={user?.id} />
               <ShareButton title={spot.title} text={spot.short_description} />
+              <SuggestEditDialog
+                spotId={spot.id}
+                userId={user?.id}
+                current={{
+                  description: spot.description ?? '',
+                  short_description: spot.short_description ?? '',
+                  address: spot.address ?? '',
+                  best_time_to_visit: spot.best_time_to_visit ?? '',
+                  estimated_visit_duration: spot.estimated_visit_duration ?? '',
+                  difficulty_level: spot.difficulty_level ?? '',
+                  entry_fee: Number(spot.entry_fee ?? 0),
+                  parking_available: !!spot.parking_available,
+                  family_friendly: !!spot.family_friendly,
+                  pet_friendly: !!spot.pet_friendly,
+                  requires_trek: !!spot.requires_trek,
+                  trek_distance_km: Number(spot.trek_distance_km ?? 0),
+                  safety_notes: spot.safety_notes ?? '',
+                }}
+              />
               <ReportDialog spotId={spot.id} userId={user?.id} />
             </div>
           </div>
