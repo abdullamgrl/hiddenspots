@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Outfit, Caveat } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navigation/navbar";
 import { MobileNav } from "@/components/navigation/mobile-nav";
@@ -9,14 +9,23 @@ import { AuthDialogProvider } from "@/components/auth/auth-dialog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { PWARegister } from "@/components/provider/pwa-register";
 
+// Fonts are self-hosted via next/font (preloaded, no CLS). The variables carry
+// distinct names so globals.css can map them into the Tailwind theme without
+// the theme values overriding the font loader's output.
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-inter",
 });
 
 const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-outfit",
+});
+
+// Script accent for taglines/eyebrows only — echoes the logo's script wordmark.
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
 });
 
 export const metadata: Metadata = {
@@ -64,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${outfit.variable} dark h-full antialiased`}
+      className={`${inter.variable} ${outfit.variable} ${caveat.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
         <QueryProvider>

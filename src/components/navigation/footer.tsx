@@ -20,9 +20,9 @@ export function Footer() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               HiddenSpot is a community-driven travel discovery engine for sharing visual-first hidden gems, scenic viewpoints, waterfalls, and offbeat locales in India.
             </p>
-            <div className="flex items-center space-x-3 text-muted-foreground text-xs">
-              <Globe className="h-4 w-4 text-emerald-600" />
-              <span>Made with love in Kerala, India</span>
+            <div className="flex items-center space-x-2 text-muted-foreground">
+              <Globe className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+              <span className="font-script text-lg leading-none">made with love in Kerala, India</span>
             </div>
           </div>
 

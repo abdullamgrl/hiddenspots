@@ -272,7 +272,10 @@ export default async function HomePage() {
                 <span>Explore Vetted Secluded Gems</span>
               </div>
               <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
-                Find the <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500">Unseen</span>
+                Find the{' '}
+                <span className="font-script font-bold text-[1.18em] text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500">
+                  Unseen
+                </span>
               </h1>
               <p className="text-sm sm:text-base text-zinc-300 max-w-lg mx-auto lg:mx-0 leading-relaxed">
                 HiddenSpot.in is a community-vetted map directory of secret waterfalls, misty viewpoints, and offbeat trails. Exact coordinates, zero filler.
@@ -310,6 +313,7 @@ export default async function HomePage() {
       {categories && categories.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
+            <div className="font-script text-2xl text-emerald-400">find your kind of place</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Browse Popular Categories</h2>
             <p className="text-zinc-400 text-sm max-w-md mx-auto">Explore destinations categorized by adventure terrain.</p>
           </div>
@@ -336,9 +340,9 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-white/5 pb-5 gap-4">
             <div>
-              <div className="text-emerald-400 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <div className="font-script text-xl text-emerald-400 flex items-center gap-1.5">
                 <TrendingUp className="h-4 w-4" />
-                <span>Trending Exploration</span>
+                <span>trending right now</span>
               </div>
               <h2 className="font-heading text-3xl font-extrabold tracking-tight mt-1">Featured Hidden Gems</h2>
             </div>
@@ -413,6 +417,7 @@ export default async function HomePage() {
       {mappedMapSpots.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
+            <div className="font-script text-2xl text-emerald-400">wander the map</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Interactive Map Explorer</h2>
             <p className="text-zinc-400 text-sm max-w-md mx-auto">Click markers or zoom in on clusters to inspect nearby spots.</p>
           </div>
@@ -427,8 +432,8 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-white/5 pb-5 gap-4">
             <div>
-              <div className="text-emerald-400 text-xs font-bold uppercase tracking-wider">
-                Fresh Discoveries
+              <div className="font-script text-xl text-emerald-400">
+                fresh discoveries
               </div>
               <h2 className="font-heading text-3xl font-extrabold tracking-tight mt-1">Newest Travel Submissions</h2>
             </div>
@@ -495,6 +500,7 @@ export default async function HomePage() {
       {/* How it Works / Steps */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center space-y-2">
+          <div className="font-script text-2xl text-emerald-400">simple as one, two, three</div>
           <h2 className="font-heading text-3xl font-extrabold tracking-tight">How It Works</h2>
           <p className="text-zinc-400 text-sm max-w-md mx-auto">Three simple steps to build the leading travel community directory.</p>
         </div>
@@ -559,7 +565,9 @@ export default async function HomePage() {
         <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-800 to-teal-700 text-white p-8 sm:p-12 text-center shadow-2xl">
           <div className="absolute inset-0 bg-[radial-gradient(at_0%_0%,rgba(16,185,129,0.3)_0,transparent_50%)]" />
           <div className="relative z-10 max-w-xl mx-auto space-y-6">
-            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">Know A Secluded Spot?</h2>
+            <h2 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Know a <span className="font-script font-bold text-[1.18em] text-amber-300">secluded spot</span>?
+            </h2>
             <p className="text-emerald-100 text-sm sm:text-base leading-relaxed">
               Help your fellow travelers. Register instantly via SMS, drop the coordinate pin, upload cover photos, and submit.
             </p>
