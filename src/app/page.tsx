@@ -367,7 +367,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/map"
-              className={`${buttonVariants({ variant: "ghost" })} text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/5 font-semibold gap-1 inline-flex items-center`}
+              className={`${buttonVariants({ variant: "ghost" })} text-sunset hover:text-sunset hover:bg-sunset/10 font-semibold gap-1 inline-flex items-center`}
             >
               <span>Explore the Map</span>
               <ArrowRight className="h-4 w-4" />
@@ -385,7 +385,7 @@ export default async function HomePage() {
                   href={`/${stateObj.slug}/${districtObj.slug}/${spot.slug}`}
                   className="group"
                 >
-                  <Card className="glass overflow-hidden border border-white/5 hover:border-emerald-500/35 bg-zinc-900/20 backdrop-blur-md group-hover:shadow-xl group-hover:shadow-emerald-950/10 transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
+                  <Card className="glass overflow-hidden border border-white/5 hover:border-emerald-500/35 bg-zinc-900/20 backdrop-blur-md group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
                     <div className="relative h-56 w-full overflow-hidden">
                       <Image
                         src={spot.cover_image}
@@ -394,6 +394,7 @@ export default async function HomePage() {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
+                      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
                       <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 text-white px-2.5 py-0.5 text-xs font-semibold">
                         <Sparkles className="h-3 w-3" />
                         <span>{spot.verification_score} Score</span>
@@ -469,7 +470,7 @@ export default async function HomePage() {
                   href={`/${stateObj.slug}/${districtObj.slug}/${spot.slug}`}
                   className="group"
                 >
-                  <Card className="glass overflow-hidden border border-white/5 hover:border-emerald-500/35 bg-zinc-900/20 backdrop-blur-md group-hover:shadow-xl group-hover:shadow-emerald-950/10 transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
+                  <Card className="glass overflow-hidden border border-white/5 hover:border-emerald-500/35 bg-zinc-900/20 backdrop-blur-md group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
                     <div className="relative h-56 w-full overflow-hidden">
                       <Image
                         src={spot.cover_image}
@@ -478,6 +479,7 @@ export default async function HomePage() {
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
+                      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
                       <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 text-white px-2.5 py-0.5 text-xs font-semibold">
                         <Sparkles className="h-3 w-3" />
                         <span>{spot.verification_score} Score</span>
