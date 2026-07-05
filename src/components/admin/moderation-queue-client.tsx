@@ -400,7 +400,7 @@ export function ModerationQueueClient({
                     </div>
 
                     {/* Right Column: Actions */}
-                    <div className="border-t lg:border-t-0 lg:border-l border-border/50 p-6 flex lg:flex-col justify-end lg:justify-center gap-3 lg:w-48 bg-muted/10">
+                    <div className="border-t lg:border-t-0 lg:border-l border-border/50 p-6 flex flex-col lg:flex-col justify-center gap-3 lg:w-48 bg-muted/10">
                       <Button
                         onClick={() => handleApprove(spot.id)}
                         className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-1.5"
@@ -470,7 +470,7 @@ export function ModerationQueueClient({
                     </p>
                   </div>
 
-                  <div className="flex flex-row md:flex-col gap-2.5 w-full md:w-auto">
+                  <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 w-full md:w-auto">
                     <Button
                       onClick={() => handleResolveReport(report.id, report.spot_id)}
                       variant="destructive"
@@ -550,7 +550,7 @@ export function ModerationQueueClient({
                     )}
                   </div>
 
-                  <div className="flex flex-row md:flex-col gap-2.5 w-full md:w-auto">
+                  <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 w-full md:w-auto">
                     <Button
                       onClick={() => handleReviewSuggestion(sug.id, 'approve')}
                       disabled={reviewingId === sug.id}
