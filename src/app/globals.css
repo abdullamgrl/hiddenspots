@@ -145,7 +145,7 @@
 
 /* Glassmorphism custom classes */
 .glass {
-  @apply backdrop-blur-md bg-white/70 dark:bg-card/80 border border-white/20 dark:border-white/10;
+  @apply backdrop-blur-md bg-white/70 dark:bg-card/80 border border-zinc-200/80 dark:border-white/10;
 }
 
 .glass-nav {

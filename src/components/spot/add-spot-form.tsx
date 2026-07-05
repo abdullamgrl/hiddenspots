@@ -324,21 +324,35 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
     <Card className="glass shadow-xl overflow-hidden border-border/50">
       <CardContent className="p-6 sm:p-8">
         {/* Progress Tracker Header */}
-        <div className="relative flex justify-between items-center mb-8 max-w-xs mx-auto">
-          {[1, 2, 3, 4].map((num) => (
-            <div key={num} className="relative z-10 flex flex-col items-center">
-              <div
-                className={`h-8 w-8 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                  step >= num
-                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20 scale-110'
-                    : 'bg-muted text-muted-foreground'
-                }`}
-              >
-                {num}
+        <div className="relative flex justify-between items-center mb-10 max-w-md mx-auto">
+          {['Details', 'Location', 'Info', 'Media'].map((name, index) => {
+            const num = index + 1
+            const isCompleted = step > num
+            const isActive = step === num
+            return (
+              <div key={name} className="relative z-10 flex flex-col items-center flex-1">
+                <div
+                  className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+                    isCompleted
+                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25 scale-105'
+                      : isActive
+                      ? 'bg-emerald-500 text-white border-2 border-emerald-300 dark:border-emerald-700 shadow-lg scale-110'
+                      : 'bg-zinc-800 text-zinc-400 border border-zinc-700 dark:bg-zinc-900'
+                  }`}
+                >
+                  {num}
+                </div>
+                <span
+                  className={`mt-2 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${
+                    isActive ? 'text-emerald-400 font-extrabold' : isCompleted ? 'text-emerald-600/90' : 'text-zinc-500'
+                  }`}
+                >
+                  {name}
+                </span>
               </div>
-            </div>
-          ))}
-          <div className="absolute top-4 left-0 right-0 h-[2px] bg-muted -z-0">
+            )
+          })}
+          <div className="absolute top-[18px] left-[12%] right-[12%] h-[2px] bg-zinc-700 dark:bg-zinc-800 -z-0">
             <div
               className="h-full bg-emerald-600 transition-all duration-300"
               style={{ width: `${((step - 1) / 3) * 100}%` }}

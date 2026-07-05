@@ -7,10 +7,11 @@ import type { FeatureCollection, Point } from 'geojson'
 import type { MapBounds, MapSpotProperties } from '@/hooks/use-map-spots'
 import { SpotPreviewCard } from './spot-preview-card'
 
-// Default dark vector basemap. Free fair-use CARTO style that matches the
-// app's dark theme. Override with NEXT_PUBLIC_MAP_STYLE_URL to point at
-// OpenFreeMap, a self-hosted style, or any MapLibre-compatible style JSON.
-const DEFAULT_STYLE_URL = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+// Default vector basemaps. Free fair-use CARTO styles that match the
+// app's dark and light themes. Override with NEXT_PUBLIC_MAP_STYLE_URL
+// and NEXT_PUBLIC_MAP_STYLE_LIGHT_URL.
+const DEFAULT_DARK_STYLE_URL = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+const DEFAULT_LIGHT_STYLE_URL = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
 
 // Whole-of-India default viewport (content is currently Kerala-centric but
 // the directory is national in scope).
@@ -50,6 +51,26 @@ export default function MapLibreMap({
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const [styleReady, setStyleReady] = useState(false)
+  const [isDark, setIsDark] = useState(true)
+
+  // Track document theme changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const checkDark = () => {
+      setIsDark(document.documentElement.classList.contains('dark'))
+    }
+    checkDark()
+    const observer = new MutationObserver(checkDark)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  // Keep track of the last viewport state to prevent reset during theme switch
+  const lastCenterRef = useRef<[number, number]>(center)
+  const lastZoomRef = useRef<number>(zoom)
 
   // Keep latest callbacks in refs so the init-once effect never reads stale ones.
   const onBoundsChangeRef = useRef(onBoundsChange)
@@ -59,15 +80,20 @@ export default function MapLibreMap({
     onSelectSpotRef.current = onSelectSpot
   })
 
-  // Create the map + cluster layers once.
+  // Select the style based on the active theme
+  const styleUrl = isDark
+    ? (process.env.NEXT_PUBLIC_MAP_STYLE_URL || DEFAULT_DARK_STYLE_URL)
+    : (process.env.NEXT_PUBLIC_MAP_STYLE_LIGHT_URL || DEFAULT_LIGHT_STYLE_URL)
+
+  // Create the map + cluster layers, re-initializing when the theme-style changes.
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return
+    if (!containerRef.current) return
 
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: process.env.NEXT_PUBLIC_MAP_STYLE_URL || DEFAULT_STYLE_URL,
-      center,
-      zoom,
+      style: styleUrl,
+      center: lastCenterRef.current,
+      zoom: lastZoomRef.current,
       attributionControl: { compact: true },
     })
     mapRef.current = map
@@ -95,6 +121,9 @@ export default function MapLibreMap({
 
     const syncBounds = () => {
       const b = map.getBounds()
+      const c = map.getCenter()
+      lastCenterRef.current = [c.lng, c.lat]
+      lastZoomRef.current = map.getZoom()
       onBoundsChangeRef.current?.({
         minLng: b.getWest(),
         minLat: b.getSouth(),
@@ -220,7 +249,7 @@ export default function MapLibreMap({
       setStyleReady(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [styleUrl])
 
   // Push parent-owned spots into the GeoJSON source.
   useEffect(() => {

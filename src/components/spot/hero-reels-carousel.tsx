@@ -65,6 +65,32 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
     setCurrentIndex((prev) => (prev - 1 + total) % total)
   }
 
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const swipeDiff = touchStart - touchEnd
+    const minSwipeDistance = 50
+
+    if (swipeDiff > minSwipeDistance) {
+      handleNext()
+    } else if (swipeDiff < -minSwipeDistance) {
+      handlePrev()
+    }
+
+    setTouchStart(null)
+    setTouchEnd(null)
+  }
+
   const getCardStyle = (index: number) => {
     let diff = index - currentIndex
 
@@ -98,20 +124,10 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
       <div 
         className="relative w-full h-[450px] flex items-center justify-center overflow-hidden md:overflow-visible"
         style={{ perspective: 1200 }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-        {/* Swipe overlay */}
-        <motion.div
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={(e, info) => {
-            if (info.offset.x < -50) {
-              handleNext()
-            } else if (info.offset.x > 50) {
-              handlePrev()
-            }
-          }}
-          className="absolute inset-0 z-20 cursor-grab active:cursor-grabbing md:hidden"
-        />
 
         {/* Carousel Cards */}
         {reels.map((item, index) => {

@@ -142,7 +142,7 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <Button onClick={openAuthDialog} className="gradient-btn">
-              Sign In
+              Sign In 
             </Button>
           )}
         </nav>
@@ -190,6 +190,7 @@ export function Navbar() {
                   }>
                     <ShieldAlert className="mr-2 h-4 w-4" />
                     <span>Moderator Panel</span>
+
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
