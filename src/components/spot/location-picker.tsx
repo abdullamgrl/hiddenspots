@@ -118,24 +118,23 @@ export function LocationPicker({
 }: LocationPickerProps) {
   // Google Maps autocompletion state
   const [geoQuery, setGeoQuery] = useState('')
-  const [geoSuggestions, setGeoSuggestions] = useState<google.maps.places.AutocompletePrediction[]>([])
+  const [geoSuggestions, setGeoSuggestions] = useState<google.maps.places.PlacePrediction[]>([])
   const [searchingGeo, setSearchingGeo] = useState(false)
 
   const [mapsApiLoaded, setMapsApiLoaded] = useState(false)
   const [detectingGps, setDetectingGps] = useState(false)
 
-  // Service handles are external-system objects, not render state — refs.
-  const autocompleteServiceRef = useRef<google.maps.places.AutocompleteService | null>(null)
+  // Geocoder is an external-system handle, not render state — ref.
+  // Autocomplete + Place Details use the Places API (New) static classes
+  // (AutocompleteSuggestion / Place): the legacy AutocompleteService and
+  // PlacesService are unavailable to Google Cloud projects created after
+  // March 2025.
   const geocoderRef = useRef<google.maps.Geocoder | null>(null)
 
   useEffect(() => {
     loadGoogleMaps()
       .then(() => {
-        autocompleteServiceRef.current = new google.maps.places.AutocompleteService()
         geocoderRef.current = new google.maps.Geocoder()
-        placesServiceRef.current = new google.maps.places.PlacesService(
-          document.createElement('div')
-        )
         setMapsApiLoaded(true)
       })
       .catch((err) => {
@@ -148,7 +147,6 @@ export function LocationPicker({
   // selection (session-based billing), and requests are debounced so we never
   // fire per-keystroke.
   const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null)
-  const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null)
   const geoDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -178,33 +176,40 @@ export function LocationPicker({
       return
     }
 
-    if (!autocompleteServiceRef.current) return
+    if (!mapsApiLoaded) return
 
-    geoDebounceRef.current = setTimeout(() => {
+    geoDebounceRef.current = setTimeout(async () => {
       if (!sessionTokenRef.current) {
         sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
       }
       setSearchingGeo(true)
-      autocompleteServiceRef.current!.getPlacePredictions(
-        {
-          input: val,
-          componentRestrictions: { country: 'in' },
-          sessionToken: sessionTokenRef.current,
-        },
-        (predictions, status) => {
-          setSearchingGeo(false)
-          if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
-            setGeoSuggestions(predictions)
-          } else {
-            setGeoSuggestions([])
-          }
-        }
-      )
+      try {
+        const { suggestions } =
+          await google.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+            input: val,
+            sessionToken: sessionTokenRef.current,
+            includedRegionCodes: ['in'],
+          })
+        setGeoSuggestions(
+          suggestions
+            .map((s) => s.placePrediction)
+            .filter((p): p is google.maps.places.PlacePrediction => p !== null)
+        )
+      } catch (err) {
+        console.error('Places autocomplete failed:', err)
+        setGeoSuggestions([])
+      } finally {
+        setSearchingGeo(false)
+      }
     }, 350)
   }
 
-  // Autofill state/district selects from resolved address components.
-  const applyAddressComponents = (components: google.maps.GeocoderAddressComponent[]) => {
+  // Autofill state/district selects from resolved address components. Accepts
+  // both shapes: legacy Geocoder rows ({long_name}) and Places API (New) rows
+  // ({longText}).
+  type AnyAddressComponent = { types: string[]; long_name?: string; longText?: string | null }
+  const componentName = (c: AnyAddressComponent) => c.long_name ?? c.longText ?? ''
+  const applyAddressComponents = (components: AnyAddressComponent[]) => {
     const administrativeArea1 = components.find((c) =>
       c.types.includes('administrative_area_level_1')
     )
@@ -213,7 +218,7 @@ export function LocationPicker({
     )
 
     if (administrativeArea1) {
-      const stateName = administrativeArea1.long_name.toLowerCase()
+      const stateName = componentName(administrativeArea1).toLowerCase()
       const matchedState = states.find(
         (s) =>
           s.name.toLowerCase().includes(stateName) ||
@@ -223,7 +228,7 @@ export function LocationPicker({
         setValue('state_id', matchedState.id, { shouldValidate: true })
 
         if (administrativeArea2) {
-          const districtName = administrativeArea2.long_name.toLowerCase()
+          const districtName = componentName(administrativeArea2).toLowerCase()
           const matchedDistrict = districts.find(
             (d) =>
               d.state_id === matchedState.id &&
@@ -238,39 +243,33 @@ export function LocationPicker({
     }
   }
 
-  const handleSelectSuggestion = (suggestion: google.maps.places.AutocompletePrediction) => {
-    const placesService = placesServiceRef.current
-    if (!placesService) return
-
-    setGeoQuery(suggestion.description)
+  const handleSelectSuggestion = async (prediction: google.maps.places.PlacePrediction) => {
+    const label = prediction.text.text
+    setGeoQuery(label)
     setGeoSuggestions([])
 
     // Place Details (limited fields) closes the autocomplete session, so the
     // whole search bills as one session instead of per-request.
-    placesService.getDetails(
-      {
-        placeId: suggestion.place_id,
-        fields: ['geometry.location', 'formatted_address', 'address_components'],
-        sessionToken: sessionTokenRef.current ?? undefined,
-      },
-      (place, status) => {
-        sessionTokenRef.current = null
-        if (
-          status === google.maps.places.PlacesServiceStatus.OK &&
-          place?.geometry?.location
-        ) {
-          const location = place.geometry.location
-          setValue('latitude', location.lat(), { shouldValidate: true })
-          setValue('longitude', location.lng(), { shouldValidate: true })
-          setValue('address', place.formatted_address ?? suggestion.description, {
-            shouldValidate: true,
-          })
-          applyAddressComponents(place.address_components ?? [])
-        } else {
-          toast.error('Could not resolve the selected location')
-        }
+    try {
+      const place = prediction.toPlace()
+      await place.fetchFields({
+        fields: ['location', 'formattedAddress', 'addressComponents'],
+      })
+      sessionTokenRef.current = null
+
+      if (!place.location) {
+        toast.error('Could not resolve the selected location')
+        return
       }
-    )
+      setValue('latitude', place.location.lat(), { shouldValidate: true })
+      setValue('longitude', place.location.lng(), { shouldValidate: true })
+      setValue('address', place.formattedAddress ?? label, { shouldValidate: true })
+      applyAddressComponents(place.addressComponents ?? [])
+    } catch (err) {
+      sessionTokenRef.current = null
+      console.error('Place details failed:', err)
+      toast.error('Could not resolve the selected location')
+    }
   }
 
   // Detect GPS location with browser geolocation
@@ -467,13 +466,13 @@ export function LocationPicker({
           <div className="absolute z-30 w-full mt-1 rounded-md border border-border bg-card shadow-lg max-h-60 overflow-y-auto glass">
             {geoSuggestions.map((s) => (
               <button
-                key={s.place_id}
+                key={s.placeId}
                 type="button"
                 onClick={() => handleSelectSuggestion(s)}
                 className="w-full text-left px-4 py-2 text-sm hover:bg-muted transition-colors flex items-center space-x-2"
               >
                 <MapPin className="h-4 w-4 text-emerald-600 flex-shrink-0" />
-                <span className="truncate">{s.description}</span>
+                <span className="truncate">{s.text.text}</span>
               </button>
             ))}
           </div>
