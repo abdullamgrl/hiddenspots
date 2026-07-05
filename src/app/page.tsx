@@ -566,7 +566,7 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(at_0%_0%,rgba(16,185,129,0.3)_0,transparent_50%)]" />
           <div className="relative z-10 max-w-xl mx-auto space-y-6">
             <h2 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Know a <span className="font-script font-bold text-[1.18em] text-amber-300">secluded spot</span>?
+              Know a <span className="font-script font-bold text-[1.18em] text-amber-300">secluded spot</span> ?
             </h2>
             <p className="text-emerald-100 text-sm sm:text-base leading-relaxed">
               Help your fellow travelers. Register instantly via SMS, drop the coordinate pin, upload cover photos, and submit.

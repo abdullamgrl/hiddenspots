@@ -34,19 +34,24 @@ export function MobileNav() {
               href={href}
               aria-current={active ? 'page' : undefined}
               className={`flex flex-col items-center gap-0.5 py-2 text-[10px] font-semibold transition-colors ${
-                active
-                  ? 'text-emerald-600 dark:text-teal-400'
-                  : 'text-muted-foreground hover:text-foreground'
+                active ? 'text-primary' : 'text-muted-foreground hover:text-heading'
               }`}
             >
               {primary ? (
-                <span className="flex h-7 w-7 -translate-y-0.5 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20">
-                  <Icon className="h-4 w-4" />
+                /* raised circular Add button */
+                <span className="flex h-11 w-11 -translate-y-4 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-4 ring-background">
+                  <Icon className="h-5 w-5" />
                 </span>
               ) : (
-                <Icon className="h-5 w-5" />
+                <span
+                  className={`flex items-center justify-center rounded-full px-3.5 py-0.5 transition-colors ${
+                    active ? 'bg-primary/15' : ''
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                </span>
               )}
-              <span>{label}</span>
+              <span className={primary ? '-mt-3.5' : ''}>{label}</span>
             </Link>
           )
         })}

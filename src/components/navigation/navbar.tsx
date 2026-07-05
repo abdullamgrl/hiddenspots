@@ -14,7 +14,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Bookmark, PlusCircle, Settings, ShieldAlert, Sparkles, User, LogOut } from 'lucide-react'
+import { Bookmark, PlusCircle, Search, Settings, ShieldAlert, Sparkles, User, LogOut } from 'lucide-react'
+
+const NAV_LINKS = [
+  { href: '/', label: 'Explore' },
+  { href: '/map', label: 'Map' },
+  { href: '/nearby', label: 'Nearby' },
+] as const
 
 export function Navbar() {
   const pathname = usePathname()
@@ -35,7 +41,8 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={80} height={40} className="h-10 w-auto drop-shadow-sm" priority />
+          {/* logo.svg is a base64-wrapped bitmap (~830KB) — the PNG is 34KB */}
+          <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={144} height={48} className="h-12 w-auto drop-shadow-sm" priority />
           {/* <span className="font-heading text-xl font-extrabold tracking-tight">
             Hidden<span className="text-emerald-600 dark:text-teal-400">Spot</span>
             <span className="text-xs font-semibold text-muted-foreground ml-1">.in</span>
@@ -44,33 +51,39 @@ export function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
+          {NAV_LINKS.map(({ href, label }) => {
+            const active = pathname === href
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? 'page' : undefined}
+                className={`relative pb-0.5 text-sm font-medium transition-colors hover:text-heading ${
+                  active ? 'text-heading' : 'text-muted-foreground'
+                }`}
+              >
+                {label}
+                {/* sunset active indicator */}
+                <span
+                  className={`absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-sunset transition-opacity ${
+                    active ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+              </Link>
+            )
+          })}
           <Link
-            href="/"
-            className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
-              pathname === '/' ? 'text-emerald-600 dark:text-teal-400' : 'text-muted-foreground'
+            href="/search"
+            aria-label="Search"
+            className={`transition-colors hover:text-heading ${
+              pathname === '/search' ? 'text-sunset' : 'text-muted-foreground'
             }`}
           >
-            Explore
-          </Link>
-          <Link
-            href="/map"
-            className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
-              pathname === '/map' ? 'text-emerald-600 dark:text-teal-400' : 'text-muted-foreground'
-            }`}
-          >
-            Map
-          </Link>
-          <Link
-            href="/nearby"
-            className={`text-sm font-medium transition-colors hover:text-emerald-600 ${
-              pathname === '/nearby' ? 'text-emerald-600 dark:text-teal-400' : 'text-muted-foreground'
-            }`}
-          >
-            Nearby
+            <Search className="h-4.5 w-4.5" />
           </Link>
           <button
             onClick={handleAddSpotClick}
-            className="flex items-center space-x-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-emerald-600"
+            className="flex items-center space-x-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-heading"
           >
             <PlusCircle className="h-4 w-4" />
             <span>Add Spot</span>

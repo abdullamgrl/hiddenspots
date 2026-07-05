@@ -29,6 +29,10 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-sunset: var(--sunset);
+  --color-sunset-foreground: var(--sunset-foreground);
+  --color-surface-alt: var(--surface-alt);
+  --color-heading: var(--heading);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -69,33 +73,41 @@
 }
 
 .dark {
-  --background: oklch(0.12 0.015 160); /* High contrast deep forest/zinc background */
-  --foreground: oklch(0.98 0.01 160);
-  
-  --card: oklch(0.16 0.015 160);
-  --card-foreground: oklch(0.98 0.01 160);
-  
-  --popover: oklch(0.14 0.015 160);
-  --popover-foreground: oklch(0.98 0.01 160);
-  
-  --primary: oklch(0.65 0.14 175); /* Glowing Active Teal (#0d9488 equivalent) */
-  --primary-foreground: oklch(0.1 0.02 175);
-  
-  --secondary: oklch(0.22 0.04 170);
-  --secondary-foreground: oklch(0.85 0.06 175);
-  
-  --muted: oklch(0.2 0.015 160);
-  --muted-foreground: oklch(0.7 0.02 160);
-  
-  --accent: oklch(0.22 0.04 170);
-  --accent-foreground: oklch(0.85 0.06 175);
-  
+  /* Warm forest/sunset palette sampled from the HiddenSpots logo:
+     pine green + golden caramel script + cream on warm near-black. */
+  --background: #0D1210;          /* warm near-black */
+  --foreground: #C7CDC9;          /* body text */
+  --heading: #F4F1EA;             /* cream — matches the wordmark */
+
+  --card: #161C1A;                /* cards, nav, footer panels */
+  --card-foreground: #C7CDC9;
+
+  --popover: #12181A;
+  --popover-foreground: #C7CDC9;
+
+  --primary: #2ECC91;             /* emerald — buttons, active, vetted */
+  --primary-foreground: #07271B;  /* deep forest text for WCAG contrast */
+
+  --secondary: #1B4332;           /* deep pine accents */
+  --secondary-foreground: #F4F1EA;
+
+  --muted: #1A211E;
+  --muted-foreground: #9CA6A0;
+
+  --accent: #1B4332;
+  --accent-foreground: #9FE8CD;
+
+  --sunset: #E8873A;              /* golden caramel — CTAs, hovers, featured */
+  --sunset-foreground: #221206;
+
+  --surface-alt: #12181A;         /* alternating section background */
+
   --destructive: oklch(0.45 0.15 28);
   --destructive-foreground: oklch(0.98 0.01 28);
-  
-  --border: oklch(0.25 0.02 160);
-  --input: oklch(0.25 0.02 160);
-  --ring: oklch(0.65 0.14 175);
+
+  --border: #273129;
+  --input: #273129;
+  --ring: #E8873A;                /* sunset focus rings */
 }
 
 @layer base {
@@ -109,28 +121,71 @@
   }
   
   .dark body {
-    background-image: radial-gradient(at 0% 0%, oklch(0.18 0.03 175 / 0.25) 0px, transparent 50%),
-                      radial-gradient(at 100% 100%, oklch(0.14 0.02 165 / 0.2) 0px, transparent 50%);
+    /* forest green -> dusk blue -> faint sunset glow */
+    background-image: radial-gradient(at 0% 0%, rgba(27, 67, 50, 0.35) 0px, transparent 55%),
+                      radial-gradient(at 100% 0%, rgba(58, 75, 99, 0.22) 0px, transparent 50%),
+                      radial-gradient(at 100% 100%, rgba(232, 135, 58, 0.07) 0px, transparent 45%);
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
+    color: var(--heading);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
 /* Glassmorphism custom classes */
 .glass {
-  @apply backdrop-blur-md bg-white/70 dark:bg-black/75 border border-white/20 dark:border-white/10;
+  @apply backdrop-blur-md bg-white/70 dark:bg-card/80 border border-white/20 dark:border-white/10;
 }
 
 .glass-nav {
-  @apply backdrop-blur-md bg-white/80 dark:bg-black/80 border-b border-border/50 sticky top-0 z-50;
+  @apply backdrop-blur-xl bg-white/80 border-b border-border/50 sticky top-0 z-50;
+}
+.dark .glass-nav {
+  background-color: rgba(13, 18, 16, 0.75);
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-400;
+  /* emerald -> golden caramel, echoing the two-tone wordmark */
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-sunset;
 }
 
+/* Primary button: emerald fill, deep-forest text, lift + glow on hover */
 .gradient-btn {
-  @apply bg-gradient-to-r from-emerald-700 to-teal-600 hover:from-emerald-600 hover:to-teal-500 text-white font-medium shadow-md shadow-emerald-900/10 transition-all duration-300;
+  @apply bg-primary text-primary-foreground font-semibold shadow-md shadow-black/30 transition-all duration-300 hover:bg-[#3EDBA1] hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5;
+}
+
+/* Secondary button: sunset outline, tint fill on hover */
+.sunset-btn {
+  @apply border border-sunset/60 bg-transparent text-sunset font-semibold transition-all duration-300 hover:bg-sunset/10 hover:border-sunset;
+}
+
+/* Tertiary: sunset text link */
+.sunset-link {
+  @apply text-sunset font-semibold underline-offset-4 transition-colors hover:underline;
+}
+
+/* Script eyebrow phrases ("wander the map", "fresh discoveries") */
+.eyebrow-script {
+  @apply font-script text-lg sm:text-xl leading-none text-sunset;
+}
+
+/* Alternating major-section background */
+.section-alt {
+  background-color: var(--surface-alt);
+}
+
+/* Card hover: lift, brighten, warm glow */
+.card-glow {
+  @apply transition-all duration-300 hover:-translate-y-1 hover:brightness-[1.06] hover:shadow-xl hover:shadow-sunset/10;
 }
