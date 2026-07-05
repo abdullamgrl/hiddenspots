@@ -70,6 +70,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX)
+    setTouchEnd(null)
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -87,6 +88,11 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
       handlePrev()
     }
 
+    setTouchStart(null)
+    setTouchEnd(null)
+  }
+
+  const handleTouchCancel = () => {
     setTouchStart(null)
     setTouchEnd(null)
   }
@@ -123,10 +129,11 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
       {/* 3D Carousel Stage */}
       <div 
         className="relative w-full h-[450px] flex items-center justify-center overflow-hidden md:overflow-visible"
-        style={{ perspective: 1200 }}
+        style={{ perspective: 1200, touchAction: 'pan-y' }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchCancel}
       >
 
         {/* Carousel Cards */}
