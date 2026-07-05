@@ -42,7 +42,7 @@ export function Navbar() {
         {/* Brand Logo */}
         <Link href="/" className="flex items-center space-x-2">
           {/* logo.svg is a base64-wrapped bitmap (~830KB) — the PNG is 34KB */}
-          <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={144} height={48} className="h-12 w-auto drop-shadow-sm" priority />
+          <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={144} height={48} className="h-18 w-auto drop-shadow-sm" priority />
           {/* <span className="font-heading text-xl font-extrabold tracking-tight">
             Hidden<span className="text-emerald-600 dark:text-teal-400">Spot</span>
             <span className="text-xs font-semibold text-muted-foreground ml-1">.in</span>

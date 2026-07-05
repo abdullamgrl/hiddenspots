@@ -23,9 +23,9 @@ export function Footer() {
           {/* Brand/Mission */}
           <div className="space-y-4 md:col-span-1">
             <div className="flex items-center space-x-2">
-              <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={168} height={56} className="h-14 w-auto drop-shadow-sm" />
+              <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={168} height={80} className="h-24 w-auto drop-shadow-sm" />
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed ">
               HiddenSpot is a community-driven travel discovery engine for sharing visual-first hidden gems, scenic viewpoints, waterfalls, and offbeat locales in India.
             </p>
             <div className="flex items-center space-x-2 text-muted-foreground">
