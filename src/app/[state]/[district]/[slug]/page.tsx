@@ -423,7 +423,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
 function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div>
-      <div className="font-script text-xl text-emerald-500">{eyebrow.toLowerCase()}</div>
+      <div className="font-script text-xl text-sunset">{eyebrow.toLowerCase()}</div>
       <h2 className="font-heading text-2xl font-bold">{title}</h2>
     </div>
   )

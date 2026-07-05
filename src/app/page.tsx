@@ -18,6 +18,8 @@ import { SearchBox } from '@/components/navigation/search-box'
 import DynamicMap from '@/components/map/map-wrapper'
 import { HeroReelsCarousel, ReelItem } from '@/components/spot/hero-reels-carousel'
 import { first, type SpotCardRow } from '@/lib/spot-types'
+import { CategoryIcon } from '@/components/spot/category-icon'
+import { CountUpStat } from '@/components/home/count-up-stat'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -203,12 +205,13 @@ export default async function HomePage() {
 
   // Map database reels
   type ReelLinkRow = { url: string; spot: SpotCardRow }
-  const databaseReels = ((reelLinks ?? []) as unknown as ReelLinkRow[]).map((rl) => {
+  const databaseReels = ((reelLinks ?? []) as unknown as ReelLinkRow[]).map((rl, idx) => {
     const spot = rl.spot
     const stateObj = first(spot.state)!
     const districtObj = first(spot.district)!
     return {
-      id: spot.id,
+      // A spot can carry multiple reels — key must be unique per reel, not per spot.
+      id: `${spot.id}-${idx}`,
       title: spot.title,
       cover_image: spot.cover_image,
       video_url: rl.url,
@@ -238,7 +241,7 @@ export default async function HomePage() {
   const reelCount = databaseReels.length
 
   return (
-    <div className="space-y-24 pb-24 overflow-hidden bg-zinc-950 text-zinc-50">
+    <div className="space-y-24 pb-24 overflow-hidden bg-background text-foreground">
       {/* Floating Animations CSS */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes float-slow {
@@ -254,13 +257,13 @@ export default async function HomePage() {
       `}} />
 
       {/* Hero Section */}
-      <section className="relative min-h-[95vh] lg:min-h-screen flex items-center justify-center bg-zinc-950 px-4 py-20 text-white overflow-hidden border-b border-white/5">
+      <section className="relative min-h-[95vh] lg:min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden border-b border-white/5">
         {/* Ambient Glows */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-12 left-12 h-80 w-80 rounded-full bg-emerald-600/10 blur-[130px] animate-float-1" />
-          <div className="absolute bottom-12 right-12 h-96 w-96 rounded-full bg-teal-600/10 blur-[140px] animate-float-2" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-indigo-600/5 blur-[160px] animate-float-1" />
-          <div className="absolute inset-0 bg-zinc-950/20" />
+          <div className="absolute bottom-12 right-12 h-96 w-96 rounded-full bg-sunset/10 blur-[140px] animate-float-2" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-[#3A4B63]/15 blur-[160px] animate-float-1" />
+          <div className="absolute inset-0 bg-background/20" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -273,7 +276,7 @@ export default async function HomePage() {
               </div>
               <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
                 Find the{' '}
-                <span className="font-script font-bold text-[1.18em] text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500">
+                <span className="font-script font-bold text-[1.18em] gradient-text">
                   Unseen
                 </span>
               </h1>
@@ -292,8 +295,25 @@ export default async function HomePage() {
               </span>
             </div>
 
-            <div className="max-w-md mx-auto lg:mx-0 w-full">
+            <div className="max-w-md mx-auto lg:mx-0 w-full space-y-3">
               <SearchBox variant="hero" />
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2">
+                {[
+                  { label: 'Waterfalls', slug: 'waterfalls' },
+                  { label: 'Viewpoints', slug: 'viewpoints' },
+                  { label: 'Beaches', slug: 'beaches' },
+                  { label: 'Camping', slug: 'camping-spots' },
+                ].map((chip) => (
+                  <Link
+                    key={chip.slug}
+                    href={`/category/${chip.slug}`}
+                    className="flex items-center gap-1.5 rounded-full border border-white/10 bg-card/60 px-3 py-1 text-xs font-semibold text-muted-foreground backdrop-blur-md transition-colors hover:border-sunset/50 hover:text-sunset"
+                  >
+                    <CategoryIcon slug={chip.slug} className="h-3.5 w-3.5" />
+                    {chip.label}
+                  </Link>
+                ))}
+              </div>
             </div>
 
             <div className="text-[11px] text-zinc-500 flex items-center justify-center lg:justify-start gap-1">
@@ -313,7 +333,7 @@ export default async function HomePage() {
       {categories && categories.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
-            <div className="font-script text-2xl text-emerald-400">find your kind of place</div>
+            <div className="font-script text-2xl text-sunset">find your kind of place</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Browse Popular Categories</h2>
             <p className="text-zinc-400 text-sm max-w-md mx-auto">Explore destinations categorized by adventure terrain.</p>
           </div>
@@ -322,8 +342,8 @@ export default async function HomePage() {
             {categories.map((cat) => (
               <Link key={cat.id} href={`/category/${cat.slug}`} className="group">
                 <Card className="glass h-full border border-white/5 hover:border-emerald-500/50 hover:bg-emerald-950/10 text-center p-6 flex flex-col items-center justify-center transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-emerald-950/20">
-                  <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                    <Compass className="h-6 w-6" />
+                  <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-sunset/10 group-hover:text-sunset transition-all duration-300">
+                    <CategoryIcon slug={cat.slug} className="h-6 w-6" />
                   </div>
                   <span className="font-heading text-sm font-bold text-zinc-200 group-hover:text-emerald-400 transition-colors">
                     {cat.name}
@@ -340,7 +360,7 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-white/5 pb-5 gap-4">
             <div>
-              <div className="font-script text-xl text-emerald-400 flex items-center gap-1.5">
+              <div className="font-script text-xl text-sunset flex items-center gap-1.5">
                 <TrendingUp className="h-4 w-4" />
                 <span>trending right now</span>
               </div>
@@ -417,7 +437,7 @@ export default async function HomePage() {
       {mappedMapSpots.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-2">
-            <div className="font-script text-2xl text-emerald-400">wander the map</div>
+            <div className="font-script text-2xl text-sunset">wander the map</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Interactive Map Explorer</h2>
             <p className="text-zinc-400 text-sm max-w-md mx-auto">Click markers or zoom in on clusters to inspect nearby spots.</p>
           </div>
@@ -432,7 +452,7 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-white/5 pb-5 gap-4">
             <div>
-              <div className="font-script text-xl text-emerald-400">
+              <div className="font-script text-xl text-sunset">
                 fresh discoveries
               </div>
               <h2 className="font-heading text-3xl font-extrabold tracking-tight mt-1">Newest Travel Submissions</h2>
@@ -500,7 +520,7 @@ export default async function HomePage() {
       {/* How it Works / Steps */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center space-y-2">
-          <div className="font-script text-2xl text-emerald-400">simple as one, two, three</div>
+          <div className="font-script text-2xl text-sunset">simple as one, two, three</div>
           <h2 className="font-heading text-3xl font-extrabold tracking-tight">How It Works</h2>
           <p className="text-zinc-400 text-sm max-w-md mx-auto">Three simple steps to build the leading travel community directory.</p>
         </div>
@@ -539,24 +559,12 @@ export default async function HomePage() {
       </section>
 
       {/* Community stats — live counts, not vanity numbers */}
-      <section className="bg-zinc-900/10 backdrop-blur-md py-16 border-y border-white/5">
+      <section className="section-alt py-16 border-y border-white/5">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{spotCount}</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Hidden Spots</div>
-          </div>
-          <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{districtCount}</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Districts Covered</div>
-          </div>
-          <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">{reelCount}</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Reels Curated</div>
-          </div>
-          <div>
-            <div className="font-heading text-4xl sm:text-5xl font-extrabold text-emerald-400">100%</div>
-            <div className="text-xs text-zinc-400 uppercase font-semibold mt-2">Community Vetted</div>
-          </div>
+          <CountUpStat value={spotCount} label="Hidden Spots" />
+          <CountUpStat value={districtCount} label="Districts Covered" />
+          <CountUpStat value={reelCount} label="Reels Curated" />
+          <CountUpStat value={100} suffix="%" label="Community Vetted" />
         </div>
       </section>
 

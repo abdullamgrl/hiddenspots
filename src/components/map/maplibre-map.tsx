@@ -73,6 +73,7 @@ export default function MapLibreMap({
     mapRef.current = map
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
+    map.addControl(new maplibregl.FullscreenControl(), 'top-right')
     map.addControl(
       new maplibregl.GeolocateControl({
         positionOptions: { enableHighAccuracy: true },

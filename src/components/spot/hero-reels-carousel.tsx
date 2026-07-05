@@ -158,7 +158,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                         sizes="260px"
                         className="object-cover opacity-40 blur-xs"
                       />
-                      <Sparkles className="h-6 w-6 text-emerald-500 animate-pulse mb-2" />
+                      <Sparkles className="h-6 w-6 text-sunset animate-pulse mb-2" />
                       <span className="text-xs text-zinc-300 font-medium">Loading local secret...</span>
                     </div>
                   )}
@@ -226,7 +226,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                   </div>
 
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-12 w-12 rounded-full bg-emerald-600/90 border border-emerald-500/30 text-white flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-500">
+                    <div className="h-12 w-12 rounded-full bg-sunset/90 border border-sunset/40 text-sunset-foreground flex items-center justify-center shadow-lg shadow-sunset/30 transition-all duration-300 group-hover:scale-110 group-hover:bg-sunset">
                       <Play className="h-5 w-5 fill-white ml-0.5" />
                     </div>
                   </div>

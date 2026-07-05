@@ -102,7 +102,7 @@ export function SearchBox({ variant = 'hero', autoFocus = false, initialQuery = 
     <div ref={rootRef} className="relative w-full">
       <form onSubmit={handleSubmit} role="search" className="w-full">
         <div
-          className={`relative flex items-center rounded-2xl border bg-white/90 backdrop-blur-md dark:bg-black/80 ${
+          className={`relative flex items-center rounded-2xl border bg-white/90 backdrop-blur-md transition-all duration-300 focus-within:border-sunset/60 focus-within:shadow-[0_0_0_3px_rgba(232,135,58,0.15)] dark:bg-card/80 ${
             hero ? 'border-white/20 p-2 shadow-2xl dark:border-white/10' : 'border-border p-1.5 shadow-md'
           }`}
         >
