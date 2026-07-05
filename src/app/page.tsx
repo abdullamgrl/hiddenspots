@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { buttonVariants } from '@/components/ui/button'
 import {
-  Compass,
   MapPin,
   Sparkles,
   Award,
