@@ -60,11 +60,23 @@ export default async function ModerationPage() {
     .eq('status', 'pending')
     .order('created_at', { ascending: true })
 
+  // 4. Fetch pending community reel submissions
+  const { data: pendingReels } = await supabase
+    .from('spot_reel_submissions')
+    .select(`
+      id, spot_id, url, note, created_at,
+      spot:spots(id, title, slug, cover_image),
+      submitter:profiles!spot_reel_submissions_submitted_by_fkey(id, username, full_name)
+    `)
+    .eq('status', 'pending')
+    .order('created_at', { ascending: true })
+
   return (
     <ModerationQueueClient
       initialSpots={pendingSpots || []}
       initialReports={activeReports || []}
       initialSuggestions={(pendingSuggestions as never[]) || []}
+      initialReelSubmissions={(pendingReels as never[]) || []}
       moderatorId={user.id}
     />
   )

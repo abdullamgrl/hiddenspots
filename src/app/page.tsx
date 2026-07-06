@@ -19,6 +19,7 @@ import { HeroReelsCarousel, ReelItem } from '@/components/spot/hero-reels-carous
 import { first, type SpotCardRow } from '@/lib/spot-types'
 import { CategoryIcon } from '@/components/spot/category-icon'
 import { CountUpStat } from '@/components/home/count-up-stat'
+import { section } from 'framer-motion/client'
 
 export default async function HomePage() {
   const supabase = await createClient()
@@ -561,7 +562,7 @@ export default async function HomePage() {
 
       {/* Community stats — live counts, not vanity numbers */}
       <section className="section-alt py-16 border-y border-white/5">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center ">
           <CountUpStat value={spotCount} label="Hidden Spots" />
           <CountUpStat value={districtCount} label="Districts Covered" />
           <CountUpStat value={reelCount} label="Reels Curated" />

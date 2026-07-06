@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ReelEmbed } from './reel-embed'
+import { AddReelDialog } from './add-reel-dialog'
 import { Film, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface SocialLink {
@@ -12,6 +13,8 @@ interface SocialLink {
 
 interface ReelsSectionProps {
   links: SocialLink[]
+  spotId: string
+  spotTitle: string
 }
 
 /**
@@ -20,7 +23,7 @@ interface ReelsSectionProps {
  * instead of stacking into a grid. Non-Instagram platforms render as outbound
  * link chips.
  */
-export function ReelsSection({ links }: ReelsSectionProps) {
+export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
   const instagram = links.filter((l) => l.platform === 'instagram')
   const others = links.filter((l) => l.platform !== 'instagram')
 
@@ -39,8 +42,6 @@ export function ReelsSection({ links }: ReelsSectionProps) {
     ro.observe(el)
     return () => ro.disconnect()
   }, [instagram.length])
-
-  if (links.length === 0) return null
 
   const scrollToCard = (index: number) => {
     const scroller = scrollerRef.current
@@ -77,6 +78,8 @@ export function ReelsSection({ links }: ReelsSectionProps) {
           Watch the {instagram.length === 1 ? 'Reel' : 'Reels'}
         </h2>
 
+        <div className="flex items-center gap-2">
+          <AddReelDialog spotId={spotId} spotTitle={spotTitle} />
         {instagram.length > 1 && scrollable && (
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold tabular-nums text-muted-foreground">
@@ -102,7 +105,17 @@ export function ReelsSection({ links }: ReelsSectionProps) {
             </button>
           </div>
         )}
+        </div>
       </div>
+
+      {instagram.length === 0 && (
+        <div className="rounded-2xl border border-dashed border-border/50 bg-muted/20 px-6 py-10 text-center">
+          <Film className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
+          <p className="text-sm text-muted-foreground">
+            No reels here yet — seen one of this spot on Instagram? Add it and earn reputation.
+          </p>
+        </div>
+      )}
 
       {instagram.length === 1 && (
         <div className="space-y-2">

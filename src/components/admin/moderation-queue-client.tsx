@@ -77,10 +77,21 @@ interface PendingSuggestion {
   suggester: { id: string; username: string | null; full_name: string | null } | null
 }
 
+interface PendingReelSubmission {
+  id: string
+  spot_id: string
+  url: string
+  note: string | null
+  created_at: string
+  spot: { id: string; title: string; slug: string; cover_image: string } | null
+  submitter: { id: string; username: string | null; full_name: string | null } | null
+}
+
 interface ModerationQueueProps {
   initialSpots: PendingSpot[]
   initialReports: PendingReport[]
   initialSuggestions: PendingSuggestion[]
+  initialReelSubmissions: PendingReelSubmission[]
   moderatorId: string
 }
 
@@ -111,12 +122,14 @@ export function ModerationQueueClient({
   initialSpots,
   initialReports,
   initialSuggestions,
+  initialReelSubmissions,
   moderatorId,
 }: ModerationQueueProps) {
   const supabase = createClient()
   const [spots, setSpots] = useState<PendingSpot[]>(initialSpots)
   const [reports, setReports] = useState<PendingReport[]>(initialReports)
   const [suggestions, setSuggestions] = useState<PendingSuggestion[]>(initialSuggestions)
+  const [reelSubmissions, setReelSubmissions] = useState<PendingReelSubmission[]>(initialReelSubmissions)
   const [reviewingId, setReviewingId] = useState<string | null>(null)
 
   const [activeTab, setActiveTab] = useState('submissions')
@@ -256,6 +269,29 @@ export function ModerationQueueClient({
     }
   }
 
+  const handleReviewReel = async (submissionId: string, action: 'approve' | 'reject') => {
+    setReviewingId(submissionId)
+    try {
+      const { error } = await supabase.rpc('review_reel_submission', {
+        p_submission_id: submissionId,
+        p_action: action,
+        p_reason: null,
+      })
+      if (error) throw error
+
+      toast.success(
+        action === 'approve'
+          ? 'Reel is now live on the spot — contributor credited!'
+          : 'Reel submission rejected.'
+      )
+      setReelSubmissions((prev) => prev.filter((r) => r.id !== submissionId))
+    } catch (err) {
+      toast.error(errMessage(err, 'Failed to review the reel submission'))
+    } finally {
+      setReviewingId(null)
+    }
+  }
+
   // Resolve Report (Soft Delete Spot)
   const handleResolveReport = async (reportId: string, spotId: string) => {
     try {
@@ -329,6 +365,7 @@ export function ModerationQueueClient({
           <TabsTrigger value="submissions">Submissions ({spots.length})</TabsTrigger>
           <TabsTrigger value="reports">Reports ({reports.length})</TabsTrigger>
           <TabsTrigger value="edits">Edits ({suggestions.length})</TabsTrigger>
+          <TabsTrigger value="reels">Reels ({reelSubmissions.length})</TabsTrigger>
         </TabsList>
 
         {/* 1. Submissions Tab Content */}
@@ -582,6 +619,82 @@ export function ModerationQueueClient({
               <h3 className="font-heading text-lg font-bold">No Pending Edits</h3>
               <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-1">
                 Community edit suggestions will land here for one-click review.
+              </p>
+            </div>
+          )}
+        </TabsContent>
+
+        {/* TAB 4: Community reel submissions */}
+        <TabsContent value="reels" className="space-y-6 outline-none">
+          {reelSubmissions.length > 0 ? (
+            reelSubmissions.map((sub) => (
+              <Card key={sub.id} className="glass border-border/50 p-6 shadow-sm">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+                  <div className="space-y-3 flex-1 min-w-0">
+                    <div className="flex items-center flex-wrap gap-2">
+                      <Badge className="bg-emerald-600 text-white uppercase text-[10px] tracking-wider px-2 py-0.5">
+                        Reel Submission
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(sub.created_at).toLocaleDateString('en-IN')} · by{' '}
+                        <span className="font-semibold text-foreground">
+                          @{sub.submitter?.username || 'unknown'}
+                        </span>
+                      </span>
+                    </div>
+
+                    <h4 className="font-heading text-lg font-bold text-foreground">
+                      Reel for: <span className="text-emerald-600">{sub.spot?.title || 'Unknown Spot'}</span>
+                    </h4>
+
+                    <a
+                      href={sub.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block max-w-full truncate rounded-lg border border-border/50 bg-muted/20 px-3 py-2 text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400"
+                    >
+                      {sub.url}
+                    </a>
+
+                    {sub.note && (
+                      <p className="text-xs text-muted-foreground bg-muted/30 p-3 rounded-lg border border-border/50">
+                        <span className="font-semibold">Contributor&rsquo;s note:</span> &ldquo;{sub.note}&rdquo;
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 w-full md:w-auto">
+                    <Button
+                      onClick={() => handleReviewReel(sub.id, 'approve')}
+                      disabled={reviewingId === sub.id}
+                      className="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-1.5"
+                    >
+                      {reviewingId === sub.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Check className="h-4 w-4" />
+                      )}
+                      <span>Approve &amp; Publish</span>
+                    </Button>
+                    <Button
+                      onClick={() => handleReviewReel(sub.id, 'reject')}
+                      disabled={reviewingId === sub.id}
+                      variant="outline"
+                      className="flex-1 md:flex-none border-border/50 font-semibold text-muted-foreground hover:text-destructive"
+                    >
+                      <X className="h-4 w-4 mr-1.5" />
+                      Reject
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))
+          ) : (
+            <div className="text-center py-20 rounded-2xl bg-muted/20 border border-dashed border-border/50 glass">
+              <Check className="h-10 w-10 text-muted-foreground mx-auto mb-3 animate-pulse" />
+              <h3 className="font-heading text-lg font-bold">No Pending Reels</h3>
+              <p className="text-sm text-muted-foreground max-w-xs mx-auto mt-1">
+                Community-submitted reels will land here for one-click review.
               </p>
             </div>
           )}

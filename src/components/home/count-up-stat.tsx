@@ -52,7 +52,7 @@ export function CountUpStat({ value, suffix = '', label }: CountUpStatProps) {
 
   return (
     <div ref={ref}>
-      <div className="font-heading text-4xl sm:text-5xl font-extrabold text-primary tabular-nums">
+      <div className="font-script text-4xl sm:text-5xl font-extrabold text-sunset tabular-nums">
         {display}
         {suffix}
       </div>

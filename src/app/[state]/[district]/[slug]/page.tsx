@@ -323,7 +323,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
             </section>
 
             {/* All reels + social links for this spot */}
-            <ReelsSection links={socialLinks} />
+            <ReelsSection links={socialLinks} spotId={spot.id} spotTitle={spot.title} />
           </div>
 
           {/* Right Sidebar — sticks alongside the long content column */}
