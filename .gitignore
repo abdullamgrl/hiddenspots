@@ -27,6 +27,8 @@
 # local-only agent skills
 .agents/
 .claude/skills/
+.claude/settings.local.json
+.codex/
 skills-lock.json
 
 # debug
