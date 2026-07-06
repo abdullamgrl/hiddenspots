@@ -28,32 +28,37 @@ const getReelCode = (url: string) => {
 export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cardOffset, setCardOffset] = useState(120)
+  const [isMobile, setIsMobile] = useState(false)
   const [iframeLoaded, setIframeLoaded] = useState<Record<string, boolean>>({})
+  // Mobile facade: the live IG iframe swallows touches (breaking swipe) and
+  // IG treats media taps as open-on-Instagram. So on phones the active card
+  // rests as our own cover + play button; the first tap mounts the iframe.
+  const [activated, setActivated] = useState<Record<string, boolean>>({})
 
   const total = reels.length
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setCardOffset(65)
-      } else {
-        setCardOffset(125)
-      }
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      setCardOffset(mobile ? 65 : 125)
     }
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Auto-advance every 20 seconds, resets whenever currentIndex changes
+  // Auto-advance every 20 seconds — but never while the viewer has started a
+  // reel (yanking a playing video away is worse than a static carousel).
+  const activeReelStarted = !!(reels[currentIndex] && activated[reels[currentIndex].id])
   useEffect(() => {
-    if (total === 0) return
+    if (total === 0 || activeReelStarted) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % total)
     }, 20000)
 
     return () => clearInterval(timer)
-  }, [currentIndex, total])
+  }, [currentIndex, total, activeReelStarted])
 
   if (total === 0) return null
 
@@ -169,7 +174,47 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                   : 'hover:shadow-lg hover:shadow-black/40 cursor-pointer'
               }`}
             >
-              {diff === 0 ? (
+              {diff === 0 && isMobile && !activated[item.id] ? (
+                // Active card, phone, untapped: facade keeps swipe working and
+                // defers Instagram's player until the user asks for it.
+                <button
+                  type="button"
+                  onClick={() => setActivated((prev) => ({ ...prev, [item.id]: true }))}
+                  className="relative block w-full h-full text-left"
+                  aria-label={`Play reel: ${item.title}`}
+                >
+                  <Image
+                    src={item.cover_image}
+                    alt={item.title}
+                    fill
+                    sizes="260px"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-sunset/90 border border-sunset/40 text-sunset-foreground shadow-lg shadow-sunset/30">
+                      <Play className="h-6 w-6 fill-white ml-0.5" />
+                    </span>
+                    <span className="text-[11px] font-semibold text-white/90">Tap to load reel</span>
+                  </div>
+                  <div className="absolute bottom-4 left-3 right-3 z-30">
+                    <Link
+                      href={item.detail_link}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center justify-between w-full bg-black/75 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs font-semibold shadow-lg"
+                    >
+                      <div className="text-left max-w-[150px]">
+                        <p className="truncate font-heading text-xs font-bold leading-tight">{item.title}</p>
+                        <p className="text-[10px] text-zinc-400 truncate mt-0.5 flex items-center">
+                          <MapPin className="h-2.5 w-2.5 mr-0.5" />
+                          {item.district}, {item.state}
+                        </p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-emerald-400" />
+                    </Link>
+                  </div>
+                </button>
+              ) : diff === 0 ? (
                 // Active Card - Renders Instagram Video Player
                 <div className="relative w-full h-full bg-black flex items-center justify-center">
                   {!iframeLoaded[item.id] && (
@@ -196,6 +241,8 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                           top: '-54px',
                           height: 'calc(100% + 120px)',
                         }}
+                        title={`Instagram reel: ${item.title}`}
+                        allow="autoplay; encrypted-media; picture-in-picture"
                         allowFullScreen
                         scrolling="no"
                         onLoad={() => {
