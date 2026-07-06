@@ -26,6 +26,8 @@
 
 # local-only agent skills
 .agents/
+.claude/skills/
+skills-lock.json
 
 # debug
 npm-debug.log*
