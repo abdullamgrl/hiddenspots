@@ -80,31 +80,7 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
 
         <div className="flex items-center gap-2">
           <AddReelDialog spotId={spotId} spotTitle={spotTitle} />
-        {instagram.length > 1 && scrollable && (
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold tabular-nums text-muted-foreground">
-              {active + 1} / {instagram.length}
-            </span>
-            <button
-              type="button"
-              onClick={() => scrollToCard(active - 1)}
-              disabled={active === 0}
-              aria-label="Previous reel"
-              className="rounded-full border border-border/50 p-1.5 text-muted-foreground transition-colors hover:text-foreground hover:border-emerald-500/50 disabled:opacity-30 disabled:pointer-events-none"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToCard(active + 1)}
-              disabled={active === instagram.length - 1}
-              aria-label="Next reel"
-              className="rounded-full border border-border/50 p-1.5 text-muted-foreground transition-colors hover:text-foreground hover:border-emerald-500/50 disabled:opacity-30 disabled:pointer-events-none"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        )}
+
         </div>
       </div>
 
