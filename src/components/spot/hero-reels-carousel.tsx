@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Play, ChevronLeft, ChevronRight, Sparkles, MapPin } from 'lucide-react'
 
 export interface ReelItem {
@@ -26,6 +26,7 @@ const getReelCode = (url: string) => {
 }
 
 export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
+  const reduceMotion = useReducedMotion()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [cardOffset, setCardOffset] = useState(120)
   const [isMobile, setIsMobile] = useState(false)
@@ -49,16 +50,18 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
   }, [])
 
   // Auto-advance every 20 seconds — but never while the viewer has started a
-  // reel (yanking a playing video away is worse than a static carousel).
+  // reel (yanking a playing video away is worse than a static carousel), and
+  // never under reduced-motion (unprompted movement is exactly what it opts out
+  // of; framer's JS animation ignores the CSS motion guard, so gate it here).
   const activeReelStarted = !!(reels[currentIndex] && activated[reels[currentIndex].id])
   useEffect(() => {
-    if (total === 0 || activeReelStarted) return
+    if (total === 0 || activeReelStarted || reduceMotion) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % total)
     }, 20000)
 
     return () => clearInterval(timer)
-  }, [currentIndex, total, activeReelStarted])
+  }, [currentIndex, total, activeReelStarted, reduceMotion])
 
   if (total === 0) return null
 
@@ -152,17 +155,18 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
             <motion.div
               key={item.id}
               animate={{
-                x: xOffset,
-                scale: scale,
+                // Full transform string stays on the GPU compositor; the
+                // x/scale/rotateY shorthands run on the main thread via rAF and
+                // drop frames animating up to five cards at once under load.
+                transform: `translateX(${xOffset}px) scale(${scale}) rotateY(${rotateY}deg)`,
                 opacity: opacity,
-                rotateY: rotateY,
                 zIndex: zIndex,
               }}
-              transition={{
-                type: 'spring',
-                stiffness: 260,
-                damping: 26,
-              }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { type: 'spring', stiffness: 260, damping: 26 }
+              }
               onClick={() => {
                 if (diff !== 0) {
                   setCurrentIndex(index)
