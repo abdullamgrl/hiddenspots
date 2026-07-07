@@ -40,7 +40,7 @@
   --color-brand: #8B5A2B;
   --color-brand-hover: #A0693A;
   --color-brand-muted: #B07D4F;
-  --color-brand-cream: #F3F3D9;
+  --color-brand-cream: #F7F7E6;
   --color-brand-green: #1F3D2E;
   --color-brand-green-light: #2D5A43;
 
@@ -53,7 +53,7 @@
 
 /* ── Light mode (default, priority) ──────────────────────────────── */
 :root {
-  --background: #F3F3D9;           /* warm cream background */
+  --background: #F7F7E6;           /* warm cream background */
   --foreground: #2A2418;           /* warm dark brown */
   --heading: #1F3D2E;              /* deep forest green headings */
 
@@ -64,15 +64,15 @@
   --popover-foreground: #2A2418;
 
   --primary: #1F3D2E;              /* deep green — primary buttons */
-  --primary-foreground: #F3F3D9;   /* cream text on green buttons */
+  --primary-foreground: #F7F7E6;   /* cream text on green buttons */
 
-  --secondary: #F3F3D9;            /* cream background accents */
+  --secondary: #F7F7E6;            /* cream background accents */
   --secondary-foreground: #1F3D2E;
 
   --muted: #F5F0E8;                /* warm muted background */
   --muted-foreground: #7A7062;     /* warm gray text */
 
-  --accent: #F3F3D9;
+  --accent: #F7F7E6;
   --accent-foreground: #1F3D2E;
 
   --destructive: oklch(0.55 0.18 28);
@@ -83,7 +83,7 @@
   --ring: #8B5A2B;                 /* brown focus rings */
 
   --sunset: #8B5A2B;               /* brown — CTAs, script accents */
-  --sunset-foreground: #F3F3D9;
+  --sunset-foreground: #F7F7E6;
 
   --surface-alt: #F8F4ED;          /* alternating section background */
 
@@ -94,7 +94,7 @@
 .dark {
   --background: #0C0F0D;           /* warm near-black */
   --foreground: #C5BBA8;           /* muted cream body text */
-  --heading: #F3F3D9;              /* cream gold headings */
+  --heading: #F7F7E6;              /* cream gold headings */
 
   --card: #141816;
   --card-foreground: #C5BBA8;
@@ -103,18 +103,18 @@
   --popover-foreground: #C5BBA8;
 
   --primary: #8B5A2B;              /* saddle brown — buttons, active */
-  --primary-foreground: #F3F3D9;   /* cream text on brown buttons */
+  --primary-foreground: #F7F7E6;   /* cream text on brown buttons */
 
   --secondary: #1F3D2E;            /* deep forest accents */
-  --secondary-foreground: #F3F3D9;
+  --secondary-foreground: #F7F7E6;
 
   --muted: #1A1D1B;
   --muted-foreground: #8A8474;     /* warm gray */
 
   --accent: #1F3D2E;
-  --accent-foreground: #F3F3D9;
+  --accent-foreground: #F7F7E6;
 
-  --sunset: #F3F3D9;               /* cream — script accents in dark mode */
+  --sunset: #F7F7E6;               /* cream — script accents in dark mode */
   --sunset-foreground: #1F3D2E;
 
   --surface-alt: #111413;

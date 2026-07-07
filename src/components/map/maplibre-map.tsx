@@ -80,10 +80,8 @@ export default function MapLibreMap({
     onSelectSpotRef.current = onSelectSpot
   })
 
-  // Select the style based on the active theme
-  const styleUrl = isDark
-    ? (process.env.NEXT_PUBLIC_MAP_STYLE_URL || DEFAULT_DARK_STYLE_URL)
-    : (process.env.NEXT_PUBLIC_MAP_STYLE_LIGHT_URL || DEFAULT_LIGHT_STYLE_URL)
+  // Always use the dark basemap theme
+  const styleUrl = process.env.NEXT_PUBLIC_MAP_STYLE_URL || DEFAULT_DARK_STYLE_URL
 
   // Create the map + cluster layers, re-initializing when the theme-style changes.
   useEffect(() => {
