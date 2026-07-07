@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ReelEmbed } from './reel-embed'
 import { AddReelDialog } from './add-reel-dialog'
-import { Film, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Film, ExternalLink } from 'lucide-react'
 
 interface SocialLink {
   id: string
@@ -48,7 +48,12 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
     if (!scroller) return
     const clamped = Math.max(0, Math.min(index, instagram.length - 1))
     const card = scroller.children[clamped] as HTMLElement | undefined
-    card?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    card?.scrollIntoView({
+      behavior: prefersReduced ? 'auto' : 'smooth',
+      inline: 'center',
+      block: 'nearest',
+    })
   }
 
   const handleScroll = () => {
@@ -75,13 +80,12 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
       <div className="flex items-center justify-between gap-3">
         <h2 className="flex items-center gap-2 font-heading text-2xl font-bold">
           <Film className="h-5 w-5 text-emerald-500" />
-          Watch the {instagram.length === 1 ? 'Reel' : 'Reels'}
+          {instagram.length === 0
+            ? 'Reels'
+            : `Watch the ${instagram.length === 1 ? 'Reel' : 'Reels'}`}
         </h2>
 
-        <div className="flex items-center gap-2">
-          <AddReelDialog spotId={spotId} spotTitle={spotTitle} />
-
-        </div>
+        <AddReelDialog spotId={spotId} spotTitle={spotTitle} />
       </div>
 
       {instagram.length === 0 && (
@@ -115,21 +119,28 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
             ))}
           </div>
 
-          {/* Snap-position dots */}
+          {/* Snap-position dots — tiny bars, padded to a tappable hit area */}
           {scrollable && (
-          <div className="flex justify-center gap-1.5">
-            {instagram.map((link, i) => (
-              <button
-                key={link.id}
-                type="button"
-                aria-label={`Go to reel ${i + 1}`}
-                onClick={() => scrollToCard(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === active ? 'w-5 bg-emerald-500' : 'w-1.5 bg-border hover:bg-muted-foreground/50'
-                }`}
-              />
-            ))}
-          </div>
+            <div className="flex justify-center">
+              {instagram.map((link, i) => (
+                <button
+                  key={link.id}
+                  type="button"
+                  aria-label={`Go to reel ${i + 1}`}
+                  aria-current={i === active ? 'true' : undefined}
+                  onClick={() => scrollToCard(i)}
+                  className="group grid place-items-center px-1.5 py-2.5 focus-visible:outline-none"
+                >
+                  <span
+                    className={`h-1.5 rounded-full transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-ring ${
+                      i === active
+                        ? 'w-5 bg-emerald-500'
+                        : 'w-1.5 bg-border group-hover:bg-muted-foreground/50'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
           )}
         </>
       )}
@@ -142,7 +153,7 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-full border border-border/50 bg-card px-3 py-1.5 text-xs font-semibold capitalize text-muted-foreground transition-colors hover:border-emerald-500/50 hover:text-emerald-500"
+              className="flex items-center gap-1.5 rounded-full border border-border/50 bg-card px-3 py-1.5 text-xs font-semibold capitalize text-muted-foreground transition-colors hover:border-emerald-500/50 hover:text-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ExternalLink className="h-3 w-3" />
               {link.platform}
@@ -160,7 +171,7 @@ function OpenOnInstagram({ url }: { url: string }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="mx-auto flex w-fit items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-emerald-500"
+      className="mx-auto flex w-fit items-center gap-1 rounded text-xs font-medium text-muted-foreground transition-colors hover:text-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       <ExternalLink className="h-3 w-3" />
       Open on Instagram
