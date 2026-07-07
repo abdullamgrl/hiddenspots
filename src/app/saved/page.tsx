@@ -45,7 +45,7 @@ export default async function SavedSpotsPage({ searchParams }: SavedPageProps) {
   if (!user) {
     return (
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-4 py-20 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand/10 text-brand dark:text-brand-cream">
           <Bookmark className="h-6 w-6" />
         </div>
         <h1 className="mt-4 font-heading text-2xl font-extrabold">Your saved spots live here</h1>
@@ -100,7 +100,7 @@ export default async function SavedSpotsPage({ searchParams }: SavedPageProps) {
     <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-6 flex items-end justify-between gap-4 border-b border-border/50 pb-5">
         <div>
-          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-500">
+          <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand dark:text-brand-cream">
             <Bookmark className="h-4 w-4" />
             Your Collection
           </div>
@@ -150,7 +150,7 @@ export default async function SavedSpotsPage({ searchParams }: SavedPageProps) {
             const href = `/${spot.state?.slug}/${spot.district?.slug}/${spot.slug}`
             return (
               <Link key={id} href={href} className="group relative">
-                <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-emerald-500/35 group-hover:-translate-y-1 group-hover:shadow-xl">
+                <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-brand/35 group-hover:-translate-y-1 group-hover:shadow-xl">
                   <div className="relative h-44 w-full overflow-hidden">
                     <Image
                       src={spot.cover_image}
@@ -159,7 +159,7 @@ export default async function SavedSpotsPage({ searchParams }: SavedPageProps) {
                       sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute left-3 top-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 px-2.5 py-0.5 text-xs font-semibold text-white">
+                    <div className="absolute left-3 top-3 flex items-center space-x-1 rounded-full bg-brand/90 px-2.5 py-0.5 text-xs font-semibold text-white">
                       <Sparkles className="h-3 w-3" />
                       <span>{spot.verification_score} Score</span>
                     </div>
@@ -173,10 +173,10 @@ export default async function SavedSpotsPage({ searchParams }: SavedPageProps) {
                     </div>
                   </div>
                   <div className="p-4">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-brand dark:text-brand-cream">
                       {spot.category?.name}
                     </span>
-                    <h3 className="mt-1 line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-emerald-500">
+                    <h3 className="mt-1 line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-brand">
                       {spot.title}
                     </h3>
                     <div className="mt-2 flex items-center border-t border-border/40 pt-2 text-xs text-muted-foreground">

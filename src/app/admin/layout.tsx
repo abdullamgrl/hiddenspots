@@ -31,7 +31,7 @@ export default async function AdminLayout({
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 flex-col border-r border-border/50 bg-card p-6 space-y-6">
         <div className="flex items-center space-x-2">
-          <ShieldCheck className="h-6 w-6 text-emerald-600" />
+          <ShieldCheck className="h-6 w-6 text-brand dark:text-brand-cream" />
           <span className="font-heading text-lg font-bold">Mod Panel</span>
         </div>
 

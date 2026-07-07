@@ -255,7 +255,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             {isOwner && (spots?.length ?? 0) > 0 && (
               <div className="flex flex-wrap gap-2 text-xs font-semibold">
                 {approvedSpotsCount > 0 && (
-                  <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-500">
+                  <span className="rounded-full bg-brand/10 px-3 py-1 text-brand dark:text-brand-cream">
                     {approvedSpotsCount} approved
                   </span>
                 )}
@@ -281,7 +281,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   <div
                     className={`glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 ${
                       approved
-                        ? 'group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] hover:border-emerald-500/35'
+                        ? 'group-hover:-translate-y-1 group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] hover:border-brand/35'
                         : 'opacity-90'
                     }`}
                   >
@@ -294,7 +294,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                         className={`object-cover transition-transform duration-500 ${approved ? 'group-hover:scale-105' : ''}`}
                       />
                       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-xs font-semibold text-white">
+                      <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-brand/90 px-2 py-0.5 text-xs font-semibold text-white">
                         <Sparkles className="h-3 w-3" />
                         <span>{spot.verification_score} Score</span>
                       </div>
@@ -314,10 +314,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                     </div>
 
                     <div className="space-y-2 p-5">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-brand dark:text-brand-cream">
                         {spot.category.name}
                       </span>
-                      <h3 className="line-clamp-1 font-heading text-lg font-bold text-foreground transition-colors group-hover:text-emerald-500">
+                      <h3 className="line-clamp-1 font-heading text-lg font-bold text-foreground transition-colors group-hover:text-brand">
                         {spot.title}
                       </h3>
                       <div className="flex items-center justify-between border-t border-border/40 pt-2.5 text-xs text-muted-foreground">

@@ -110,10 +110,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     <Link
                       key={`${r.kind}-${r.url}`}
                       href={r.url}
-                      className="group flex items-center gap-2.5 rounded-full border border-border/50 bg-card px-4 py-2 transition-colors hover:border-emerald-500/50 hover:bg-emerald-500/5"
+                      className="group flex items-center gap-2.5 rounded-full border border-border/50 bg-card px-4 py-2 transition-colors hover:border-brand/50 hover:bg-brand-hover/5"
                     >
-                      <Icon className="h-4 w-4 text-emerald-500" />
-                      <span className="text-sm font-semibold group-hover:text-emerald-500">{r.title}</span>
+                      <Icon className="h-4 w-4 text-brand dark:text-brand-cream" />
+                      <span className="text-sm font-semibold group-hover:text-brand">{r.title}</span>
                       {r.subtitle && <span className="text-xs text-muted-foreground">{r.subtitle}</span>}
                     </Link>
                   )
@@ -131,7 +131,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {spots.map((r) => (
                   <Link key={r.url} href={r.url} className="group">
-                    <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-emerald-500/35 group-hover:-translate-y-1 group-hover:shadow-xl">
+                    <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-brand/35 group-hover:-translate-y-1 group-hover:shadow-xl">
                       <div className="relative h-44 w-full overflow-hidden">
                         {r.image ? (
                           <Image
@@ -148,7 +148,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         )}
                       </div>
                       <div className="p-4">
-                        <h3 className="line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-emerald-500">
+                        <h3 className="line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-brand">
                           {r.title}
                         </h3>
                         {r.subtitle && (

@@ -165,8 +165,8 @@ export function CollectionControls({
           href="/saved"
           className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors ${
             !activeSlug
-              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500'
-              : 'border-border/50 bg-card text-muted-foreground hover:border-emerald-500/40 hover:text-foreground'
+              ? 'border-brand bg-brand/10 text-brand dark:text-brand-cream'
+              : 'border-border/50 bg-card text-muted-foreground hover:border-brand/40 hover:text-foreground'
           }`}
         >
           All Saved
@@ -177,8 +177,8 @@ export function CollectionControls({
             href={`/saved?c=${c.slug}`}
             className={`flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors ${
               activeSlug === c.slug
-                ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500'
-                : 'border-border/50 bg-card text-muted-foreground hover:border-emerald-500/40 hover:text-foreground'
+                ? 'border-brand bg-brand/10 text-brand dark:text-brand-cream'
+                : 'border-border/50 bg-card text-muted-foreground hover:border-brand/40 hover:text-foreground'
             }`}
           >
             {c.is_public ? <Globe className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
@@ -201,7 +201,7 @@ export function CollectionControls({
         <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border/50 bg-card px-4 py-3">
           <span className="mr-auto flex items-center gap-1.5 text-sm font-semibold">
             {active.is_public ? (
-              <Globe className="h-4 w-4 text-emerald-500" />
+              <Globe className="h-4 w-4 text-brand dark:text-brand-cream" />
             ) : (
               <Lock className="h-4 w-4 text-muted-foreground" />
             )}
@@ -260,7 +260,7 @@ export function CollectionControls({
             </div>
             <label className="flex items-center justify-between gap-3 rounded-xl border border-border/50 px-4 py-3">
               <span className="flex items-center gap-2 text-sm font-medium">
-                <Globe className="h-4 w-4 text-emerald-500" />
+                <Globe className="h-4 w-4 text-brand dark:text-brand-cream" />
                 Public collection
               </span>
               <Switch checked={isPublic} onCheckedChange={setIsPublic} disabled={busy} />

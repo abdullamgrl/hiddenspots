@@ -350,7 +350,7 @@ export function LocationPicker({
         title: 'Drag or click map to pin hidden spot',
         icon: {
           path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
-          fillColor: '#10b981',
+          fillColor: '#8B5A2B',
           fillOpacity: 1,
           strokeColor: '#ffffff',
           strokeWeight: 1.5,
@@ -446,7 +446,7 @@ export function LocationPicker({
             variant="outline"
             onClick={handleDetectGPS}
             disabled={detectingGps}
-            className="flex items-center justify-center space-x-2 border-emerald-600/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600/10 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all font-semibold whitespace-nowrap"
+            className="flex items-center justify-center space-x-2 border-brand/30 text-brand dark:text-brand-cream hover:bg-brand/10 hover:text-brand-green dark:hover:text-brand-cream transition-all font-semibold whitespace-nowrap"
           >
             {detectingGps ? (
               <>
@@ -471,7 +471,7 @@ export function LocationPicker({
                 onClick={() => handleSelectSuggestion(s)}
                 className="w-full text-left px-4 py-2 text-sm hover:bg-muted transition-colors flex items-center space-x-2"
               >
-                <MapPin className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+                <MapPin className="h-4 w-4 text-brand dark:text-brand-cream flex-shrink-0" />
                 <span className="truncate">{s.text.text}</span>
               </button>
             ))}
@@ -550,7 +550,7 @@ export function LocationPicker({
         />
         <div className="flex items-center justify-between gap-2 pt-0.5">
           {hasPin ? (
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-brand dark:text-brand-cream">
               <MapPin className="h-3.5 w-3.5" />
               Pinned at {formLat.toFixed(5)}, {formLng.toFixed(5)}
             </span>

@@ -41,7 +41,7 @@ export function ShareButton({ title, text }: ShareButtonProps) {
       onClick={handleShare}
       className="gap-1.5 border-border/50 font-medium text-muted-foreground hover:text-foreground"
     >
-      {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Share2 className="h-4 w-4" />}
+      {copied ? <Check className="h-4 w-4 text-brand dark:text-brand-cream" /> : <Share2 className="h-4 w-4" />}
       <span>{copied ? 'Copied' : 'Share'}</span>
     </Button>
   )

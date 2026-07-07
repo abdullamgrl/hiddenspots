@@ -260,7 +260,7 @@ export default async function HomePage() {
       <section className="relative min-h-[95vh] lg:min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden border-b border-white/5">
         {/* Ambient Glows */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-12 left-12 h-80 w-80 rounded-full bg-emerald-600/10 blur-[130px] animate-float-1" />
+          <div className="absolute top-12 left-12 h-80 w-80 rounded-full bg-brand/10 blur-[130px] animate-float-1" />
           <div className="absolute bottom-12 right-12 h-96 w-96 rounded-full bg-sunset/10 blur-[140px] animate-float-2" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-[#3A4B63]/15 blur-[160px] animate-float-1" />
           <div className="absolute inset-0 bg-background/20" />
@@ -270,7 +270,7 @@ export default async function HomePage() {
           {/* Left: Branding & Search (5 cols) */}
           <div className="lg:col-span-5 text-center lg:text-left space-y-8 px-4 flex flex-col justify-center">
             <div className="space-y-4">
-              <div className="inline-flex items-center space-x-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-4 py-1.5 text-xs font-semibold text-emerald-400 backdrop-blur-md w-fit mx-auto lg:mx-0">
+              <div className="inline-flex items-center space-x-2 rounded-full bg-brand/10 border border-brand/20 px-4 py-1.5 text-xs font-semibold text-brand dark:text-brand-cream backdrop-blur-md w-fit mx-auto lg:mx-0">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>Explore Vetted Secluded Gems</span>
               </div>
@@ -280,15 +280,15 @@ export default async function HomePage() {
                   Unseen
                 </span>
               </h1>
-              <p className="text-sm sm:text-base text-zinc-300 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 max-w-lg mx-auto lg:mx-0 leading-relaxed">
                 HiddenSpot.in is a community-vetted map directory of secret waterfalls, misty viewpoints, and offbeat trails. Exact coordinates, zero filler.
               </p>
             </div>
 
             {/* Trust badge — real numbers only */}
-            <div className="flex items-center space-x-2 bg-zinc-900/40 backdrop-blur-md border border-white/5 px-4 py-2 rounded-full w-fit mx-auto lg:mx-0 shadow-lg">
-              <CheckCircle className="h-4 w-4 text-emerald-400" />
-              <span className="text-[11px] font-semibold text-zinc-300">
+            <div className="flex items-center space-x-2 bg-card/60 backdrop-blur-md border border-border/50 px-4 py-2 rounded-full w-fit mx-auto lg:mx-0 shadow-lg">
+              <CheckCircle className="h-4 w-4 text-brand dark:text-brand-cream" />
+              <span className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
                 {spotCount > 0
                   ? `${spotCount} GPS-verified ${spotCount === 1 ? 'spot' : 'spots'} across ${districtCount} ${districtCount === 1 ? 'district' : 'districts'} — growing weekly`
                   : 'Every spot GPS-verified before it goes live'}
@@ -317,7 +317,7 @@ export default async function HomePage() {
             </div>
 
             <div className="text-[11px] text-zinc-500 flex items-center justify-center lg:justify-start gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
+              <span className="h-1.5 w-1.5 rounded-full bg-brand animate-ping" />
               <span>100% community vetted with coordinate verification checks</span>
             </div>
           </div>
@@ -335,17 +335,17 @@ export default async function HomePage() {
           <div className="text-center space-y-2">
             <div className="font-script text-2xl text-sunset">find your kind of place</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Browse Popular Categories</h2>
-            <p className="text-zinc-400 text-sm max-w-md mx-auto">Explore destinations categorized by adventure terrain.</p>
+            <p className="text-muted-foreground text-sm max-w-md mx-auto">Explore destinations categorized by adventure terrain.</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {categories.map((cat) => (
               <Link key={cat.id} href={`/category/${cat.slug}`} className="group">
-                <Card className="glass h-full border border-white/5 hover:border-emerald-500/50 hover:bg-emerald-950/10 text-center p-6 flex flex-col items-center justify-center transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-emerald-950/20">
-                  <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-sunset/10 group-hover:text-sunset transition-all duration-300">
+                <Card className="glass h-full border border-white/5 hover:border-brand/50 hover:bg-brand-green/10 text-center p-6 flex flex-col items-center justify-center transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-brand-green/20">
+                  <div className="h-12 w-12 rounded-2xl bg-brand/10 text-brand dark:text-brand-cream flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-sunset/10 group-hover:text-sunset transition-all duration-300">
                     <CategoryIcon slug={cat.slug} className="h-6 w-6" />
                   </div>
-                  <span className="font-heading text-sm font-bold text-zinc-200 group-hover:text-emerald-400 transition-colors">
+                  <span className="font-heading text-sm font-bold text-zinc-700 dark:text-zinc-200 group-hover:text-brand transition-colors">
                     {cat.name}
                   </span>
                 </Card>
@@ -386,7 +386,7 @@ export default async function HomePage() {
                   href={`/${stateObj.slug}/${districtObj.slug}/${spot.slug}`}
                   className="group"
                 >
-                  <Card className="glass overflow-hidden border border-white/5 hover:border-emerald-500/35 bg-zinc-900/20 backdrop-blur-md group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
+                  <Card className="glass overflow-hidden border border-border/30 hover:border-brand/35 group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
                     <div className="relative h-56 w-full overflow-hidden">
                       <Image
                         src={spot.cover_image}
@@ -396,7 +396,7 @@ export default async function HomePage() {
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 text-white px-2.5 py-0.5 text-xs font-semibold">
+                      <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-brand/90 text-white px-2.5 py-0.5 text-xs font-semibold">
                         <Sparkles className="h-3 w-3" />
                         <span>{spot.verification_score} Score</span>
                       </div>
@@ -404,14 +404,14 @@ export default async function HomePage() {
 
                     <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-3">
                       <div>
-                        <span className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">
+                        <span className="text-xs text-brand dark:text-brand-cream font-semibold uppercase tracking-wider">
                           {categoryObj.name}
                         </span>
-                        <h3 className="font-heading text-lg font-bold text-zinc-100 line-clamp-1 group-hover:text-emerald-400 transition-colors mt-1">
+                        <h3 className="font-heading text-lg font-bold text-zinc-800 dark:text-zinc-100 line-clamp-1 group-hover:text-brand transition-colors mt-1">
                           {spot.title}
                         </h3>
                       </div>
-                      <div className="flex items-center justify-between gap-2 text-xs text-zinc-400 pt-3 border-t border-white/5">
+                      <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground pt-3 border-t border-border/50">
                         <span className="flex items-center min-w-0">
                           <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0 text-zinc-500" />
                           <span className="truncate">
@@ -419,7 +419,7 @@ export default async function HomePage() {
                           </span>
                         </span>
                         {spot.best_time_to_visit && (
-                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-400">
+                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-brand/10 px-2 py-0.5 font-semibold text-brand dark:text-brand-cream">
                             <Calendar className="h-3 w-3" />
                             {spot.best_time_to_visit}
                           </span>
@@ -440,7 +440,7 @@ export default async function HomePage() {
           <div className="text-center space-y-2">
             <div className="font-script text-2xl text-sunset">wander the map</div>
             <h2 className="font-heading text-3xl font-extrabold tracking-tight">Interactive Map Explorer</h2>
-            <p className="text-zinc-400 text-sm max-w-md mx-auto">Click markers or zoom in on clusters to inspect nearby spots.</p>
+            <p className="text-muted-foreground text-sm max-w-md mx-auto">Click markers or zoom in on clusters to inspect nearby spots.</p>
           </div>
           <div className="h-[480px] w-full rounded-3xl overflow-hidden border border-white/5 shadow-2xl bg-zinc-900/10 backdrop-blur-md">
             <DynamicMap spots={mappedMapSpots} />
@@ -471,7 +471,7 @@ export default async function HomePage() {
                   href={`/${stateObj.slug}/${districtObj.slug}/${spot.slug}`}
                   className="group"
                 >
-                  <Card className="glass overflow-hidden border border-white/5 hover:border-emerald-500/35 bg-zinc-900/20 backdrop-blur-md group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
+                  <Card className="glass overflow-hidden border border-border/30 hover:border-brand/35 group-hover:shadow-xl group-hover:shadow-sunset/10 group-hover:brightness-[1.06] transition-all duration-300 h-full flex flex-col group-hover:-translate-y-1">
                     <div className="relative h-56 w-full overflow-hidden">
                       <Image
                         src={spot.cover_image}
@@ -481,7 +481,7 @@ export default async function HomePage() {
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 text-white px-2.5 py-0.5 text-xs font-semibold">
+                      <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-brand/90 text-white px-2.5 py-0.5 text-xs font-semibold">
                         <Sparkles className="h-3 w-3" />
                         <span>{spot.verification_score} Score</span>
                       </div>
@@ -489,14 +489,14 @@ export default async function HomePage() {
 
                     <CardContent className="p-5 flex-1 flex flex-col justify-between space-y-3">
                       <div>
-                        <span className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">
+                        <span className="text-xs text-brand dark:text-brand-cream font-semibold uppercase tracking-wider">
                           {categoryObj.name}
                         </span>
-                        <h3 className="font-heading text-lg font-bold text-zinc-100 line-clamp-1 group-hover:text-emerald-400 transition-colors mt-1">
+                        <h3 className="font-heading text-lg font-bold text-zinc-800 dark:text-zinc-100 line-clamp-1 group-hover:text-brand transition-colors mt-1">
                           {spot.title}
                         </h3>
                       </div>
-                      <div className="flex items-center justify-between gap-2 text-xs text-zinc-400 pt-3 border-t border-white/5">
+                      <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground pt-3 border-t border-border/50">
                         <span className="flex items-center min-w-0">
                           <MapPin className="h-3.5 w-3.5 mr-1 flex-shrink-0 text-zinc-500" />
                           <span className="truncate">
@@ -504,7 +504,7 @@ export default async function HomePage() {
                           </span>
                         </span>
                         {spot.best_time_to_visit && (
-                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 font-semibold text-emerald-400">
+                          <span className="flex items-center flex-shrink-0 gap-1 rounded-full bg-brand/10 px-2 py-0.5 font-semibold text-brand dark:text-brand-cream">
                             <Calendar className="h-3 w-3" />
                             {spot.best_time_to_visit}
                           </span>
@@ -524,36 +524,36 @@ export default async function HomePage() {
         <div className="text-center space-y-2">
           <div className="font-script text-2xl text-sunset">simple as one, two, three</div>
           <h2 className="font-heading text-3xl font-extrabold tracking-tight">How It Works</h2>
-          <p className="text-zinc-400 text-sm max-w-md mx-auto">Three simple steps to build the leading travel community directory.</p>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto">Three simple steps to build the leading travel community directory.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center p-6 space-y-4">
-            <div className="h-16 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-xl font-bold shadow-md">
+            <div className="h-16 w-16 rounded-full bg-brand/10 border border-brand/20 text-brand dark:text-brand-cream flex items-center justify-center mx-auto text-xl font-bold shadow-md">
               <UploadCloud className="h-7 w-7" />
             </div>
-            <h3 className="font-heading text-lg font-bold text-zinc-100">1. Submit a Spot</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
+            <h3 className="font-heading text-lg font-bold text-zinc-800 dark:text-zinc-100">1. Submit a Spot</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
               Sign in with your mobile number, drop a pin on the exact location, add photos and the reel that inspired you — done in under two minutes.
             </p>
           </div>
 
           <div className="text-center p-6 space-y-4">
-            <div className="h-16 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-xl font-bold shadow-md">
+            <div className="h-16 w-16 rounded-full bg-brand/10 border border-brand/20 text-brand dark:text-brand-cream flex items-center justify-center mx-auto text-xl font-bold shadow-md">
               <Award className="h-7 w-7" />
             </div>
-            <h3 className="font-heading text-lg font-bold text-zinc-100">2. Moderation & Vetting</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
+            <h3 className="font-heading text-lg font-bold text-zinc-800 dark:text-zinc-100">2. Moderation & Vetting</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
               Moderators check the coordinates on a map, catch duplicates automatically, and approve only spots that are genuinely worth the trip.
             </p>
           </div>
 
           <div className="text-center p-6 space-y-4">
-            <div className="h-16 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-xl font-bold shadow-md">
+            <div className="h-16 w-16 rounded-full bg-brand/10 border border-brand/20 text-brand dark:text-brand-cream flex items-center justify-center mx-auto text-xl font-bold shadow-md">
               <CheckCircle className="h-7 w-7" />
             </div>
-            <h3 className="font-heading text-lg font-bold text-zinc-100">3. Earn Reputation</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
+            <h3 className="font-heading text-lg font-bold text-zinc-800 dark:text-zinc-100">3. Earn Reputation</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
               Every approved spot builds your explorer reputation. Top contributors get featured placements and trusted-moderator privileges.
             </p>
           </div>
@@ -561,7 +561,7 @@ export default async function HomePage() {
       </section>
 
       {/* Community stats — live counts, not vanity numbers */}
-      <section className="section-alt py-16 border-y border-white/5">
+      <section className="section-alt py-16 border-y border-border/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center ">
           <CountUpStat value={spotCount} label="Hidden Spots" />
           <CountUpStat value={districtCount} label="Districts Covered" />
@@ -572,19 +572,19 @@ export default async function HomePage() {
 
       {/* CTA section */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-800 to-teal-700 text-white p-8 sm:p-12 text-center shadow-2xl">
-          <div className="absolute inset-0 bg-[radial-gradient(at_0%_0%,rgba(16,185,129,0.3)_0,transparent_50%)]" />
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-brand-green to-brand text-white p-8 sm:p-12 text-center shadow-2xl">
+          <div className="absolute inset-0 bg-[radial-gradient(at_0%_0%,rgba(243,243,217,0.3)_0,transparent_50%)]" />
           <div className="relative z-10 max-w-xl mx-auto space-y-6">
             <h2 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">
               Know a <span className="font-script font-bold text-[1.18em] text-amber-300">secluded spot</span> ?
             </h2>
-            <p className="text-emerald-100 text-sm sm:text-base leading-relaxed">
-              Help your fellow travelers. Register instantly via SMS, drop the coordinate pin, upload cover photos, and submit.
+            <p className="text-brand-cream text-sm sm:text-base leading-relaxed">
+              Help your fellow travelers. Register instantly, drop the coordinate pin, upload cover photos, and submit.
             </p>
             <div className="pt-2">
               <Link
                 href="/add-spot"
-                className={`${buttonVariants({ variant: "default", size: "lg" })} bg-white hover:bg-emerald-800 !text-emerald-800 hover:!text-white font-semibold px-8 shadow-md transition-all`}
+                className={`${buttonVariants({ variant: "default", size: "lg" })} bg-white hover:bg-brand-green !text-brand-green hover:!text-white font-semibold px-8 shadow-md transition-all`}
               >
                 Share Hidden Spot
               </Link>

@@ -143,7 +143,7 @@ export function AuthDialogProvider({ children }: { children: React.ReactNode }) 
         <DialogContent className="sm:max-w-[420px] glass">
           <DialogHeader>
             <DialogTitle className="font-heading text-2xl font-bold flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-emerald-600" />
+              <Sparkles className="h-5 w-5 text-brand dark:text-brand-cream" />
               {step === 'phone' && 'Join HiddenSpot'}
               {step === 'otp' && 'Verify OTP'}
               {step === 'profile' && 'Complete Profile'}

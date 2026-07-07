@@ -87,7 +87,7 @@ export function AddReelDialog({ spotId, spotTitle }: AddReelDialogProps) {
         variant="outline"
         size="sm"
         onClick={handleOpen}
-        className="gap-1.5 border-border/50 font-medium text-muted-foreground hover:border-emerald-500/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+        className="gap-1.5 border-border/50 font-medium text-muted-foreground hover:border-brand/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Plus className="h-4 w-4" />
         Add Reel
@@ -97,7 +97,7 @@ export function AddReelDialog({ spotId, spotTitle }: AddReelDialogProps) {
         <DialogContent className="glass sm:max-w-[440px]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 font-heading text-xl font-bold">
-              <Film className="h-5 w-5 text-emerald-500" />
+              <Film className="h-5 w-5 text-brand dark:text-brand-cream" />
               Add a Reel
             </DialogTitle>
             <DialogDescription>

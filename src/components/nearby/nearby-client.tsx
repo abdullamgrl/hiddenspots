@@ -69,7 +69,7 @@ export function NearbyClient() {
       {/* Ask for location */}
       {(location.status === 'idle' || location.status === 'locating') && (
         <div className="mx-auto max-w-md rounded-2xl border border-border/50 bg-card p-8 text-center shadow-sm">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand/10 text-brand dark:text-brand-cream">
             <Locate className="h-6 w-6" />
           </div>
           <h2 className="mt-4 font-heading text-lg font-bold">Find what&apos;s around you</h2>
@@ -134,8 +134,8 @@ export function NearbyClient() {
                 onClick={() => setRadiusKm(r)}
                 className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors ${
                   radiusKm === r
-                    ? 'border-emerald-500 bg-emerald-500/10 text-emerald-500'
-                    : 'border-border/50 bg-card text-muted-foreground hover:border-emerald-500/40 hover:text-foreground'
+                    ? 'border-brand bg-brand/10 text-brand dark:text-brand-cream'
+                    : 'border-border/50 bg-card text-muted-foreground hover:border-brand/40 hover:text-foreground'
                 }`}
               >
                 {r} km
@@ -195,7 +195,7 @@ export function NearbyClient() {
                   href={`/${spot.state_slug}/${spot.district_slug}/${spot.slug}`}
                   className="group"
                 >
-                  <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-emerald-500/35 group-hover:-translate-y-1 group-hover:shadow-xl">
+                  <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-brand/35 group-hover:-translate-y-1 group-hover:shadow-xl">
                     <div className="relative h-44 w-full overflow-hidden">
                       <Image
                         src={spot.cover_image}
@@ -205,21 +205,21 @@ export function NearbyClient() {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-0.5 text-xs font-bold text-white backdrop-blur-sm">
-                        <Locate className="h-3 w-3 text-emerald-400" />
+                        <Locate className="h-3 w-3 text-brand dark:text-brand-cream" />
                         {spot.distance_km} km
                       </div>
                       {spot.reel_count > 0 && (
-                        <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-emerald-600/90 px-2.5 py-0.5 text-xs font-semibold text-white">
+                        <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-brand/90 px-2.5 py-0.5 text-xs font-semibold text-white">
                           <Film className="h-3 w-3" />
                           {spot.reel_count}
                         </div>
                       )}
                     </div>
                     <div className="p-4">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-brand dark:text-brand-cream">
                         {spot.category_name}
                       </span>
-                      <h3 className="mt-1 line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-emerald-500">
+                      <h3 className="mt-1 line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-brand">
                         {spot.title}
                       </h3>
                       <div className="mt-2 flex items-center justify-between border-t border-border/40 pt-2 text-xs text-muted-foreground">

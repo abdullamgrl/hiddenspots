@@ -143,7 +143,7 @@ export function SuggestEditDialog({ spotId, userId, current }: SuggestEditDialog
       <DialogContent className="sm:max-w-[560px] glass max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-heading text-xl font-bold flex items-center gap-2">
-            <Pencil className="h-4 w-4 text-emerald-600" />
+            <Pencil className="h-4 w-4 text-brand dark:text-brand-cream" />
             Suggest an edit
           </DialogTitle>
           <DialogDescription>

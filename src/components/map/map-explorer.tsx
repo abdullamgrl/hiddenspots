@@ -84,7 +84,7 @@ export function MapExplorer({ categories }: MapExplorerProps) {
             <p>No reels in this area yet. Try zooming out or panning the map.</p>
             <Link
               href="/add-spot"
-              className="font-semibold text-emerald-600 transition-colors hover:text-emerald-500 dark:text-teal-400"
+              className="font-semibold text-brand dark:text-brand-cream transition-colors hover:text-brand dark:text-brand-cream"
             >
               Know a hidden gem here? Add it →
             </Link>
@@ -98,7 +98,7 @@ export function MapExplorer({ categories }: MapExplorerProps) {
                   <button
                     onClick={() => handleListSelect(item)}
                     className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/50 ${
-                      active ? 'bg-emerald-500/10' : ''
+                      active ? 'bg-brand/10' : ''
                     }`}
                   >
                     <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg border border-border/50">
@@ -114,7 +114,7 @@ export function MapExplorer({ categories }: MapExplorerProps) {
                       <h3 className="truncate font-heading text-sm font-bold text-foreground">
                         {item.props.title}
                       </h3>
-                      <span className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                      <span className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-brand dark:text-brand-cream">
                         <Sparkles className="h-3 w-3" />
                         {item.props.reel_count} {item.props.reel_count === 1 ? 'reel' : 'reels'}
                       </span>

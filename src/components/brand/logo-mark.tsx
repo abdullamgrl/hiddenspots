@@ -15,7 +15,7 @@ export function LogoMark({ className }: { className?: string }) {
       </defs>
       <path d="M60 146 C60 146 14 88 14 54 A46 46 0 1 1 106 54 C106 88 60 146 60 146 Z" fill="#1F3D2E" />
       <g clipPath={`url(#${clipId})`}>
-        <rect x="14" y="8" width="92" height="92" fill="#F7E9C4" />
+        <rect x="14" y="8" width="92" height="92" fill="#F3F3D9" />
         <circle cx="75" cy="37" r="13" fill="#F39C12" />
         <path d="M42 30 q4 -4 8 0" stroke="#1F3D2E" strokeWidth="2.2" fill="none" strokeLinecap="round" />
         <path d="M55 25 q4 -4 8 0" stroke="#1F3D2E" strokeWidth="2.2" fill="none" strokeLinecap="round" />
@@ -27,8 +27,8 @@ export function LogoMark({ className }: { className?: string }) {
         <rect x="14" y="76" width="92" height="24" fill="#4C6B3D" />
         <ellipse cx="76" cy="79.5" rx="12" ry="3" fill="#FFFFFF" opacity="0.9" />
       </g>
-      <circle cx="60" cy="54" r="38" fill="none" stroke="#F7E9C4" strokeWidth="3.5" />
-      <circle cx="60" cy="113" r="5" fill="#F7E9C4" />
+      <circle cx="60" cy="54" r="38" fill="none" stroke="#F3F3D9" strokeWidth="3.5" />
+      <circle cx="60" cy="113" r="5" fill="#F3F3D9" />
     </svg>
   )
 }

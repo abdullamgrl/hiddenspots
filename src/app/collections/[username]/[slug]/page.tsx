@@ -94,7 +94,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
     <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-10 space-y-4 border-b border-border/50 pb-6">
-        <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-500">
+        <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand dark:text-brand-cream">
           <Globe className="h-4 w-4" />
           {collection.is_public ? 'Shared Collection' : 'Private Preview — only you can see this'}
         </div>
@@ -105,9 +105,9 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
         <div className="flex flex-wrap items-center gap-4">
           <Link
             href={`/profile/${profile.username}`}
-            className="flex items-center gap-2 text-sm font-semibold transition-colors hover:text-emerald-500"
+            className="flex items-center gap-2 text-sm font-semibold transition-colors hover:text-brand"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10 font-bold text-emerald-500">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand/10 font-bold text-brand dark:text-brand-cream">
               {(profile.full_name || profile.username)?.charAt(0).toUpperCase()}
             </span>
             Curated by {profile.full_name || `@${profile.username}`}
@@ -149,7 +149,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                 href={`/${state?.slug}/${district?.slug}/${spot.slug}`}
                 className="group"
               >
-                <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-emerald-500/35 group-hover:-translate-y-1 group-hover:shadow-xl">
+                <div className="glass h-full overflow-hidden rounded-2xl border border-white/5 bg-card transition-all duration-300 hover:border-brand/35 group-hover:-translate-y-1 group-hover:shadow-xl">
                   <div className="relative h-44 w-full overflow-hidden">
                     <Image
                       src={spot.cover_image}
@@ -158,16 +158,16 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                       sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute left-3 top-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 px-2.5 py-0.5 text-xs font-semibold text-white">
+                    <div className="absolute left-3 top-3 flex items-center space-x-1 rounded-full bg-brand/90 px-2.5 py-0.5 text-xs font-semibold text-white">
                       <Sparkles className="h-3 w-3" />
                       <span>{spot.verification_score} Score</span>
                     </div>
                   </div>
                   <div className="p-4">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-brand dark:text-brand-cream">
                       {category?.name}
                     </span>
-                    <h3 className="mt-1 line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-emerald-500">
+                    <h3 className="mt-1 line-clamp-1 font-heading text-base font-bold transition-colors group-hover:text-brand">
                       {spot.title}
                     </h3>
                     <div className="mt-2 flex items-center border-t border-border/40 pt-2 text-xs text-muted-foreground">
@@ -183,7 +183,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
       )}
 
       {/* CTA for visitors */}
-      <div className="mt-14 rounded-3xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
+      <div className="mt-14 rounded-3xl border border-brand/20 bg-brand/5 p-8 text-center">
         <h2 className="font-heading text-xl font-extrabold">Build your own collection</h2>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
           Save the spots you love, organise them into trips, and share them with friends — free.

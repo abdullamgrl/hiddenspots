@@ -79,7 +79,7 @@ export function AssignCollectionMenu({
         <DropdownMenuItem onClick={() => assign(null, '')} className="cursor-pointer gap-2">
           <Bookmark className="h-4 w-4" />
           <span className="flex-1">All Saved</span>
-          {currentCollectionId === null && <Check className="h-4 w-4 text-emerald-500" />}
+          {currentCollectionId === null && <Check className="h-4 w-4 text-brand dark:text-brand-cream" />}
         </DropdownMenuItem>
         {collections.map((c) => (
           <DropdownMenuItem
@@ -89,7 +89,7 @@ export function AssignCollectionMenu({
           >
             <FolderInput className="h-4 w-4" />
             <span className="flex-1 truncate">{c.name}</span>
-            {currentCollectionId === c.id && <Check className="h-4 w-4 text-emerald-500" />}
+            {currentCollectionId === c.id && <Check className="h-4 w-4 text-brand dark:text-brand-cream" />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

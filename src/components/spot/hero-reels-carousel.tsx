@@ -174,7 +174,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
               }}
               className={`absolute w-[240px] h-[380px] md:w-[260px] md:h-[420px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl transition-shadow duration-300 ${
                 diff === 0 
-                  ? 'shadow-emerald-500/20 ring-2 ring-emerald-500/30' 
+                  ? 'shadow-brand/20 ring-2 ring-brand/30' 
                   : 'hover:shadow-lg hover:shadow-black/40 cursor-pointer'
               }`}
             >
@@ -214,7 +214,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                           {item.district}, {item.state}
                         </p>
                       </div>
-                      <ArrowRight className="h-4 w-4 text-emerald-400" />
+                      <ArrowRight className="h-4 w-4 text-brand dark:text-brand-cream" />
                     </Link>
                   </div>
                 </button>
@@ -264,18 +264,18 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                   <div className="absolute bottom-4 left-3 right-3 z-30 animate-in fade-in slide-in-from-bottom-3 duration-300">
                     <Link
                       href={item.detail_link}
-                      className="flex items-center justify-between w-full bg-black/75 hover:bg-emerald-600/90 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2.5 text-white transition-all text-xs font-semibold shadow-lg group/btn"
+                      className="flex items-center justify-between w-full bg-black/75 hover:bg-brand/90 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2.5 text-white transition-all text-xs font-semibold shadow-lg group/btn"
                     >
                       <div className="text-left max-w-[150px]">
                         <p className="truncate font-heading text-xs font-bold leading-tight group-hover/btn:text-white">
                           {item.title}
                         </p>
-                        <p className="text-[10px] text-zinc-400 truncate mt-0.5 group-hover/btn:text-emerald-100 flex items-center">
+                        <p className="text-[10px] text-zinc-400 truncate mt-0.5 group-hover/btn:text-brand-cream flex items-center">
                           <MapPin className="h-2.5 w-2.5 mr-0.5" />
                           {item.district}, {item.state}
                         </p>
                       </div>
-                      <ArrowRight className="h-4 w-4 text-emerald-400 group-hover/btn:text-white group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="h-4 w-4 text-brand dark:text-brand-cream group-hover/btn:text-white group-hover/btn:translate-x-1 transition-transform" />
                     </Link>
                   </div>
                 </div>
@@ -294,7 +294,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                   {/* Subtle info label */}
                   <div className="absolute top-4 left-4 right-4 z-10">
                     <span className="text-[10px] bg-black/40 backdrop-blur-xs border border-white/10 rounded-full px-2.5 py-1 text-white font-semibold flex items-center w-fit">
-                      <Sparkles className="h-3 w-3 mr-1 text-emerald-400" />
+                      <Sparkles className="h-3 w-3 mr-1 text-brand dark:text-brand-cream" />
                       Local Secret
                     </span>
                   </div>
@@ -325,7 +325,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
       <div className="flex items-center space-x-6 mt-6 z-30">
         <button
           onClick={handlePrev}
-          className="h-10 w-10 rounded-full border border-border bg-zinc-900/50 hover:bg-emerald-600 hover:text-white transition-colors duration-300 flex items-center justify-center cursor-pointer shadow-md text-muted-foreground hover:border-emerald-600"
+          className="h-10 w-10 rounded-full border border-border bg-zinc-900/50 hover:bg-brand hover:text-white transition-colors duration-300 flex items-center justify-center cursor-pointer shadow-md text-muted-foreground hover:border-brand"
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -334,7 +334,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
         </span>
         <button
           onClick={handleNext}
-          className="h-10 w-10 rounded-full border border-border bg-zinc-900/50 hover:bg-emerald-600 hover:text-white transition-colors duration-300 flex items-center justify-center cursor-pointer shadow-md text-muted-foreground hover:border-emerald-600"
+          className="h-10 w-10 rounded-full border border-border bg-zinc-900/50 hover:bg-brand hover:text-white transition-colors duration-300 flex items-center justify-center cursor-pointer shadow-md text-muted-foreground hover:border-brand"
         >
           <ChevronRight className="h-5 w-5" />
         </button>

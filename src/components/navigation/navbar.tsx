@@ -44,7 +44,7 @@ export function Navbar() {
           {/* logo.svg is a base64-wrapped bitmap (~830KB) — the PNG is 34KB */}
           <Image src="/brand/Hiddenspotlogo.png" alt="HiddenSpots logo" width={144} height={48} className="h-18 w-auto drop-shadow-sm" priority />
           {/* <span className="font-heading text-xl font-extrabold tracking-tight">
-            Hidden<span className="text-emerald-600 dark:text-teal-400">Spot</span>
+            Hidden<span className="text-brand dark:text-brand-cream">Spot</span>
             <span className="text-xs font-semibold text-muted-foreground ml-1">.in</span>
           </span> */}
         </Link>
@@ -93,7 +93,7 @@ export function Navbar() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger render={
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400">
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full bg-brand-cream/20 dark:bg-brand/15 text-brand-green dark:text-brand-cream">
                   <User className="h-5 w-5" />
                 </Button>
               } />
@@ -127,7 +127,7 @@ export function Navbar() {
                 </DropdownMenuItem>
                 {profile?.role && (profile.role === 'admin' || profile.role === 'moderator') && (
                   <DropdownMenuItem render={
-                    <Link href="/admin" className="cursor-pointer text-emerald-600 dark:text-teal-400 font-medium" />
+                    <Link href="/admin" className="cursor-pointer text-brand dark:text-brand-cream font-medium" />
                   }>
                     <ShieldAlert className="mr-2 h-4 w-4" />
                     <span>Moderator Panel</span>
@@ -152,7 +152,7 @@ export function Navbar() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger render={
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400">
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full bg-brand-cream/20 dark:bg-brand/15 text-brand-green dark:text-brand-cream">
                   <User className="h-5 w-5" />
                 </Button>
               } />
@@ -186,7 +186,7 @@ export function Navbar() {
                 </DropdownMenuItem>
                 {profile?.role && (profile.role === 'admin' || profile.role === 'moderator') && (
                   <DropdownMenuItem render={
-                    <Link href="/admin" className="cursor-pointer text-emerald-600 dark:text-teal-400 font-medium" />
+                    <Link href="/admin" className="cursor-pointer text-brand dark:text-brand-cream font-medium" />
                   }>
                     <ShieldAlert className="mr-2 h-4 w-4" />
                     <span>Moderator Panel</span>

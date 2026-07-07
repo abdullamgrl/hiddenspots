@@ -334,9 +334,9 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
                 <div
                   className={`h-9 w-9 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
                     isCompleted
-                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25 scale-105'
+                      ? 'bg-brand text-white shadow-md shadow-brand/25 scale-105'
                       : isActive
-                      ? 'bg-emerald-500 text-white border-2 border-emerald-300 dark:border-emerald-700 shadow-lg scale-110'
+                      ? 'bg-brand text-white border-2 border-brand-cream dark:border-brand-green shadow-lg scale-110'
                       : 'bg-zinc-800 text-zinc-400 border border-zinc-700 dark:bg-zinc-900'
                   }`}
                 >
@@ -344,7 +344,7 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
                 </div>
                 <span
                   className={`mt-2 text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${
-                    isActive ? 'text-emerald-400 font-extrabold' : isCompleted ? 'text-emerald-600/90' : 'text-zinc-500'
+                    isActive ? 'text-brand dark:text-brand-cream font-extrabold' : isCompleted ? 'text-brand/90 dark:text-brand-cream/90' : 'text-zinc-500'
                   }`}
                 >
                   {name}
@@ -354,7 +354,7 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
           })}
           <div className="absolute top-[18px] left-[12%] right-[12%] h-[2px] bg-zinc-700 dark:bg-zinc-800 -z-0">
             <div
-              className="h-full bg-emerald-600 transition-all duration-300"
+              className="h-full bg-brand transition-all duration-300"
               style={{ width: `${((step - 1) / 3) * 100}%` }}
             />
           </div>
@@ -608,12 +608,12 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
                   <div className="flex flex-col items-center">
                     {compressing ? (
                       <>
-                        <Loader2 className="h-10 w-10 animate-spin text-emerald-600 mb-3" />
+                        <Loader2 className="h-10 w-10 animate-spin text-brand dark:text-brand-cream mb-3" />
                         <span className="text-sm font-semibold">Compressing images on-client...</span>
                       </>
                     ) : (
                       <>
-                        <UploadCloud className="h-10 w-10 text-emerald-600 mb-3" />
+                        <UploadCloud className="h-10 w-10 text-brand dark:text-brand-cream mb-3" />
                         <span className="text-sm font-semibold">Click or drag images here to upload</span>
                         <span className="text-xs text-muted-foreground mt-1">JPEG, PNG, WebP format. Maximum 5MB.</span>
                       </>
@@ -641,7 +641,7 @@ export function AddSpotForm({ categories, states, districts, userId }: AddSpotFo
                           <X className="h-3 w-3" />
                         </button>
                         {idx === 0 && (
-                          <div className="absolute bottom-0 left-0 right-0 bg-emerald-600/90 text-white text-[10px] text-center font-semibold py-0.5">
+                          <div className="absolute bottom-0 left-0 right-0 bg-brand/90 text-white text-[10px] text-center font-semibold py-0.5">
                             Cover Image
                           </div>
                         )}

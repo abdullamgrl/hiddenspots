@@ -33,6 +33,17 @@
   --color-sunset-foreground: var(--sunset-foreground);
   --color-surface-alt: var(--surface-alt);
   --color-heading: var(--heading);
+
+  /* ── Brand color tokens ────────────────────────────────────────────
+     Static palette for direct component use. These do NOT change
+     between light/dark — components pick the right one per mode. */
+  --color-brand: #8B5A2B;
+  --color-brand-hover: #A0693A;
+  --color-brand-muted: #B07D4F;
+  --color-brand-cream: #F3F3D9;
+  --color-brand-green: #1F3D2E;
+  --color-brand-green-light: #2D5A43;
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -40,74 +51,80 @@
   --radius-2xl: calc(var(--radius) * 1.8);
 }
 
+/* ── Light mode (default, priority) ──────────────────────────────── */
 :root {
-  --background: oklch(0.99 0.01 160);
-  --foreground: oklch(0.18 0.02 160);
-  
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 160);
-  
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 160);
-  
-  --primary: oklch(0.35 0.12 165); /* Elegant Forest Green (#064e3b equivalent) */
-  --primary-foreground: oklch(0.99 0.01 160);
-  
-  --secondary: oklch(0.94 0.03 170); /* Light Teal tint */
-  --secondary-foreground: oklch(0.25 0.1 165);
-  
-  --muted: oklch(0.96 0.01 160);
-  --muted-foreground: oklch(0.45 0.03 160);
-  
-  --accent: oklch(0.94 0.03 170);
-  --accent-foreground: oklch(0.25 0.1 165);
-  
+  --background: #F3F3D9;           /* warm cream background */
+  --foreground: #2A2418;           /* warm dark brown */
+  --heading: #1F3D2E;              /* deep forest green headings */
+
+  --card: #FFFFFF;
+  --card-foreground: #2A2418;
+
+  --popover: #FFFFFF;
+  --popover-foreground: #2A2418;
+
+  --primary: #1F3D2E;              /* deep green — primary buttons */
+  --primary-foreground: #F3F3D9;   /* cream text on green buttons */
+
+  --secondary: #F3F3D9;            /* cream background accents */
+  --secondary-foreground: #1F3D2E;
+
+  --muted: #F5F0E8;                /* warm muted background */
+  --muted-foreground: #7A7062;     /* warm gray text */
+
+  --accent: #F3F3D9;
+  --accent-foreground: #1F3D2E;
+
   --destructive: oklch(0.55 0.18 28);
   --destructive-foreground: oklch(0.98 0.01 28);
-  
-  --border: oklch(0.91 0.02 160);
-  --input: oklch(0.91 0.02 160);
-  --ring: oklch(0.35 0.12 165);
-  
+
+  --border: #E8E0D0;               /* warm border */
+  --input: #E8E0D0;
+  --ring: #8B5A2B;                 /* brown focus rings */
+
+  --sunset: #8B5A2B;               /* brown — CTAs, script accents */
+  --sunset-foreground: #F3F3D9;
+
+  --surface-alt: #F8F4ED;          /* alternating section background */
+
   --radius: 0.75rem;
 }
 
+/* ── Dark mode ───────────────────────────────────────────────────── */
 .dark {
-  /* Warm forest/sunset palette sampled from the HiddenSpots logo:
-     pine green + golden caramel script + cream on warm near-black. */
-  --background: #0D1210;          /* warm near-black */
-  --foreground: #C7CDC9;          /* body text */
-  --heading: #F4F1EA;             /* cream — matches the wordmark */
+  --background: #0C0F0D;           /* warm near-black */
+  --foreground: #C5BBA8;           /* muted cream body text */
+  --heading: #F3F3D9;              /* cream gold headings */
 
-  --card: #161C1A;                /* cards, nav, footer panels */
-  --card-foreground: #C7CDC9;
+  --card: #141816;
+  --card-foreground: #C5BBA8;
 
-  --popover: #12181A;
-  --popover-foreground: #C7CDC9;
+  --popover: #111413;
+  --popover-foreground: #C5BBA8;
 
-  --primary: #2ECC91;             /* emerald — buttons, active, vetted */
-  --primary-foreground: #07271B;  /* deep forest text for WCAG contrast */
+  --primary: #8B5A2B;              /* saddle brown — buttons, active */
+  --primary-foreground: #F3F3D9;   /* cream text on brown buttons */
 
-  --secondary: #1B4332;           /* deep pine accents */
-  --secondary-foreground: #F4F1EA;
+  --secondary: #1F3D2E;            /* deep forest accents */
+  --secondary-foreground: #F3F3D9;
 
-  --muted: #1A211E;
-  --muted-foreground: #9CA6A0;
+  --muted: #1A1D1B;
+  --muted-foreground: #8A8474;     /* warm gray */
 
-  --accent: #1B4332;
-  --accent-foreground: #9FE8CD;
+  --accent: #1F3D2E;
+  --accent-foreground: #F3F3D9;
 
-  --sunset: #E8873A;              /* golden caramel — CTAs, hovers, featured */
-  --sunset-foreground: #221206;
+  --sunset: #F3F3D9;               /* cream — script accents in dark mode */
+  --sunset-foreground: #1F3D2E;
 
-  --surface-alt: #12181A;         /* alternating section background */
+  --surface-alt: #111413;
 
   --destructive: oklch(0.45 0.15 28);
   --destructive-foreground: oklch(0.98 0.01 28);
 
-  --border: #273129;
-  --input: #273129;
-  --ring: #E8873A;                /* sunset focus rings */
+  --border: #2A2822;               /* warm border */
+  --input: #2A2822;
+  --ring: #8B5A2B;
 }
 
 @layer base {
@@ -116,15 +133,14 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    background-image: radial-gradient(at 0% 0%, oklch(0.98 0.02 165 / 0.15) 0px, transparent 50%),
-                      radial-gradient(at 100% 100%, oklch(0.92 0.04 180 / 0.15) 0px, transparent 50%);
+    background-image: radial-gradient(at 0% 0%, rgba(247, 233, 196, 0.12) 0px, transparent 50%),
+                      radial-gradient(at 100% 100%, rgba(139, 90, 43, 0.06) 0px, transparent 50%);
   }
-  
+
   .dark body {
-    /* forest green -> dusk blue -> faint sunset glow */
-    background-image: radial-gradient(at 0% 0%, rgba(27, 67, 50, 0.35) 0px, transparent 55%),
-                      radial-gradient(at 100% 0%, rgba(58, 75, 99, 0.22) 0px, transparent 50%),
-                      radial-gradient(at 100% 100%, rgba(232, 135, 58, 0.07) 0px, transparent 45%);
+    background-image: radial-gradient(at 0% 0%, rgba(31, 61, 46, 0.30) 0px, transparent 55%),
+                      radial-gradient(at 100% 0%, rgba(139, 90, 43, 0.12) 0px, transparent 50%),
+                      radial-gradient(at 100% 100%, rgba(247, 233, 196, 0.03) 0px, transparent 45%);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -145,24 +161,24 @@
 
 /* Glassmorphism custom classes */
 .glass {
-  @apply backdrop-blur-md bg-white/70 dark:bg-card/80 border border-zinc-200/80 dark:border-white/10;
+  @apply backdrop-blur-md bg-white/70 dark:bg-card/80 border border-[#E8E0D0] dark:border-white/10;
 }
 
 .glass-nav {
   @apply backdrop-blur-xl bg-white/80 border-b border-border/50 sticky top-0 z-50;
 }
 .dark .glass-nav {
-  background-color: rgba(13, 18, 16, 0.75);
+  background-color: rgba(12, 15, 13, 0.75);
 }
 
 .gradient-text {
-  /* emerald -> golden caramel, echoing the two-tone wordmark */
+  /* green → brown in light; brown → cream in dark */
   @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-sunset;
 }
 
-/* Primary button: emerald fill, deep-forest text, lift + glow on hover */
+/* Primary button: deep green (light) / brown (dark) fill, cream text */
 .gradient-btn {
-  @apply bg-primary text-primary-foreground font-semibold shadow-md shadow-black/30 transition-all duration-300 hover:bg-[#3EDBA1] hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5;
+  @apply bg-primary text-primary-foreground font-semibold shadow-md shadow-black/20 transition-all duration-300 hover:brightness-[1.15] hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5;
 }
 
 /* Secondary button: sunset outline, tint fill on hover */

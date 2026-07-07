@@ -87,7 +87,7 @@ export default async function StatePage({ params }: StatePageProps) {
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 space-y-12">
       {/* Title */}
       <div className="space-y-2 border-b border-border/50 pb-6">
-        <div className="text-emerald-600 dark:text-teal-400 text-sm font-semibold uppercase tracking-wider">
+        <div className="text-brand dark:text-brand-cream text-sm font-semibold uppercase tracking-wider">
           State Directory
         </div>
         <h1 className="font-heading text-4xl font-extrabold tracking-tight">
@@ -107,7 +107,7 @@ export default async function StatePage({ params }: StatePageProps) {
               <Link
                 key={dist.id}
                 href={`/${stateData.slug}/${dist.slug}`}
-                className="px-4 py-2 rounded-xl border border-border/50 bg-card hover:bg-emerald-50 dark:hover:bg-emerald-950/20 hover:text-emerald-600 font-medium text-sm transition-all"
+                className="px-4 py-2 rounded-xl border border-border/50 bg-card hover:bg-brand-cream/10 dark:hover:bg-brand/10 hover:text-brand font-medium text-sm transition-all"
               >
                 {dist.name}
               </Link>
@@ -146,17 +146,17 @@ export default async function StatePage({ params }: StatePageProps) {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-emerald-600/90 text-white px-2 py-0.5 text-xs font-semibold">
+                    <div className="absolute top-3 left-3 flex items-center space-x-1 rounded-full bg-brand/90 text-white px-2 py-0.5 text-xs font-semibold">
                       <Sparkles className="h-3 w-3" />
                       <span>{spot.verification_score} Score</span>
                     </div>
                   </div>
 
                   <CardContent className="p-5 space-y-3">
-                    <span className="text-xs text-emerald-600 dark:text-teal-400 font-semibold uppercase tracking-wider">
+                    <span className="text-xs text-brand dark:text-brand-cream font-semibold uppercase tracking-wider">
                       {spot.category.name}
                     </span>
-                    <h3 className="font-heading text-lg font-bold text-foreground line-clamp-1 group-hover:text-emerald-600 transition-colors">
+                    <h3 className="font-heading text-lg font-bold text-foreground line-clamp-1 group-hover:text-brand transition-colors">
                       {spot.title}
                     </h3>
                     <div className="flex items-center text-xs text-muted-foreground">
@@ -179,7 +179,7 @@ export default async function StatePage({ params }: StatePageProps) {
             </p>
             <Link
               href="/add-spot"
-              className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-emerald-600 hover:to-teal-500"
+              className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-brand-green to-brand px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:from-brand-green-light hover:to-brand-hover"
             >
               <Compass className="h-4 w-4" />
               Add the First Spot

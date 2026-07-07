@@ -180,13 +180,13 @@ export default async function SpotDetailPage({ params }: PageProps) {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
         <nav className="mb-6 flex items-center space-x-2 text-xs text-muted-foreground">
-          <Link href="/" className="hover:text-emerald-600 transition-colors">Explore</Link>
+          <Link href="/" className="hover:text-brand transition-colors">Explore</Link>
           <span>/</span>
-          <Link href={`/${spot.state.slug}`} className="hover:text-emerald-600 transition-colors">
+          <Link href={`/${spot.state.slug}`} className="hover:text-brand transition-colors">
             {spot.state.name}
           </Link>
           <span>/</span>
-          <Link href={`/${spot.state.slug}/${spot.district.slug}`} className="hover:text-emerald-600 transition-colors">
+          <Link href={`/${spot.state.slug}/${spot.district.slug}`} className="hover:text-brand transition-colors">
             {spot.district.name}
           </Link>
           <span>/</span>
@@ -214,7 +214,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
 
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white space-y-3">
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-emerald-600 px-3 py-0.5 text-[11px] font-semibold uppercase tracking-widest">
+              <span className="rounded-full bg-brand px-3 py-0.5 text-[11px] font-semibold uppercase tracking-widest">
                 {spot.category.name}
               </span>
               <span className="flex items-center gap-1 rounded-full bg-white/15 backdrop-blur-md px-2.5 py-0.5 text-xs font-semibold">
@@ -226,7 +226,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
               {spot.title}
             </h1>
             <div className="flex items-center text-sm text-white/75">
-              <MapPin className="h-4 w-4 mr-1.5 text-emerald-400 flex-shrink-0" />
+              <MapPin className="h-4 w-4 mr-1.5 text-brand dark:text-brand-cream flex-shrink-0" />
               <span className="line-clamp-1">{spot.address}</span>
             </div>
           </div>
@@ -360,11 +360,11 @@ export default async function SpotDetailPage({ params }: PageProps) {
               <section className="p-6 rounded-2xl border border-border/50 bg-card shadow-sm space-y-4">
                 <h4 className="font-heading text-sm font-semibold uppercase tracking-wider text-muted-foreground">Submitted By</h4>
                 <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold">
+                  <div className="h-10 w-10 rounded-full bg-brand-cream/20 dark:bg-brand/10 text-brand-green dark:text-brand-cream flex items-center justify-center font-bold">
                     {spot.creator.full_name?.charAt(0) || 'U'}
                   </div>
                   <div>
-                    <Link href={`/profile/${spot.creator.username}`} className="font-bold hover:text-emerald-600 transition-colors">
+                    <Link href={`/profile/${spot.creator.username}`} className="font-bold hover:text-brand transition-colors">
                       {spot.creator.full_name || 'Anonymous Contributor'}
                     </Link>
                     <div className="text-xs text-muted-foreground font-medium">@{spot.creator.username}</div>
@@ -398,7 +398,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-heading text-sm font-bold text-foreground group-hover:text-emerald-600 transition-colors truncate">
+                        <h4 className="font-heading text-sm font-bold text-foreground group-hover:text-brand transition-colors truncate">
                           {nSpot.title}
                         </h4>
                         <div className="text-xs text-muted-foreground">{nSpot.category.name}</div>
@@ -433,7 +433,7 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
 function FactCell({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-start gap-3 bg-card p-4 md:p-5">
-      <span className="mt-0.5 text-emerald-500">{icon}</span>
+      <span className="mt-0.5 text-brand dark:text-brand-cream">{icon}</span>
       <span className="min-w-0">
         <span className="block text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</span>
         <span className="mt-1 block text-sm font-semibold text-foreground">{value}</span>

@@ -107,7 +107,7 @@ export function SearchBox({ variant = 'hero', autoFocus = false, initialQuery = 
           }`}
         >
           <div className="flex flex-1 items-center px-3">
-            <MapPin className="mr-2 h-5 w-5 flex-shrink-0 text-emerald-600" />
+            <MapPin className="mr-2 h-5 w-5 flex-shrink-0 text-brand dark:text-brand-cream" />
             <Input
               type="text"
               role="combobox"
@@ -162,7 +162,7 @@ export function SearchBox({ variant = 'hero', autoFocus = false, initialQuery = 
                       onClick={() => go(r.url)}
                       onMouseEnter={() => setHighlighted(i)}
                       className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                        highlighted === i ? 'bg-emerald-500/10' : 'hover:bg-muted/50'
+                        highlighted === i ? 'bg-brand/10' : 'hover:bg-muted/50'
                       }`}
                     >
                       {r.image ? (
@@ -170,7 +170,7 @@ export function SearchBox({ variant = 'hero', autoFocus = false, initialQuery = 
                           <Image src={r.image} alt="" fill sizes="40px" className="object-cover" />
                         </div>
                       ) : (
-                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand dark:text-brand-cream">
                           <Icon className="h-4 w-4" />
                         </div>
                       )}

@@ -51,8 +51,8 @@ function createPinElement(): HTMLDivElement {
   el.className = 'hs-map-pin'
   el.innerHTML = `
     <svg width="30" height="38" viewBox="0 0 24 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 18 12 18s12-9 12-18c0-6.63-5.37-12-12-12z" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
-      <circle cx="12" cy="12" r="4.5" fill="#064e3b"/>
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 9 12 18 12 18s12-9 12-18c0-6.63-5.37-12-12-12z" fill="#8B5A2B" stroke="#ffffff" stroke-width="1.5"/>
+      <circle cx="12" cy="12" r="4.5" fill="#1F3D2E"/>
     </svg>`
   el.style.cursor = 'pointer'
   el.style.transition = 'transform 0.15s ease'
@@ -169,13 +169,13 @@ export default function SpotMap({
                   sizes="320px"
                   className="object-cover"
                 />
-                <div className="absolute left-2 top-2 flex items-center space-x-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-xs font-semibold text-white">
+                <div className="absolute left-2 top-2 flex items-center space-x-1 rounded-full bg-brand/90 px-2 py-0.5 text-xs font-semibold text-white">
                   <Sparkles className="h-3 w-3" />
                   <span>{activeSpot.verification_score} Score</span>
                 </div>
               </div>
               <div className="p-4">
-                <div className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-teal-400">
+                <div className="text-xs font-semibold uppercase tracking-wider text-brand dark:text-brand-cream">
                   {activeSpot.category.name}
                 </div>
                 <h4 className="mt-1 line-clamp-1 font-heading text-base font-bold text-foreground">

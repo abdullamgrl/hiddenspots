@@ -148,10 +148,10 @@ export default function MapLibreMap({
         source: 'spots',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#10b981',
+          'circle-color': '#8B5A2B',
           'circle-opacity': 0.85,
           'circle-stroke-width': 2,
-          'circle-stroke-color': '#064e3b',
+          'circle-stroke-color': '#1F3D2E',
           'circle-radius': ['step', ['get', 'point_count'], 16, 10, 22, 50, 30],
         },
       })
@@ -175,7 +175,7 @@ export default function MapLibreMap({
         source: 'spots',
         filter: ['!', ['has', 'point_count']],
         paint: {
-          'circle-color': '#10b981',
+          'circle-color': '#8B5A2B',
           'circle-radius': 9,
           'circle-stroke-width': 2,
           'circle-stroke-color': '#ffffff',

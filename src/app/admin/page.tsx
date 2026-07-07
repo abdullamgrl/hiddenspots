@@ -26,7 +26,7 @@ export default async function AdminDashboardPage() {
         <Card className="glass">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium uppercase text-muted-foreground">Total Spots</CardTitle>
-            <Compass className="h-4 w-4 text-emerald-600" />
+            <Compass className="h-4 w-4 text-brand dark:text-brand-cream" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalSpots || 0}</div>
@@ -48,7 +48,7 @@ export default async function AdminDashboardPage() {
         <Card className="glass">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium uppercase text-muted-foreground">Approved Spots</CardTitle>
-            <CheckCircle className="h-4 w-4 text-emerald-500" />
+            <CheckCircle className="h-4 w-4 text-brand dark:text-brand-cream" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{approvedSpots || 0}</div>
@@ -59,7 +59,7 @@ export default async function AdminDashboardPage() {
         <Card className="glass">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium uppercase text-muted-foreground">Total Users</CardTitle>
-            <Users className="h-4 w-4 text-emerald-600" />
+            <Users className="h-4 w-4 text-brand dark:text-brand-cream" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalUsers || 0}</div>

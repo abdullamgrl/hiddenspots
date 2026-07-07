@@ -84,7 +84,7 @@ export function SpotPreviewCard({ spot, onClose }: SpotPreviewCardProps) {
           <div className="flex items-center justify-between gap-2">
             <h4 className="line-clamp-1 font-heading text-base font-bold text-foreground">{spot.title}</h4>
             {spot.reel_count > 0 && (
-              <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-full bg-emerald-600/90 px-2 py-0.5 text-[10px] font-semibold text-white">
+              <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-full bg-brand/90 px-2 py-0.5 text-[10px] font-semibold text-white">
                 <Sparkles className="h-3 w-3" />
                 {spot.reel_count} {spot.reel_count === 1 ? 'reel' : 'reels'}
               </span>
@@ -92,7 +92,7 @@ export function SpotPreviewCard({ spot, onClose }: SpotPreviewCardProps) {
           </div>
           <Link
             href={detailLink}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 transition-colors hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-brand dark:text-brand-cream transition-colors hover:text-brand-green dark:text-brand-cream dark:hover:text-brand-cream"
           >
             View details
             <ArrowRight className="h-3.5 w-3.5" />

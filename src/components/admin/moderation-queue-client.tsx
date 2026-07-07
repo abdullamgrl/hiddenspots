@@ -392,7 +392,7 @@ export function ModerationQueueClient({
                     <div className="flex-1 p-6 space-y-4">
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-xs text-emerald-600 dark:text-teal-400 font-semibold uppercase tracking-wider">
+                          <span className="text-xs text-brand dark:text-brand-cream font-semibold uppercase tracking-wider">
                             {spot.category.name}
                           </span>
                           <span className="text-xs text-muted-foreground">•</span>
@@ -440,7 +440,7 @@ export function ModerationQueueClient({
                     <div className="border-t lg:border-t-0 lg:border-l border-border/50 p-6 flex flex-col lg:flex-col justify-center gap-3 lg:w-48 bg-muted/10">
                       <Button
                         onClick={() => handleApprove(spot.id)}
-                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-1.5"
+                        className="w-full bg-brand hover:bg-brand-hover text-white font-semibold gap-1.5"
                       >
                         <Check className="h-4 w-4" />
                         <span>Approve</span>
@@ -499,7 +499,7 @@ export function ModerationQueueClient({
                     </div>
 
                     <h4 className="font-heading text-lg font-bold text-foreground">
-                      Ticket on Spot: <span className="text-emerald-600">{report.spot?.title || 'Unknown Spot'}</span>
+                      Ticket on Spot: <span className="text-brand dark:text-brand-cream">{report.spot?.title || 'Unknown Spot'}</span>
                     </h4>
 
                     <p className="text-sm text-muted-foreground bg-muted/30 p-4 rounded-xl border border-border/50">
@@ -546,7 +546,7 @@ export function ModerationQueueClient({
                 <div className="flex flex-col md:flex-row justify-between items-start gap-6">
                   <div className="space-y-3 flex-1 min-w-0">
                     <div className="flex items-center flex-wrap gap-2">
-                      <Badge className="bg-emerald-600 text-white uppercase text-[10px] tracking-wider px-2 py-0.5">
+                      <Badge className="bg-brand text-white uppercase text-[10px] tracking-wider px-2 py-0.5">
                         Edit Suggestion
                       </Badge>
                       <span className="text-xs text-muted-foreground">
@@ -558,7 +558,7 @@ export function ModerationQueueClient({
                     </div>
 
                     <h4 className="font-heading text-lg font-bold text-foreground">
-                      Fixes for: <span className="text-emerald-600">{sug.spot?.title || 'Unknown Spot'}</span>
+                      Fixes for: <span className="text-brand dark:text-brand-cream">{sug.spot?.title || 'Unknown Spot'}</span>
                     </h4>
 
                     {/* Field-level diff */}
@@ -572,7 +572,7 @@ export function ModerationQueueClient({
                             <div className="text-muted-foreground line-through decoration-red-400/60 break-words">
                               {formatEditValue(change.from)}
                             </div>
-                            <div className="text-emerald-600 dark:text-emerald-400 font-medium break-words">
+                            <div className="text-brand dark:text-brand-cream font-medium break-words">
                               {formatEditValue(change.to)}
                             </div>
                           </div>
@@ -591,7 +591,7 @@ export function ModerationQueueClient({
                     <Button
                       onClick={() => handleReviewSuggestion(sug.id, 'approve')}
                       disabled={reviewingId === sug.id}
-                      className="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-1.5"
+                      className="flex-1 md:flex-none bg-brand hover:bg-brand-hover text-white font-semibold gap-1.5"
                     >
                       {reviewingId === sug.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -632,7 +632,7 @@ export function ModerationQueueClient({
                 <div className="flex flex-col md:flex-row justify-between items-start gap-6">
                   <div className="space-y-3 flex-1 min-w-0">
                     <div className="flex items-center flex-wrap gap-2">
-                      <Badge className="bg-emerald-600 text-white uppercase text-[10px] tracking-wider px-2 py-0.5">
+                      <Badge className="bg-brand text-white uppercase text-[10px] tracking-wider px-2 py-0.5">
                         Reel Submission
                       </Badge>
                       <span className="text-xs text-muted-foreground">
@@ -644,14 +644,14 @@ export function ModerationQueueClient({
                     </div>
 
                     <h4 className="font-heading text-lg font-bold text-foreground">
-                      Reel for: <span className="text-emerald-600">{sub.spot?.title || 'Unknown Spot'}</span>
+                      Reel for: <span className="text-brand dark:text-brand-cream">{sub.spot?.title || 'Unknown Spot'}</span>
                     </h4>
 
                     <a
                       href={sub.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block max-w-full truncate rounded-lg border border-border/50 bg-muted/20 px-3 py-2 text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400"
+                      className="inline-block max-w-full truncate rounded-lg border border-border/50 bg-muted/20 px-3 py-2 text-sm font-medium text-brand dark:text-brand-cream hover:underline dark:text-brand-cream"
                     >
                       {sub.url}
                     </a>
@@ -667,7 +667,7 @@ export function ModerationQueueClient({
                     <Button
                       onClick={() => handleReviewReel(sub.id, 'approve')}
                       disabled={reviewingId === sub.id}
-                      className="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-1.5"
+                      className="flex-1 md:flex-none bg-brand hover:bg-brand-hover text-white font-semibold gap-1.5"
                     >
                       {reviewingId === sub.id ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -706,7 +706,7 @@ export function ModerationQueueClient({
         <DialogContent className="sm:max-w-[420px] glass">
           <DialogHeader>
             <DialogTitle className="font-heading text-lg font-bold flex items-center gap-2">
-              <Eye className="h-5 w-5 text-emerald-600" />
+              <Eye className="h-5 w-5 text-brand dark:text-brand-cream" />
               <span>
                 {actionType === 'reject' ? 'Reject Submission' : 'Request Changes'}
               </span>

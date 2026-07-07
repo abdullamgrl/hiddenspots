@@ -168,7 +168,7 @@ export function ProfileSettingsForm({
                 {usernameStatus === 'checking' && (
                   <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                 )}
-                {usernameStatus === 'available' && <Check className="h-4 w-4 text-emerald-500" />}
+                {usernameStatus === 'available' && <Check className="h-4 w-4 text-brand dark:text-brand-cream" />}
                 {usernameStatus === 'taken' && <X className="h-4 w-4 text-destructive" />}
               </span>
             </div>
@@ -177,7 +177,7 @@ export function ProfileSettingsForm({
             ) : usernameStatus === 'taken' ? (
               <span className="text-xs text-destructive">This username is already taken</span>
             ) : usernameStatus === 'available' ? (
-              <span className="text-xs text-emerald-500">Available!</span>
+              <span className="text-xs text-brand dark:text-brand-cream">Available!</span>
             ) : (
               <span className="text-xs text-muted-foreground">
                 Changing this also changes your profile link.

@@ -5,7 +5,7 @@ import { MapPin, Map as MapIcon, Search } from 'lucide-react'
 export default function NotFound() {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-4 py-24 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand/10 text-brand dark:text-brand-cream">
         <MapPin className="h-8 w-8" />
       </div>
       <h1 className="mt-5 font-heading text-3xl font-extrabold tracking-tight">

@@ -79,7 +79,7 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
     <section className="space-y-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="flex items-center gap-2 font-heading text-2xl font-bold">
-          <Film className="h-5 w-5 text-emerald-500" />
+          <Film className="h-5 w-5 text-brand dark:text-brand-cream" />
           {instagram.length === 0
             ? 'Reels'
             : `Watch the ${instagram.length === 1 ? 'Reel' : 'Reels'}`}
@@ -134,7 +134,7 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
                   <span
                     className={`h-1.5 rounded-full transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-ring ${
                       i === active
-                        ? 'w-5 bg-emerald-500'
+                        ? 'w-5 bg-brand'
                         : 'w-1.5 bg-border group-hover:bg-muted-foreground/50'
                     }`}
                   />
@@ -153,7 +153,7 @@ export function ReelsSection({ links, spotId, spotTitle }: ReelsSectionProps) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-full border border-border/50 bg-card px-3 py-1.5 text-xs font-semibold capitalize text-muted-foreground transition-colors hover:border-emerald-500/50 hover:text-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex items-center gap-1.5 rounded-full border border-border/50 bg-card px-3 py-1.5 text-xs font-semibold capitalize text-muted-foreground transition-colors hover:border-brand/50 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ExternalLink className="h-3 w-3" />
               {link.platform}
@@ -171,7 +171,7 @@ function OpenOnInstagram({ url }: { url: string }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="mx-auto flex w-fit items-center gap-1 rounded text-xs font-medium text-muted-foreground transition-colors hover:text-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="mx-auto flex w-fit items-center gap-1 rounded text-xs font-medium text-muted-foreground transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       <ExternalLink className="h-3 w-3" />
       Open on Instagram

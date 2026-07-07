@@ -104,7 +104,7 @@ export function SaveButton({ spotId, userId }: SaveButtonProps) {
       disabled={toggling}
       className={`border-border/50 gap-1.5 font-medium transition-all ${
         saved 
-          ? 'bg-emerald-600 hover:bg-emerald-500 text-white' 
+          ? 'bg-brand hover:bg-brand-hover text-white' 
           : 'text-muted-foreground hover:text-foreground'
       }`}
     >
