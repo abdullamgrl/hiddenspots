@@ -237,22 +237,24 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
 
                   {reelCode ? (
                     <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                      {/* /p/{code}/embed is canonical and works for both posts and reels */}
-                      <iframe
-                        src={`https://www.instagram.com/p/${reelCode}/embed/`}
-                        className="absolute w-full border-0"
-                        style={{
-                          top: '-54px',
-                          height: 'calc(100% + 120px)',
-                        }}
-                        title={`Instagram reel: ${item.title}`}
-                        allow="autoplay; encrypted-media; picture-in-picture"
-                        allowFullScreen
-                        scrolling="no"
-                        onLoad={() => {
-                          setIframeLoaded((prev) => ({ ...prev, [item.id]: true }))
-                        }}
-                      />
+                      {/* Wrapper centered horizontally, matching 4:5 aspect ratio of the IG media box */}
+                      <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 aspect-[4/5] overflow-hidden scale-110">
+                        <iframe
+                          src={`https://www.instagram.com/p/${reelCode}/embed/`}
+                          className="absolute left-0 w-full border-0"
+                          style={{
+                            top: '-54px',
+                            height: 'calc(100% + 150px)',
+                          }}
+                          title={`Instagram reel: ${item.title}`}
+                          allow="autoplay; encrypted-media; picture-in-picture"
+                          allowFullScreen
+                          scrolling="no"
+                          onLoad={() => {
+                            setIframeLoaded((prev) => ({ ...prev, [item.id]: true }))
+                          }}
+                        />
+                      </div>
                     </div>
                   ) : (
                     <div className="text-center p-4">

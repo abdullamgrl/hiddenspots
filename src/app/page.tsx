@@ -276,7 +276,7 @@ export default async function HomePage() {
               </div>
               <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
                 Find the{' '}
-                <span className="font-script font-bold text-[1.18em] gradient-text">
+                <span className="font-script font-bold text-[1.18em] gradient-text pr-3">
                   Unseen
                 </span>
               </h1>
