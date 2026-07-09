@@ -21,6 +21,9 @@ import { CategoryIcon } from '@/components/spot/category-icon'
 import { CountUpStat } from '@/components/home/count-up-stat'
 import { section } from 'framer-motion/client'
 
+export const revalidate = 3600 // Cache for 1 hour
+
+
 export default async function HomePage() {
   const supabase = await createClient()
 
