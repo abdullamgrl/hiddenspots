@@ -60,6 +60,8 @@ async function getSpot(slug: string) {
   return spot
 }
 
+export const revalidate = 3600
+
 // 2. Generate Dynamic Metadata (SEO)
 export async function generateMetadata({ params }: PageProps) {
   const { state, district, slug } = await params

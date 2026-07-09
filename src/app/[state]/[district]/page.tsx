@@ -37,6 +37,8 @@ async function getDistrictAndState(stateSlug: string, districtSlug: string) {
   return { state, district }
 }
 
+export const revalidate = 3600
+
 export async function generateMetadata({ params }: DistrictPageProps) {
   const { state, district } = await params
   const data = await getDistrictAndState(state, district)

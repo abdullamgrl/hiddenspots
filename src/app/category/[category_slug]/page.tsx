@@ -23,6 +23,8 @@ async function getCategory(slug: string) {
   return category
 }
 
+export const revalidate = 3600
+
 export async function generateMetadata({ params }: CategoryPageProps) {
   const { category_slug } = await params
   const category = await getCategory(category_slug)

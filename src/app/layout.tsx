@@ -8,6 +8,7 @@ import { QueryProvider } from "@/components/provider/query-provider";
 import { AuthDialogProvider } from "@/components/auth/auth-dialog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { PWARegister } from "@/components/provider/pwa-register";
+import NextTopLoader from 'nextjs-toploader';
 
 // Fonts are self-hosted via next/font (preloaded, no CLS). The variables carry
 // distinct names so globals.css can map them into the Tailwind theme without
@@ -116,6 +117,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
+        <NextTopLoader color="#4ade80" showSpinner={false} />
         <QueryProvider>
           <AuthDialogProvider>
             <Navbar />
