@@ -32,6 +32,13 @@ export const metadata: Metadata = {
   title: "HiddenSpot.in — Discover & Share Secluded Travel Spots & Hidden Gems",
   description:
     "Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India. View maps, share travel photos, and discover your next weekend getaway.",
+  keywords: ["hidden spots india", "offbeat travel", "secret destinations", "travel community", "hidden gems", "weekend getaways", "kerala tourism"],
+  authors: [{ name: "HiddenSpot" }],
+  publisher: "HiddenSpot",
+  robots: {
+    index: true,
+    follow: true,
+  },
   metadataBase: new URL("https://hiddenspot.in"),
   alternates: {
     canonical: "/",
@@ -70,11 +77,44 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': 'https://hiddenspot.in/#website',
+        url: 'https://hiddenspot.in',
+        name: 'HiddenSpot',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: 'https://hiddenspot.in/search?q={search_term_string}',
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': 'Organization',
+        '@id': 'https://hiddenspot.in/#organization',
+        name: 'HiddenSpot',
+        url: 'https://hiddenspot.in',
+        logo: 'https://hiddenspot.in/icons/icon-512x512.png',
+        sameAs: [
+          'https://instagram.com/hiddenspot.in',
+        ],
+      },
+    ],
+  };
+
   return (
     <html
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${caveat.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
         <QueryProvider>
           <AuthDialogProvider>

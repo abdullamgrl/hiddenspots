@@ -112,12 +112,12 @@ export default async function SpotDetailPage({ params }: PageProps) {
     .neq('id', spot.id)
     .limit(3)
 
-  // 4. JSON-LD Structured Data
+  // 4. JSON-LD Structured Data (AEO & GEO optimized)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'Place',
+        '@type': ['Place', 'TouristAttraction'],
         '@id': `https://hiddenspot.in/${state}/${district}/${slug}#place`,
         'name': spot.title,
         'description': spot.short_description,
@@ -133,6 +133,12 @@ export default async function SpotDetailPage({ params }: PageProps) {
           'addressRegion': spot.state.name,
           'addressCountry': 'India',
           'streetAddress': spot.address,
+        },
+        'aggregateRating': {
+          '@type': 'AggregateRating',
+          'ratingValue': spot.verification_score,
+          'bestRating': '100',
+          'ratingCount': 1,
         },
       },
       {
@@ -164,6 +170,35 @@ export default async function SpotDetailPage({ params }: PageProps) {
           },
         ],
       },
+      {
+        '@type': 'FAQPage',
+        'mainEntity': [
+          {
+            '@type': 'Question',
+            'name': `What is the best time to visit ${spot.title}?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': spot.best_time_to_visit || `The best time to visit ${spot.title} is during the favorable seasons in ${spot.district.name}.`,
+            },
+          },
+          {
+            '@type': 'Question',
+            'name': `Is parking available at ${spot.title}?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': spot.parking_available ? 'Yes, parking is available.' : 'No, dedicated parking is not available.',
+            },
+          },
+          {
+            '@type': 'Question',
+            'name': `How difficult is the visit to ${spot.title}?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': spot.difficulty_level ? `The difficulty level is ${spot.difficulty_level}.` : 'Difficulty information is not specified.',
+            },
+          },
+        ],
+      },
     ],
   }
 
@@ -177,7 +212,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <article className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
         <nav className="mb-6 flex items-center space-x-2 text-xs text-muted-foreground">
           <Link href="/" className="hover:text-brand transition-colors">Explore</Link>
@@ -301,14 +336,14 @@ export default async function SpotDetailPage({ params }: PageProps) {
             <section className="space-y-4">
               <SectionHeader eyebrow="Know before you go" title="Traveler Information" />
               <div className="overflow-hidden rounded-2xl border border-border/40">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-border/40">
+                <dl className="grid grid-cols-2 md:grid-cols-3 gap-px bg-border/40">
                   <FactCell icon={<Calendar className="h-4 w-4" />} label="Best Time" value={spot.best_time_to_visit || 'Anytime'} />
                   <FactCell icon={<Clock className="h-4 w-4" />} label="Visit Duration" value={spot.estimated_visit_duration || '1-2 Hours'} />
                   <FactCell icon={<DollarSign className="h-4 w-4" />} label="Entry Fee" value={spot.entry_fee > 0 ? `₹${spot.entry_fee}` : 'Free Entry'} />
                   <FactCell icon={<Car className="h-4 w-4" />} label="Parking" value={spot.parking_available ? 'Available' : 'No Dedicated Space'} />
                   <FactCell icon={<Users className="h-4 w-4" />} label="Family & Pets" value={spot.family_friendly ? 'Family Friendly' : 'Adventure Only'} />
                   <FactCell icon={<HikeIcon className="h-4 w-4" />} label="Requires Trek" value={spot.requires_trek ? `Yes (${spot.trek_distance_km} km)` : 'Road Accessible'} />
-                </div>
+                </dl>
               </div>
 
               {spot.safety_notes && (
@@ -414,7 +449,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
             )}
           </div>
         </div>
-      </div>
+      </article>
     </>
   )
 }
@@ -435,8 +470,8 @@ function FactCell({ icon, label, value }: { icon: React.ReactNode; label: string
     <div className="flex items-start gap-3 bg-card p-4 md:p-5">
       <span className="mt-0.5 text-brand dark:text-brand-cream">{icon}</span>
       <span className="min-w-0">
-        <span className="block text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</span>
-        <span className="mt-1 block text-sm font-semibold text-foreground">{value}</span>
+        <dt className="block text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</dt>
+        <dd className="mt-1 block text-sm font-semibold text-foreground">{value}</dd>
       </span>
     </div>
   )

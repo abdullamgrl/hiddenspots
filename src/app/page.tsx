@@ -240,8 +240,21 @@ export default async function HomePage() {
   ).size
   const reelCount = databaseReels.length
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'HiddenSpot.in — Discover & Share Secluded Travel Spots & Hidden Gems',
+    description: 'Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India.',
+    url: 'https://hiddenspot.in',
+  }
+
   return (
-    <div className="space-y-24 pb-24 overflow-hidden bg-background text-foreground">
+    <main className="space-y-24 pb-24 overflow-hidden bg-background text-foreground">
+      {/* Schema Injection */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Floating Animations CSS */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes float-slow {
@@ -317,7 +330,7 @@ export default async function HomePage() {
             </div>
 
             <div className="text-[11px] text-zinc-500 flex items-center justify-center lg:justify-start gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand animate-ping" />
+              <span className="h-1.4 w-1.5 rounded-full bg-brand animate-ping" />
               <span>100% community vetted with coordinate verification checks</span>
             </div>
           </div>
@@ -592,6 +605,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   )
 }

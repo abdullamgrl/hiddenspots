@@ -6,7 +6,7 @@ export async function GET() {
   // 1. Fetch approved spots
   const { data: spots } = await supabase
     .from('spots')
-    .select('slug, updated_at, state:states(slug), district:districts(slug)')
+    .select('slug, updated_at, cover_image, title, state:states(slug), district:districts(slug)')
     .eq('status', 'approved')
     .eq('is_deleted', false)
 
@@ -48,15 +48,18 @@ export async function GET() {
     })) || []
 
   const spotUrls =
-    (spots as { slug: string; updated_at: string; state: { slug: string }; district: { slug: string } }[] | null)?.map((spot) => ({
+    (spots as { slug: string; updated_at: string; state: { slug: string }; district: { slug: string }; cover_image: string; title: string }[] | null)?.map((spot) => ({
       url: `${baseUrl}/${spot.state.slug}/${spot.district.slug}/${spot.slug}`,
       lastmod: new Date(spot.updated_at).toISOString(),
+      image: spot.cover_image,
+      title: spot.title?.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
     })) || []
 
-  const allUrls = [...staticUrls, ...categoryUrls, ...stateUrls, ...districtUrls, ...spotUrls]
+  const allUrls: { url: string; lastmod: string; image?: string; title?: string }[] = [...staticUrls, ...categoryUrls, ...stateUrls, ...districtUrls, ...spotUrls]
 
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   ${allUrls
     .map(
       (item) => `
@@ -64,7 +67,15 @@ export async function GET() {
       <loc>${item.url}</loc>
       <lastmod>${item.lastmod}</lastmod>
       <changefreq>daily</changefreq>
-      <priority>${item.url === baseUrl ? '1.0' : '0.8'}</priority>
+      <priority>${item.url === baseUrl ? '1.0' : '0.8'}</priority>${
+        item.image
+          ? `
+      <image:image>
+        <image:loc>${item.image}</image:loc>
+        <image:title>${item.title}</image:title>
+      </image:image>`
+          : ''
+      }
     </url>`
     )
     .join('')}

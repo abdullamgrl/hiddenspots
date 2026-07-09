@@ -102,7 +102,7 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="eyebrow-script">Community Support</h3>
             <p className="text-sm text-muted-foreground">
-              Have a hidden spot you want featured? Register via SMS and share your location details instantly.
+              Have a hidden spot you want featured? Register and share your location details instantly.
             </p>
             <div className="space-y-2 text-sm text-muted-foreground">
               <a href="mailto:info@hiddenspot.in" className="flex items-center space-x-2 hover:text-sunset transition-colors">
@@ -110,13 +110,13 @@ export function Footer() {
                 <span>info@hiddenspot.in</span>
               </a>
               <a
-                href="https://www.instagram.com/hiddenspot.in"
+                href="https://www.instagram.com/hiddenspots.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 hover:text-sunset transition-colors"
               >
                 <InstagramIcon className="h-4 w-4" />
-                <span>@hiddenspot.in</span>
+                <span>@hiddenspots.in</span>
               </a>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
