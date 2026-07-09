@@ -105,9 +105,9 @@ export function Footer() {
               Have a hidden spot you want featured? Register and share your location details instantly.
             </p>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <a href="mailto:info@hiddenspot.in" className="flex items-center space-x-2 hover:text-sunset transition-colors">
+              <a href="mailto:info@hiddenspots.in" className="flex items-center space-x-2 hover:text-sunset transition-colors">
                 <Mail className="h-4 w-4" />
-                <span>info@hiddenspot.in</span>
+                <span>info@hiddenspots.in</span>
               </a>
               <a
                 href="https://www.instagram.com/hiddenspots.in"
@@ -127,7 +127,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 border-t border-border/50 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-muted-foreground space-y-4 sm:space-y-0">
-          <p>© {currentYear} HiddenSpot.in. All rights reserved.</p>
+          <p>© {currentYear} HiddenSpots.in. All rights reserved.</p>
           <div className="flex space-x-4">
             <Link href="/terms" className="hover:text-sunset transition-colors">
               Terms of Service

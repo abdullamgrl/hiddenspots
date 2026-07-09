@@ -4,7 +4,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { RetryButton } from '@/components/navigation/retry-button'
 
 export const metadata = {
-  title: 'Offline | HiddenSpot.in',
+  title: 'Offline | HiddenSpots.in',
   description: 'You are currently offline. Connect to the internet to explore more hidden travel gems.',
 }
 

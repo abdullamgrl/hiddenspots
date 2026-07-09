@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: ProfilePageProps) {
 
   return {
     title: `${profile.full_name || username} (@${profile.username}) — Traveler Profile`,
-    description: `Discover travel spots contributed by ${profile.full_name || username} on HiddenSpot.in.`,
+    description: `Discover travel spots contributed by ${profile.full_name || username} on HiddenSpots.in.`,
   }
 }
 

@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: DistrictPageProps) {
   if (!data) return { title: 'District Not Found | HiddenSpot' }
 
   return {
-    title: `Offbeat Travel Spots in ${data.district.name}, ${data.state.name} — HiddenSpot.in`,
+    title: `Offbeat Travel Spots in ${data.district.name}, ${data.state.name} — HiddenSpots.in`,
     description: `Discover waterfalls, viewpoints, and campsites in ${data.district.name} district. Real pictures, coordinate directions, and travel details.`,
     alternates: {
       canonical: `/${state}/${district}`,

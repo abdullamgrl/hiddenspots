@@ -243,9 +243,9 @@ export default async function HomePage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'HiddenSpot.in — Discover & Share Secluded Travel Spots & Hidden Gems',
+    name: 'HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems',
     description: 'Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India.',
-    url: 'https://hiddenspot.in',
+    url: 'https://hiddenspots.in',
   }
 
   return (
@@ -294,7 +294,7 @@ export default async function HomePage() {
                 </span>
               </h1>
               <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                HiddenSpot.in is a community-vetted map directory of secret waterfalls, misty viewpoints, and offbeat trails. Exact coordinates, zero filler.
+                HiddenSpots.in is a community-vetted map directory of secret waterfalls, misty viewpoints, and offbeat trails. Exact coordinates, zero filler.
               </p>
             </div>
 

@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: PageProps) {
   const spot = await getSpot(slug)
   if (!spot) return { title: 'Spot Not Found | HiddenSpot' }
 
-  const url = `https://hiddenspot.in/${state}/${district}/${slug}`
+  const url = `https://hiddenspots.in/${state}/${district}/${slug}`
 
   return {
     title: `${spot.title} — Hidden Gem in ${spot.district.name}, ${spot.state.name}`,
@@ -118,7 +118,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
     '@graph': [
       {
         '@type': ['Place', 'TouristAttraction'],
-        '@id': `https://hiddenspot.in/${state}/${district}/${slug}#place`,
+        '@id': `https://hiddenspots.in/${state}/${district}/${slug}#place`,
         'name': spot.title,
         'description': spot.short_description,
         'image': spot.cover_image,
@@ -148,25 +148,25 @@ export default async function SpotDetailPage({ params }: PageProps) {
             '@type': 'ListItem',
             'position': 1,
             'name': 'Home',
-            'item': 'https://hiddenspot.in',
+            'item': 'https://hiddenspots.in',
           },
           {
             '@type': 'ListItem',
             'position': 2,
             'name': spot.state.name,
-            'item': `https://hiddenspot.in/${spot.state.slug}`,
+            'item': `https://hiddenspots.in/${spot.state.slug}`,
           },
           {
             '@type': 'ListItem',
             'position': 3,
             'name': spot.district.name,
-            'item': `https://hiddenspot.in/${spot.state.slug}/${spot.district.slug}`,
+            'item': `https://hiddenspots.in/${spot.state.slug}/${spot.district.slug}`,
           },
           {
             '@type': 'ListItem',
             'position': 4,
             'name': spot.title,
-            'item': `https://hiddenspot.in/${spot.state.slug}/${spot.district.slug}/${spot.slug}`,
+            'item': `https://hiddenspots.in/${spot.state.slug}/${spot.district.slug}/${spot.slug}`,
           },
         ],
       },

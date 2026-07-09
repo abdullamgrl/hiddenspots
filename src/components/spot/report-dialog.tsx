@@ -85,7 +85,7 @@ export function ReportDialog({ spotId, userId }: ReportDialogProps) {
             <span>Report Spot Issue</span>
           </DialogTitle>
           <DialogDescription>
-            Help keep HiddenSpot.in accurate. Let us know what is wrong with this listing.
+            Help keep HiddenSpots.in accurate. Let us know what is wrong with this listing.
           </DialogDescription>
         </DialogHeader>
 

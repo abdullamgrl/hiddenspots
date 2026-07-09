@@ -1,6 +1,6 @@
 # HiddenSpot — Offbeat Travel Discovery Platform
 
-This is the codebase for **HiddenSpot** (`hiddenspot.in`), a premium travel discovery platform focused on hidden and remote gems in India.
+This is the codebase for **HiddenSpot** (`hiddenspots.in`), a premium travel discovery platform focused on hidden and remote gems in India.
 
 ## Setup & Environment Variables
 
@@ -28,8 +28,8 @@ This is the codebase for **HiddenSpot** (`hiddenspot.in`), a premium travel disc
 > **Production Google Maps API Key Protection**:
 > Before deploying to production, make sure to restrict your `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to **Websites** in the Google Cloud Console. Enable restrictions only for:
 > - `http://localhost:*`
-> - `https://hiddenspot.in/*`
-> - `https://*.hiddenspot.in/*`
+> - `https://hiddenspots.in/*`
+> - `https://*.hiddenspots.in/*`
 
 ## SMS OTP via httpSMS (free)
 

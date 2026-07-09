@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { MapExplorer } from '@/components/map/map-explorer'
 
 export const metadata = {
-  title: 'Explore the Map | HiddenSpot.in',
+  title: 'Explore the Map | HiddenSpots.in',
   description:
     'Discover hidden travel spots geographically. Browse community reels on an interactive map of secret waterfalls, viewpoints, and offbeat trails across India.',
   alternates: { canonical: '/map' },

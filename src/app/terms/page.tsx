@@ -35,7 +35,7 @@ export default function TermsPage() {
         <section className="space-y-3">
           <h2 className="font-heading text-xl font-bold text-zinc-800 dark:text-zinc-100">1. Acceptance of Terms</h2>
           <p>
-            By accessing or using HiddenSpot.in ("HiddenSpot", "we", "our", or "us"), you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
+            By accessing or using HiddenSpots.in ("HiddenSpot", "we", "our", or "us"), you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
           </p>
         </section>
 
@@ -79,7 +79,7 @@ export default function TermsPage() {
             <strong>Explore at your own risk.</strong> HiddenSpot is an informational travel guide. Nature spots (waterfalls, viewpoints, trails) can be dangerous, subject to rapid weather changes, accessibility limits, wildlife hazards, and terrain difficulties.
           </p>
           <p>
-            We do not guarantee the safety, accessibility, or legality of visiting any spot listed on the platform. We are not responsible for any accidents, injuries, trespassing violations, fines, or losses incurred while traveling to spots discovered via HiddenSpot.in.
+            We do not guarantee the safety, accessibility, or legality of visiting any spot listed on the platform. We are not responsible for any accidents, injuries, trespassing violations, fines, or losses incurred while traveling to spots discovered via HiddenSpots.in.
           </p>
         </section>
 

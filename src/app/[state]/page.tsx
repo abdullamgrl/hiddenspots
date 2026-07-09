@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: StatePageProps) {
   if (!stateData) return { title: 'State Not Found | HiddenSpot' }
 
   return {
-    title: `Discover Secluded Travel Gems in ${stateData.name} — HiddenSpot.in`,
+    title: `Discover Secluded Travel Gems in ${stateData.name} — HiddenSpots.in`,
     description: `Find community-sourced waterfalls, viewpoints, campsites, and offbeat travel spots in ${stateData.name}. View location maps and photos.`,
     alternates: {
       canonical: `/${state}`,

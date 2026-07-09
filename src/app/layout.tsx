@@ -29,7 +29,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "HiddenSpot.in — Discover & Share Secluded Travel Spots & Hidden Gems",
+  title: "HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems",
   description:
     "Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India. View maps, share travel photos, and discover your next weekend getaway.",
   keywords: ["hidden spots india", "offbeat travel", "secret destinations", "travel community", "hidden gems", "weekend getaways", "kerala tourism"],
@@ -39,22 +39,22 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  metadataBase: new URL("https://hiddenspot.in"),
+  metadataBase: new URL("https://hiddenspots.in"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "HiddenSpot.in — Discover & Share Secluded Travel Spots & Hidden Gems",
+    title: "HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems",
     description:
       "Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India. View maps, share travel photos, and discover your next weekend getaway.",
-    url: "https://hiddenspot.in",
+    url: "https://hiddenspots.in",
     siteName: "HiddenSpot",
     locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HiddenSpot.in — Discover & Share Secluded Travel Spots & Hidden Gems",
+    title: "HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems",
     description:
       "Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India. View maps, share travel photos, and discover your next weekend getaway.",
   },
@@ -82,23 +82,23 @@ export default function RootLayout({
     '@graph': [
       {
         '@type': 'WebSite',
-        '@id': 'https://hiddenspot.in/#website',
-        url: 'https://hiddenspot.in',
+        '@id': 'https://hiddenspots.in/#website',
+        url: 'https://hiddenspots.in',
         name: 'HiddenSpot',
         potentialAction: {
           '@type': 'SearchAction',
-          target: 'https://hiddenspot.in/search?q={search_term_string}',
+          target: 'https://hiddenspots.in/search?q={search_term_string}',
           'query-input': 'required name=search_term_string',
         },
       },
       {
         '@type': 'Organization',
-        '@id': 'https://hiddenspot.in/#organization',
+        '@id': 'https://hiddenspots.in/#organization',
         name: 'HiddenSpot',
-        url: 'https://hiddenspot.in',
-        logo: 'https://hiddenspot.in/icons/icon-512x512.png',
+        url: 'https://hiddenspots.in',
+        logo: 'https://hiddenspots.in/icons/icon-512x512.png',
         sameAs: [
-          'https://instagram.com/hiddenspot.in',
+          'https://instagram.com/hiddenspots.in',
         ],
       },
     ],

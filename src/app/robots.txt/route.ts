@@ -5,7 +5,7 @@ Disallow: /admin/
 Disallow: /add-spot/
 Disallow: /api/
 
-Sitemap: https://hiddenspot.in/sitemap.xml`
+Sitemap: https://hiddenspots.in/sitemap.xml`
 
   return new Response(robotsTxt, {
     headers: {

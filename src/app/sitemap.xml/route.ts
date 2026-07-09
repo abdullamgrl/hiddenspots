@@ -21,7 +21,7 @@ export async function GET() {
   // 4. Fetch categories
   const { data: categories } = await supabase.from('categories').select('slug')
 
-  const baseUrl = 'https://hiddenspot.in'
+  const baseUrl = 'https://hiddenspots.in'
 
   const staticUrls = [
     { url: baseUrl, lastmod: new Date().toISOString() },

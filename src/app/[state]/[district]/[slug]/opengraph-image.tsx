@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 export const runtime = 'edge'
 
 // Image metadata
-export const alt = 'HiddenSpot.in - Discover & Share Secluded Travel Spots & Hidden Gems'
+export const alt = 'HiddenSpots.in - Discover & Share Secluded Travel Spots & Hidden Gems'
 export const size = {
   width: 1200,
   height: 630,

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { AddSpotForm } from '@/components/spot/add-spot-form'
 
 export const metadata = {
-  title: 'Share a Hidden Spot | HiddenSpot.in',
+  title: 'Share a Hidden Spot | HiddenSpots.in',
   description: 'Contribute a new travel viewpoint, waterfall, or secret place to the HiddenSpot community.',
 }
 

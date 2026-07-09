@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { ProfileSettingsForm } from '@/components/profile/profile-settings-form'
 
 export const metadata = {
-  title: 'Profile Settings | HiddenSpot.in',
+  title: 'Profile Settings | HiddenSpots.in',
   description: 'Edit your HiddenSpot explorer profile.',
 }
 

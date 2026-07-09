@@ -35,7 +35,7 @@ export default function PrivacyPage() {
         <section className="space-y-3">
           <h2 className="font-heading text-xl font-bold text-zinc-800 dark:text-zinc-100">1. Introduction</h2>
           <p>
-            Welcome to HiddenSpot.in ("we", "our", or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information about you when you visit our website, submit new travel locations, and interact with other community members.
+            Welcome to HiddenSpots.in ("we", "our", or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information about you when you visit our website, submit new travel locations, and interact with other community members.
           </p>
         </section>
 
