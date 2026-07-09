@@ -93,7 +93,7 @@ export function Navbar() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger render={
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full bg-brand-cream/20 dark:bg-brand/15 text-brand-green dark:text-brand-cream">
+                <Button aria-label="User profile menu" variant="ghost" className="relative h-10 w-10 rounded-full bg-brand-cream/20 dark:bg-brand/15 text-brand-green dark:text-brand-cream">
                   <User className="h-5 w-5" />
                 </Button>
               } />
@@ -152,7 +152,7 @@ export function Navbar() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger render={
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full bg-brand-cream/20 dark:bg-brand/15 text-brand-green dark:text-brand-cream">
+                <Button aria-label="User profile menu" variant="ghost" className="relative h-10 w-10 rounded-full bg-brand-cream/20 dark:bg-brand/15 text-brand-green dark:text-brand-cream">
                   <User className="h-5 w-5" />
                 </Button>
               } />

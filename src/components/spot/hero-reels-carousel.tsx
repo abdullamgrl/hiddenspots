@@ -192,6 +192,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                     alt={item.title}
                     fill
                     sizes="260px"
+                    priority={isVisible}
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
@@ -228,6 +229,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                         alt={item.title}
                         fill
                         sizes="260px"
+                        priority={isVisible}
                         className="object-cover opacity-40 blur-xs"
                       />
                       <Sparkles className="h-6 w-6 text-sunset animate-pulse mb-2" />
@@ -289,6 +291,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                     alt={item.title}
                     fill
                     sizes="260px"
+                    priority={isVisible}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -308,9 +311,9 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                   </div>
 
                   <div className="absolute bottom-4 left-4 right-4 text-left">
-                    <h4 className="font-heading text-sm font-bold text-white line-clamp-1">
+                    <p className="font-heading text-sm font-bold text-white line-clamp-1">
                       {item.title}
-                    </h4>
+                    </p>
                     <p className="text-[10px] text-zinc-300 truncate mt-0.5 flex items-center">
                       <MapPin className="h-3 w-3 mr-0.5 text-zinc-400" />
                       {item.district}, {item.state}
@@ -326,6 +329,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
       {/* Nav Controls */}
       <div className="flex items-center space-x-6 mt-6 z-30">
         <button
+          aria-label="Previous Reel"
           onClick={handlePrev}
           className="h-10 w-10 rounded-full border border-border bg-zinc-900/50 hover:bg-brand hover:text-white transition-colors duration-300 flex items-center justify-center cursor-pointer shadow-md text-muted-foreground hover:border-brand"
         >
@@ -335,6 +339,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
           {currentIndex + 1} <span className="opacity-50">/</span> {total} Reels
         </span>
         <button
+          aria-label="Next Reel"
           onClick={handleNext}
           className="h-10 w-10 rounded-full border border-border bg-zinc-900/50 hover:bg-brand hover:text-white transition-colors duration-300 flex items-center justify-center cursor-pointer shadow-md text-muted-foreground hover:border-brand"
         >
