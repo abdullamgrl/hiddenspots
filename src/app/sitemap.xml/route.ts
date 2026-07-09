@@ -52,7 +52,7 @@ export async function GET() {
       url: `${baseUrl}/${spot.state.slug}/${spot.district.slug}/${spot.slug}`,
       lastmod: new Date(spot.updated_at).toISOString(),
       image: spot.cover_image,
-      title: spot.title?.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+      title: spot.title,
     })) || []
 
   const allUrls: { url: string; lastmod: string; image?: string; title?: string }[] = [...staticUrls, ...categoryUrls, ...stateUrls, ...districtUrls, ...spotUrls]
@@ -61,23 +61,27 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   ${allUrls
-    .map(
-      (item) => `
+    .map((item) => {
+      const url = item.url.replace(/&/g, '&amp;')
+      const image = item.image ? item.image.replace(/&/g, '&amp;') : undefined
+      const title = item.title ? item.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : undefined
+
+      return `
     <url>
-      <loc>${item.url}</loc>
+      <loc>${url}</loc>
       <lastmod>${item.lastmod}</lastmod>
       <changefreq>daily</changefreq>
       <priority>${item.url === baseUrl ? '1.0' : '0.8'}</priority>${
-        item.image
+        image
           ? `
       <image:image>
-        <image:loc>${item.image}</image:loc>
-        <image:title>${item.title}</image:title>
+        <image:loc>${image}</image:loc>
+        <image:title>${title}</image:title>
       </image:image>`
           : ''
       }
     </url>`
-    )
+    })
     .join('')}
 </urlset>`
 
