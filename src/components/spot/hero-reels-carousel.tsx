@@ -192,7 +192,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                     alt={item.title}
                     fill
                     sizes="260px"
-                    priority={isVisible}
+                    priority={diff === 0}
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
@@ -229,7 +229,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                         alt={item.title}
                         fill
                         sizes="260px"
-                        priority={isVisible}
+                        priority={diff === 0}
                         className="object-cover opacity-40 blur-xs"
                       />
                       <Sparkles className="h-6 w-6 text-sunset animate-pulse mb-2" />
@@ -291,7 +291,7 @@ export function HeroReelsCarousel({ reels }: HeroReelsCarouselProps) {
                     alt={item.title}
                     fill
                     sizes="260px"
-                    priority={isVisible}
+                    priority={diff === 0}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
