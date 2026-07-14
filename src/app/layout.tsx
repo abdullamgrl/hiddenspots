@@ -30,12 +30,11 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems",
+  title: "HiddenSpots.in — Discover Secret Indian Travel Spots",
   description:
-    "Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India. View maps, share travel photos, and discover your next weekend getaway.",
-  keywords: ["hidden spots india", "offbeat travel", "secret destinations", "travel community", "hidden gems", "weekend getaways", "kerala tourism"],
-  authors: [{ name: "HiddenSpot" }],
-  publisher: "HiddenSpot",
+    "Explore vetted, community-sourced hidden travel gems across India. Find exact GPS coordinates for secret waterfalls, secluded beaches, and misty viewpoints.",
+  authors: [{ name: "HiddenSpots" }],
+  publisher: "HiddenSpots",
   robots: {
     index: true,
     follow: true,
@@ -45,19 +44,28 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems",
+    title: "HiddenSpots.in — Discover Secret Indian Travel Spots",
     description:
-      "Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India. View maps, share travel photos, and discover your next weekend getaway.",
+      "Explore vetted, community-sourced hidden travel gems across India. Find exact GPS coordinates for secret waterfalls, secluded beaches, and misty viewpoints.",
     url: "https://hiddenspots.in",
-    siteName: "HiddenSpot",
+    siteName: "HiddenSpots",
     locale: "en_IN",
     type: "website",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200",
+        width: 1200,
+        height: 630,
+        alt: "HiddenSpots.in - Discover Secret Travel Destinations",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems",
+    title: "HiddenSpots.in — Discover Secret Indian Travel Spots",
     description:
-      "Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India. View maps, share travel photos, and discover your next weekend getaway.",
+      "Explore vetted, community-sourced hidden travel gems across India. Find exact GPS coordinates for secret waterfalls, secluded beaches, and misty viewpoints.",
+    images: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200"],
   },
   manifest: "/manifest.json",
   icons: {

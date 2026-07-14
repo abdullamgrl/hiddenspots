@@ -20,6 +20,7 @@ import { first, type SpotCardRow } from '@/lib/spot-types'
 import { CategoryIcon } from '@/components/spot/category-icon'
 import { CountUpStat } from '@/components/home/count-up-stat'
 import { section } from 'framer-motion/client'
+import { FaqSection } from '@/components/home/faq-section'
 
 export const revalidate = 3600 // Cache for 1 hour
 
@@ -243,13 +244,61 @@ export default async function HomePage() {
   ).size
   const reelCount = databaseReels.length
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'HiddenSpots.in — Discover & Share Secluded Travel Spots & Hidden Gems',
-    description: 'Explore community-sourced viewpoints, lakes, beaches, and secret travel spots across India.',
-    url: 'https://hiddenspots.in',
-  }
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'HiddenSpots.in — Discover Secret Indian Travel Spots',
+      description: 'Explore vetted, community-sourced hidden travel gems across India. Find exact GPS coordinates for secret waterfalls, secluded beaches, and misty viewpoints.',
+      url: 'https://hiddenspots.in',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Are the spots on HiddenSpots.in free to visit?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Most of our community-sourced hidden spots are natural locations (like viewpoints, waterfalls, and offbeat trails) that are completely free to visit. If a specific spot has an entry fee or is on private property, our users typically mention it in the spot\'s description.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you verify the exact location of a hidden spot?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'When a user submits a spot, they drop a pin directly on an interactive map. Our moderators then manually review the coordinates against satellite imagery and the submitted photos to ensure the GPS location is 100% accurate before approving the spot.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I share my own secret travel destinations?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Absolutely! We encourage travelers to share their favorite secluded spots. Simply create a free account with your mobile number, click "Add Spot", drop the location pin, and upload a few photos or an Instagram reel link.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the Verification Score?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The Verification Score is a trust metric assigned to each spot. It increases when the community validates the location, leaves positive reviews, or confirms the GPS coordinates are accurate. A high score means the spot is highly trusted and beautiful.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Is it safe to visit these offbeat locations?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'While we verify the coordinates, these are offbeat natural locations. We recommend traveling during daylight hours, traveling in groups for extremely secluded areas, and always prioritizing your safety. Please respect local guidelines and practice "Leave No Trace" principles.'
+          }
+        }
+      ]
+    }
+  ]
 
   return (
     <main className="space-y-24 pb-24 overflow-hidden bg-background text-foreground">
@@ -585,6 +634,9 @@ export default async function HomePage() {
           <CountUpStat value={100} suffix="%" label="Community Vetted" />
         </div>
       </section>
+
+      {/* FAQ Section */}
+      <FaqSection />
 
       {/* CTA section */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">

@@ -20,6 +20,7 @@ const NAV_LINKS = [
   { href: '/', label: 'Explore' },
   { href: '/map', label: 'Map' },
   { href: '/nearby', label: 'Nearby' },
+  { href: '/about', label: 'About' },
 ] as const
 
 export function Navbar() {

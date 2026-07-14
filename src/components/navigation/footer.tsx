@@ -120,7 +120,7 @@ export function Footer() {
               </a>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
-                <span>Wayanad, Kerala, India</span>
+                <span>Kerala, India</span>
               </div>
             </div>
           </div>
@@ -129,6 +129,9 @@ export function Footer() {
         <div className="mt-10 border-t border-border/50 pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-muted-foreground space-y-4 sm:space-y-0">
           <p>© {currentYear} HiddenSpots.in. All rights reserved.</p>
           <div className="flex space-x-4">
+            <Link href="/about" className="hover:text-sunset transition-colors">
+              About Us
+            </Link>
             <Link href="/terms" className="hover:text-sunset transition-colors">
               Terms of Service
             </Link>
