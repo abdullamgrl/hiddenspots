@@ -10,13 +10,17 @@ export interface Profile {
   username: string | null
   full_name: string | null
   avatar_url: string | null
-  phone: string | null
   role: 'visitor' | 'contributor' | 'moderator' | 'admin'
   reputation_score: number
   bio: string | null
   created_at: string
   updated_at: string
 }
+
+// phone is deliberately absent: the column is not API-readable (column
+// grants); the signed-in user's own number lives on the auth User object.
+const PROFILE_COLUMNS =
+  'id, username, full_name, avatar_url, role, reputation_score, bio, created_at, updated_at'
 
 // The signup trigger seeds username as "user_<id-prefix>" and an empty
 // full_name; either signals the user hasn't completed the profile step yet.
@@ -49,7 +53,7 @@ export function useSupabaseAuth() {
     const fetchProfile = async (userId: string): Promise<Profile | null> => {
       const { data } = await supabase
         .from('profiles')
-        .select('*')
+        .select(PROFILE_COLUMNS)
         .eq('id', userId)
         .maybeSingle()
       return data
@@ -110,7 +114,6 @@ export function useSupabaseAuth() {
       .update({
         username: username.toLowerCase().trim(),
         full_name: fullName.trim(),
-        updated_at: new Date().toISOString(),
       })
       .eq('id', user.id)
 
@@ -118,7 +121,7 @@ export function useSupabaseAuth() {
 
     const { data: prof } = await supabase
       .from('profiles')
-      .select('*')
+      .select(PROFILE_COLUMNS)
       .eq('id', user.id)
       .maybeSingle()
     setProfile(prof)

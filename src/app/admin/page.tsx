@@ -11,7 +11,7 @@ export default async function AdminDashboardPage() {
   const { count: totalSpots } = await supabase.from('spots').select('*', { count: 'exact', head: true })
   const { count: pendingSpots } = await supabase.from('spots').select('*', { count: 'exact', head: true }).eq('status', 'pending')
   const { count: approvedSpots } = await supabase.from('spots').select('*', { count: 'exact', head: true }).eq('status', 'approved')
-  const { count: totalUsers } = await supabase.from('profiles').select('*', { count: 'exact', head: true })
+  const { count: totalUsers } = await supabase.from('profiles').select('id', { count: 'exact', head: true })
   const { count: pendingReports } = await supabase.from('spot_reports').select('*', { count: 'exact', head: true }).eq('status', 'pending')
 
   return (

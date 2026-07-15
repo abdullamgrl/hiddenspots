@@ -112,7 +112,6 @@ export function ProfileSettingsForm({
           full_name: values.full_name,
           username: values.username,
           bio: values.bio || null,
-          updated_at: new Date().toISOString(),
         })
         .eq('id', userId)
 
