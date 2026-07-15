@@ -23,6 +23,7 @@ import { SuggestEditDialog } from '@/components/spot/suggest-edit-dialog'
 import { ShareButton } from '@/components/spot/share-button'
 import { CoordsCard } from '@/components/spot/coords-card'
 import type { SpotCardResolved } from '@/lib/spot-types'
+import { explorerLevel } from '@/lib/gamification'
 
 interface SpotImage {
   id: string
@@ -393,7 +394,9 @@ export default async function SpotDetailPage({ params }: PageProps) {
             </section>
 
             {/* Contributor Panel */}
-            {spot.creator && (
+            {spot.creator && (() => {
+              const creatorLevel = explorerLevel(spot.creator.reputation_score)
+              return (
               <section className="p-6 rounded-2xl border border-border/50 bg-card shadow-sm space-y-4">
                 <h4 className="font-heading text-sm font-semibold uppercase tracking-wider text-muted-foreground">Submitted By</h4>
                 <div className="flex items-center space-x-3">
@@ -407,12 +410,19 @@ export default async function SpotDetailPage({ params }: PageProps) {
                     <div className="text-xs text-muted-foreground font-medium">@{spot.creator.username}</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-1.5 pt-2 border-t border-border/50 text-xs">
-                  <Award className="h-4 w-4 text-amber-500" />
-                  <span className="font-bold text-amber-500">{spot.creator.reputation_score} Reputation Points</span>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-2 border-t border-border/50 text-xs">
+                  <span className="flex items-center gap-1.5 font-semibold text-sunset">
+                    <creatorLevel.current.icon className="h-4 w-4" />
+                    {creatorLevel.current.name}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Award className="h-4 w-4 text-amber-500" />
+                    <span className="font-bold text-amber-500">{spot.creator.reputation_score} Reputation Points</span>
+                  </span>
                 </div>
               </section>
-            )}
+              )
+            })()}
 
             {/* Nearby Spots recommendations */}
             {nearbySpots && nearbySpots.length > 0 && (

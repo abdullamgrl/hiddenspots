@@ -27,6 +27,7 @@ export async function GET() {
     { url: baseUrl, lastmod: new Date().toISOString() },
     { url: `${baseUrl}/map`, lastmod: new Date().toISOString() },
     { url: `${baseUrl}/nearby`, lastmod: new Date().toISOString() },
+    { url: `${baseUrl}/explorers`, lastmod: new Date().toISOString() },
   ]
 
   const categoryUrls =

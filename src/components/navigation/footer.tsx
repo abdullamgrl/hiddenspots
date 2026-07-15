@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Mail, Globe, MapPin } from 'lucide-react'
+import { Mail, Globe, MapPin, Trophy as TrophyIcon } from 'lucide-react'
 
 // lucide dropped brand icons — minimal inline Instagram glyph
 function InstagramIcon({ className }: { className?: string }) {
@@ -104,6 +104,13 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               Have a hidden spot you want featured? Register and share your location details instantly.
             </p>
+            <Link
+              href="/explorers"
+              className="inline-flex items-center space-x-2 text-sm text-foreground/80 hover:text-sunset transition-colors"
+            >
+              <TrophyIcon className="h-4 w-4" />
+              <span>Top Explorers</span>
+            </Link>
             <div className="space-y-2 text-sm text-muted-foreground">
               <a href="mailto:info@hiddenspots.in" className="flex items-center space-x-2 hover:text-sunset transition-colors">
                 <Mail className="h-4 w-4" />

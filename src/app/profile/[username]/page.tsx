@@ -11,12 +11,17 @@ import {
   Award,
   Bookmark,
   Pencil,
-  Mountain,
   Flag,
 } from 'lucide-react'
 import { ShareButton } from '@/components/spot/share-button'
 import { buttonVariants } from '@/components/ui/button'
 import { first, type SpotCardRow, type SpotCardResolved } from '@/lib/spot-types'
+import {
+  explorerLevel,
+  evaluateBadges,
+  nearestBadge,
+  type GamificationInputs,
+} from '@/lib/gamification'
 
 interface ProfilePageProps {
   params: Promise<{
@@ -24,36 +29,12 @@ interface ProfilePageProps {
   }>
 }
 
-// Explorer ranks derived purely from reputation_score — no schema changes.
-// Visible progression is the cheapest retention mechanic there is.
-const LEVELS = [
-  { name: 'Wanderer', min: 0 },
-  { name: 'Pathfinder', min: 50 },
-  { name: 'Trailblazer', min: 150 },
-  { name: 'Local Legend', min: 300 },
-] as const
-
-function explorerLevel(rep: number) {
-  let idx = 0
-  for (let i = LEVELS.length - 1; i >= 0; i--) {
-    if (rep >= LEVELS[i].min) {
-      idx = i
-      break
-    }
-  }
-  const current = LEVELS[idx]
-  const next = LEVELS[idx + 1] ?? null
-  const progress = next
-    ? Math.min(100, Math.round(((rep - current.min) / (next.min - current.min)) * 100))
-    : 100
-  return { current, next, progress }
-}
-
 async function getProfile(username: string) {
   const supabase = await createClient()
+  // Explicit columns: phone is PII and not API-readable (column grants).
   const { data: profile } = await supabase
     .from('profiles')
-    .select('*')
+    .select('id, username, full_name, avatar_url, role, reputation_score, bio, created_at, updated_at')
     .eq('username', username)
     .maybeSingle()
 
@@ -102,17 +83,50 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     query.eq('status', 'approved')
   }
 
-  const { data: spots } = await query.order('created_at', { ascending: false })
+  // Badge inputs: featured_spots and spots are public-readable; reel/edit
+  // submission rows are RLS-protected (owner/moderator only), so their
+  // counts come from security-definer counter RPCs that expose only the
+  // integers. All three fail soft to 0 (e.g. before migrations apply).
+  const [{ data: spots }, { count: featuredCount }, { data: reelCount }, { data: editCount }] =
+    await Promise.all([
+      query.order('created_at', { ascending: false }),
+      supabase
+        .from('featured_spots')
+        .select('id, spot:spots!inner(created_by)', { count: 'exact', head: true })
+        .eq('spot.created_by', profile.id),
+      supabase.rpc('count_approved_reels', { p_profile_id: profile.id }),
+      supabase.rpc('count_approved_edits', { p_profile_id: profile.id }),
+    ])
 
   const statusCount = (status: string) =>
     spots?.filter((s) => s.status === status).length || 0
   const approvedSpotsCount = statusCount('approved')
+  const approvedSpotRows = (spots ?? []).filter((s) => s.status === 'approved')
   const districtsExplored = new Set(
-    (spots ?? [])
-      .filter((s) => s.status === 'approved')
+    approvedSpotRows
       .map((s) => first((s as unknown as SpotCardRow).district)?.slug)
       .filter(Boolean)
   ).size
+  const categoriesContributed = new Set(
+    approvedSpotRows
+      .map((s) => first((s as unknown as SpotCardRow).category)?.name)
+      .filter(Boolean)
+  ).size
+
+  const gamificationInputs: GamificationInputs = {
+    approvedSpots: approvedSpotsCount,
+    totalSubmissions: spots?.length || 0,
+    districtsExplored,
+    categoriesContributed,
+    approvedReels: typeof reelCount === 'number' ? reelCount : 0,
+    approvedEdits: typeof editCount === 'number' ? editCount : 0,
+    featuredSpots: featuredCount ?? 0,
+    joinedAt: profile.created_at,
+    reputation: profile.reputation_score,
+  }
+  const badges = evaluateBadges(gamificationInputs)
+  const earnedCount = badges.filter((b) => b.isEarned).length
+  const nextBadge = isOwner ? nearestBadge(badges) : null
 
   const level = explorerLevel(profile.reputation_score)
   const joined = new Date(profile.created_at).toLocaleDateString('en-IN', {
@@ -202,7 +216,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-sunset/15 text-sunset">
-                <Mountain className="h-4.5 w-4.5" />
+                <level.current.icon className="h-4.5 w-4.5" />
               </span>
               <div>
                 <div className="font-heading text-base font-bold">{level.current.name}</div>
@@ -224,6 +238,61 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               style={{ width: `${level.progress}%` }}
             />
           </div>
+        </div>
+
+        {/* ---- Trail badges: live state derived from real contribution
+             counts — nothing stored, nothing fabricated ---- */}
+        <div className="mt-6 rounded-2xl border border-border/50 bg-card p-5">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="font-heading text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              Trail Badges
+            </h2>
+            <span className="text-xs font-semibold text-muted-foreground tabular-nums">
+              {earnedCount}/{badges.length}
+            </span>
+          </div>
+          <div className="mt-4 grid grid-cols-4 gap-x-2 gap-y-4 sm:grid-cols-8">
+            {badges.map((badge) => (
+              <div
+                key={badge.id}
+                className="flex flex-col items-center gap-1.5 text-center"
+                title={isOwner && !badge.isEarned ? badge.description : badge.name}
+              >
+                <span
+                  className={`flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
+                    badge.isEarned
+                      ? 'bg-sunset/15 text-sunset'
+                      : 'bg-muted text-muted-foreground/35'
+                  }`}
+                >
+                  <badge.icon className="h-5 w-5" />
+                </span>
+                <span
+                  className={`text-[10px] font-semibold leading-tight ${
+                    badge.isEarned ? 'text-foreground' : 'text-muted-foreground/50'
+                  }`}
+                >
+                  {badge.name}
+                </span>
+              </div>
+            ))}
+          </div>
+          {nextBadge && nextBadge.badgeProgress && (
+            <div className="mt-4 flex items-center gap-2.5 border-t border-border/40 pt-3.5 text-xs">
+              <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <nextBadge.icon className="h-3.5 w-3.5" />
+              </span>
+              <span className="text-muted-foreground">
+                Next badge: <span className="font-semibold text-foreground">{nextBadge.name}</span>
+                {' — '}
+                {nextBadge.description.toLowerCase()}
+                {' '}
+                <span className="font-semibold tabular-nums text-sunset">
+                  ({nextBadge.badgeProgress.current}/{nextBadge.badgeProgress.target})
+                </span>
+              </span>
+            </div>
+          )}
         </div>
 
         {/* ---- Stat tiles ---- */}
